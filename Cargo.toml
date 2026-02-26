@@ -1,0 +1,15 @@
+[package]
+name = "rust-ds2a"
+version = "0.0.1"
+edition = "2024"
+description = "Data Structures & Algorithms implemented in Rust"
+license = "MIT"
+authors = ["Than The Van <thanthevanpm3@gmail.com>"]
+repository = "https://github.com/pirumu/rust-ds2a"
+homepage = "https://github.com/pirumu/rust-ds2a"
+
+[lib]
+name = "rust_ds2a"
+path = "src/lib.rs"
+
+[dependencies]

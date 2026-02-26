@@ -1,0 +1,16 @@
+[book]
+title = "Cấu trúc dữ liệu & Giải thuật với Rust"
+authors = ["Than The Van <thanthevanpm3@gmail.com>"]
+language = "vi"
+src = "book/vi"
+
+[rust]
+edition = "2024"
+
+[build]
+build-dir = "target/book"
+create-missing = true
+
+[output.html]
+git-repository-url = "https://github.com/pirumu/rust-ds2a"
+edit-url-template = "https://github.com/pirumu/rust-ds2a/edit/main/{path}"

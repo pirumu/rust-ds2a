@@ -1,0 +1,5 @@
+[book]
+title = "Cấu trúc dữ liệu & Giải thuật với Rust"
+authors = ["Than The Van <thanthevanpm3@gmail.com>"]
+language = "vi"
+src = "."
