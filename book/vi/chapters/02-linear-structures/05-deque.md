@@ -2,7 +2,7 @@
 
 ## Đây là gì?
 
-Tưởng tượng một cửa ra vào hai đầu -- giống hành lang tàu điện ngầm. Người có thể vào và ra từ **cả hai phía**. Không bị giới hạn một hướng.
+Tưởng tượng một **bộ bài** cầm trên tay. Bạn có thể rút lá trên cùng, hoặc rút lá dưới cùng. Bạn cũng có thể đặt thêm lá vào trên cùng hoặc nhét vào dưới cùng. Cả hai đầu đều dùng được.
 
 Đó chính là **deque** (đọc là "deck", viết tắt của double-ended queue) -- hàng đợi hai đầu. Bạn có thể thêm/xóa phần tử ở **cả đầu lẫn cuối**.
 

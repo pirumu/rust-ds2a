@@ -4,9 +4,9 @@
 
 Bạn đã học Binary Tree ở Phần 3 và Hashing ở Phần 4. Merkle Tree kết hợp cả hai để kiểm tra dữ liệu có bị thay đổi không.
 
-Tưởng tượng bạn gửi 1 thùng hàng gồm 8 hộp nhỏ cho bạn mình. Trước khi gửi, bạn **dán tem niêm phong** lên thùng. Nếu ai đó mở thùng ra đổi 1 hộp rồi đóng lại — bạn nhìn cái tem là biết ngay. Tem bị rách = dữ liệu bị sửa.
+Tưởng tượng bạn là giáo viên chấm bài cho 8 học sinh. Bạn tính **điểm trung bình từng cặp**, rồi **trung bình của từng cặp trung bình**, cứ thế cho đến khi còn **1 con số duy nhất** đại diện cho cả lớp. Nếu 1 học sinh sửa bài, điểm trung bình cặp đó thay đổi, rồi lan lên trên, cuối cùng con số tổng cũng khác. Bạn chỉ cần so 1 con số tổng là biết "có ai sửa bài". Muốn tìm ai sửa? Đi từ trên xuống: nhánh nào số khác thì đi vào nhánh đó, chỉ cần **log n bước** là tìm ra thủ phạm.
 
-**Merkle Tree chính là "cái tem" đó** — nhưng thông minh hơn. Nó không chỉ nói "có ai đó sửa dữ liệu", mà còn giúp bạn **tìm ra chính xác hộp nào bị sửa**, chỉ cần kiểm tra vài bước thay vì mở tất cả.
+**Merkle Tree hoạt động y hệt** — nhưng thay vì "điểm trung bình", nó dùng **hash**. Mỗi lá là hash của 1 khối dữ liệu. Mỗi nút cha là hash của 2 con gộp lại. Thay đổi 1 byte dữ liệu ở lá → hash thay đổi **dây chuyền lên đến root**. So sánh root hash là biết ngay dữ liệu có bị sửa không, và đi xuống cây là tìm ra chỗ sửa.
 
 > Git dùng Merkle Tree! Mỗi khi bạn `git commit`, Git tính hash cho toàn bộ file và thư mục thành một cây hash. Thay đổi 1 dòng code → hash thay đổi dây chuyền lên đến root. Đó là lý do Git phát hiện mọi thay đổi ngay lập tức.
 

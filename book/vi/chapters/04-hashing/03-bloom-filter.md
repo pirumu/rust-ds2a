@@ -2,16 +2,17 @@
 
 ## Đây là gì?
 
-Tưởng tượng anh bảo vệ ở cổng tòa nhà. Anh ấy có trí nhớ hơi mờ. Khi bạn hỏi "Anh Tuấn có trong tòa nhà không?", anh ấy trả lời 1 trong 2:
+Tưởng tượng bạn có một bảng đăng ký hiến máu. Mỗi người đến đăng ký, bạn không ghi tên họ (tốn giấy lắm). Thay vào đó, bạn dùng 3 cây bút màu khác nhau, mỗi bút tô vào một ô trên bảng theo "công thức" riêng từ tên người đó. Ví dụ: "Tuấn" → bút đỏ tô ô 3, bút xanh tô ô 7, bút vàng tô ô 11.
 
-- **"Chắc chắn không có"** -- tin được 100%. Anh ấy chắc chắn không thấy ai tên Tuấn đi vào.
-- **"Có thể có"** -- tin được... phần lớn. Nhưng đôi khi anh ấy nhầm. Có lúc nói "có" nhưng thực ra không có.
+Khi ai đó hỏi "Tuấn đăng ký chưa?", bạn kiểm tra 3 ô đó:
+- **Có ô nào còn trắng?** → **Chắc chắn chưa đăng ký**. Tin được 100%.
+- **Cả 3 ô đều đã tô?** → **Có thể đã đăng ký**. Nhưng đôi khi những ô đó bị tô bởi người KHÁC, không phải Tuấn. Nhầm!
 
 Đó chính là **Bloom filter** -- cấu trúc dữ liệu xác suất, cực kỳ tiết kiệm bộ nhớ, dùng để kiểm tra "phần tử này có trong tập hợp không?"
 
 Đặc điểm quan trọng:
-- **Không bao giờ sai khi nói "không"** (no false negative)
-- **Đôi khi sai khi nói "có"** (có false positive)
+- **Không bao giờ sai khi nói "không"** (no false negative) -- ô trắng thì chắc chắn chưa ai tô
+- **Đôi khi sai khi nói "có"** (có false positive) -- ô đã tô có thể do người khác tô trùng
 
 ### Tại sao chấp nhận sai?
 

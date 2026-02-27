@@ -2,7 +2,7 @@
 
 ## Đây là gì?
 
-Bạn biết chuỗi hạt cườm không? Mỗi hạt là một ký tự, xâu lại thành một chuỗi. Đó chính là **string** -- một dãy các ký tự nối tiếp nhau.
+Bạn nhắn tin cho bạn bè mỗi ngày. Mỗi tin nhắn là một dãy ký tự nối tiếp nhau -- chữ cái, dấu cách, emoji. Đó chính là **string** -- một dãy các ký tự liên tiếp trong bộ nhớ.
 
 Nhưng trong Rust, string không đơn giản như vậy. Hầu hết ngôn ngữ giấu đi cách lưu trữ bên trong. Rust thì không -- nó để lộ hẳn **UTF-8 encoding** (cách mã hóa ký tự). Tại sao? Vì Rust muốn bạn hiểu rõ mình đang làm gì, tránh bug ngầm.
 

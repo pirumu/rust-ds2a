@@ -4,9 +4,9 @@
 
 Bạn đã học Binary Tree ở Phần 3 và Recursion ở Phần 6. Segment Tree kết hợp cả hai để trả lời câu hỏi **"tổng/min/max từ i đến j"** trong O(log n).
 
-Hãy tưởng tượng bạn quản lý một **thư viện lớn**. Thư viện có nhiều kệ, mỗi kệ có nhiều sách. Giám đốc hay hỏi: "Từ kệ 5 đến kệ 20, tổng cộng có bao nhiêu cuốn sách?" Nếu mỗi lần bạn phải đếm từng kệ một, rất chậm. Nhưng nếu bạn có **sổ ghi chú tổng hợp** — ghi sẵn tổng sách theo từng nhóm kệ — bạn chỉ cần tra vài dòng là ra kết quả.
+Hãy tưởng tượng bạn là **quản lý chuỗi cửa hàng** có 16 chi nhánh. Sếp hay hỏi: "Doanh thu từ chi nhánh 5 đến 12 là bao nhiêu?" Nếu mỗi lần phải gọi điện từng chi nhánh hỏi số, rất chậm. Thay vào đó, bạn tổ chức theo **cấp bậc**: mỗi quản lý vùng phụ trách 2 quản lý nhỏ hơn, mỗi người đó lại phụ trách 2 nhóm nhỏ hơn nữa, cho đến từng chi nhánh. Mỗi quản lý luôn **cập nhật sẵn tổng doanh thu** vùng mình. Khi sếp hỏi, bạn chỉ cần hỏi vài quản lý vùng, gộp lại là xong. Khi một chi nhánh thay đổi doanh thu, chỉ cần cập nhật **dọc theo chuỗi quản lý** lên trên — không cần tính lại tất cả.
 
-Segment Tree chính là **cuốn sổ tổng hợp** đó. Nó chia mảng thành các đoạn (segment), lưu kết quả sẵn cho mỗi đoạn, rồi kết hợp nhanh khi cần truy vấn.
+Segment Tree hoạt động chính xác như vậy. Nó chia mảng thành các đoạn (segment) theo cấu trúc cây nhị phân, lưu kết quả sẵn cho mỗi đoạn, rồi kết hợp nhanh khi cần truy vấn hoặc cập nhật.
 
 ---
 

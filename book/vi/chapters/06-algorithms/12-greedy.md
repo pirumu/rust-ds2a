@@ -2,7 +2,7 @@
 
 ## Đây là gì?
 
-Tưởng tượng bạn đi ăn buffet. Chiến lược của bạn: **luôn lấy món ngon nhất trước**. Không cần suy nghĩ về tương lai, không cần lên kế hoạch phức tạp — cứ nhìn trước mắt, chọn cái tốt nhất.
+Tưởng tượng bạn đang trả tiền và cần thối 36.000đ. Bạn có các tờ: 20k, 10k, 5k, 2k, 1k. Bạn sẽ làm gì? **Lấy tờ lớn nhất có thể trước** — 20k, rồi 10k, rồi 5k, rồi 1k. Xong! 4 tờ. Bạn không cần thử mọi cách kết hợp, chỉ cần **mỗi bước chọn tờ lớn nhất mà không vượt quá số còn lại**.
 
 Đây chính là **Greedy Algorithm** (thuật toán tham lam) — tại mỗi bước, luôn chọn **phương án tốt nhất tại thời điểm đó** (locally optimal), hy vọng dẫn đến kết quả tốt nhất toàn cục (globally optimal).
 

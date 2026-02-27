@@ -2,11 +2,11 @@
 
 ## Đây là gì?
 
-Hãy tưởng tượng bạn **lan truyền một tin đồn**. Bạn kể cho 3 người bạn thân. Rồi mỗi người bạn đó kể cho bạn bè của họ. Rồi bạn bè của bạn bè lại kể tiếp. Tin đồn lan ra theo **từng vòng** -- vòng 1 là bạn bè trực tiếp, vòng 2 là bạn của bạn, vòng 3 là bạn của bạn của bạn...
+Hãy tưởng tượng bạn **thả một viên đá xuống mặt hồ**. Sóng lan ra theo từng vòng tròn -- vòng 1 gần nhất, vòng 2 xa hơn, vòng 3 xa hơn nữa... Mỗi vòng sóng lan đều ra mọi hướng trước khi vòng tiếp theo bắt đầu.
 
 Đó chính là cách **BFS** (Breadth-First Search -- tìm kiếm theo chiều rộng) hoạt động. Nó khám phá graph **theo từng lớp**, từ gần đến xa.
 
-Tại sao cần BFS? Vì BFS tự nhiên tìm được **đường đi ngắn nhất** (ít cạnh nhất) trong graph không trọng số. Giống như tin đồn đến tai ai đầu tiên = con đường ngắn nhất từ bạn đến người đó.
+Tại sao cần BFS? Vì BFS tự nhiên tìm được **đường đi ngắn nhất** (ít cạnh nhất) trong graph không trọng số. Vòng sóng đầu tiên chạm tới đâu = con đường ngắn nhất từ điểm xuất phát đến đó.
 
 BFS dùng **queue** (hàng đợi) -- ai đến trước phục vụ trước, giống xếp hàng mua vé.
 

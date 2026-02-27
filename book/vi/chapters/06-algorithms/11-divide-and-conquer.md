@@ -2,15 +2,15 @@
 
 ## Đây là gì?
 
-Tưởng tượng bạn cần dọn dẹp một căn nhà rất lớn. Một mình làm thì choáng ngợp. Thay vào đó, bạn **chia nhà thành các phòng**, dọn từng phòng một, rồi **gộp lại** — cả nhà sạch!
+Bầu cử có hàng triệu phiếu. Không ai ngồi đếm tất cả một chỗ. Thay vào đó, mỗi phường đếm phiếu của mình, báo kết quả lên quận, quận tổng hợp báo lên thành phố, thành phố báo lên trung ương. Mỗi cấp chỉ làm một việc nhỏ — **đếm phần của mình** hoặc **cộng kết quả từ cấp dưới**. Đó chính là Divide and Conquer.
 
-Đây chính là **Divide and Conquer** (chia để trị) — một mô hình thiết kế thuật toán gồm 3 bước:
+**Divide and Conquer** (chia để trị) là mô hình thiết kế thuật toán gồm 3 bước:
 
 1. **Divide** (chia) — tách bài toán lớn thành các bài toán con nhỏ hơn cùng loại
-2. **Conquer** (trị) — giải từng bài con bằng đệ quy (base case: bài nhỏ đến mức giải được ngay)
+2. **Conquer** (trị) — giải từng bài con (nếu còn lớn thì tiếp tục chia, nếu đủ nhỏ thì giải trực tiếp)
 3. **Combine** (gộp) — gộp lời giải các bài con thành lời giải cho bài gốc
 
-Nhiều thuật toán nền tảng đều theo mô hình này: Merge Sort, Quick Sort, Binary Search, v.v.
+Bạn đã gặp pattern này rồi: Merge Sort chia mảng làm đôi rồi merge lại, Binary Search bỏ nửa mảng mỗi bước. Chương này mình nhìn lại chúng dưới góc nhìn chung — để bạn nhận ra pattern khi gặp bài mới.
 
 ---
 

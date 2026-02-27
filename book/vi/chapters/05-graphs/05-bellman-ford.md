@@ -2,15 +2,15 @@
 
 ## Đây là gì?
 
-Dijkstra như Google Maps bình thường -- chỉ xử lý được đường có chi phí dương (khoảng cách, thời gian). Nhưng nếu có **"đường giảm giá"** thì sao?
+Dijkstra như Google Maps bình thường -- chỉ xử lý được đường có chi phí dương (khoảng cách, thời gian). Nhưng đời thực có lúc **đi một đoạn lại được tiền**.
 
-Hãy tưởng tượng: đi từ A đến B tốn 10.000đ, nhưng có chương trình khuyến mãi -- đi qua C được **giảm 3.000đ**. Đó chính là **trọng số âm** (negative weight). Dijkstra không xử lý được, nhưng **Bellman-Ford** thì có thể.
+Hãy tưởng tượng bạn giao hàng giữa các thành phố. Hầu hết chặng đường tốn xăng (chi phí dương). Nhưng có chặng bạn **chở hàng thuê dọc đường, tiền công nhận được nhiều hơn tiền xăng** -- tổng chi phí chặng đó thành **âm**. Đó chính là **trọng số âm** (negative weight). Dijkstra không xử lý được, nhưng **Bellman-Ford** thì có thể.
 
 **Bellman-Ford** giải cùng bài toán với Dijkstra (đường ngắn nhất từ 1 nguồn), nhưng thêm 2 khả năng:
 1. Xử lý **trọng số âm**
 2. Phát hiện **negative cycle** (chu trình âm)
 
-**Negative cycle** là gì? Là một vòng lặp mà đi quanh 1 vòng lại **giảm chi phí**. Giống như vòng lặp "giảm giá vô hạn" -- cứ đi vòng vòng mãi, chi phí giảm mãi, không bao giờ dừng. Khi có negative cycle, **không tồn tại đường ngắn nhất**.
+**Negative cycle** là gì? Là một vòng lặp mà đi quanh 1 vòng lại **giảm chi phí**. Giống như có 3 thành phố mà cứ chạy vòng A->B->C->A, mỗi vòng bạn lại lãi thêm tiền -- chạy mãi, lãi mãi, không bao giờ dừng. Khi có negative cycle, **không tồn tại đường ngắn nhất**.
 
 Cái giá phải trả: Bellman-Ford chậm hơn Dijkstra. O(V * E) vs O((V + E) log V).
 

@@ -2,9 +2,13 @@
 
 ## Đây là gì?
 
-Tưởng tượng bạn có nhóm 4 người chia nhau 1 pizza cắt thành 12 miếng. Mỗi người được 3 miếng. Giờ 1 người phải về sớm. Nếu chia lại **toàn bộ** pizza cho 3 người? Rối. Nhưng nếu chỉ chia lại **3 miếng của người rời đi** cho những người còn lại? Đơn giản hơn nhiều.
+Tưởng tượng 3 bạn sinh viên ở cùng khu trọ, chia nhau **trông xe** cho cả xóm. Cách đơn giản: đánh số xe từ 1 đến 100, xe số 1-33 giao bạn A, 34-66 giao bạn B, 67-100 giao bạn C. Ổn.
 
-Đó chính là ý tưởng của **consistent hashing** -- kỹ thuật phân phối dữ liệu trên nhiều server sao cho khi thêm/bớt server, **chỉ một phần nhỏ dữ liệu** cần di chuyển.
+Nhưng giờ bạn D mới dọn vào, muốn phụ trông xe. Nếu chia lại thành 4 phần đều (1-25, 26-50, 51-75, 76-100)? **Gần như tất cả xe phải đổi chỗ trông.** Chủ xe nào cũng bị ảnh hưởng. Rối loạn.
+
+Cách thông minh hơn: xếp các bạn **quanh một vòng tròn**. Mỗi chiếc xe được gán vào vòng, rồi "đi theo chiều kim đồng hồ" cho đến khi gặp bạn nào thì bạn đó trông. Khi bạn D chen vào vòng, chỉ những xe nằm ngay trước D cần đổi người trông. Phần còn lại giữ nguyên.
+
+Đó chính là **consistent hashing** -- kỹ thuật phân phối dữ liệu trên nhiều server sao cho khi thêm/bớt server, **chỉ một phần nhỏ dữ liệu** cần di chuyển.
 
 ### Tại sao cần? Bài toán cũ có gì sai?
 
