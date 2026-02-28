@@ -2,6 +2,8 @@
 
 ## Đây là gì?
 
+> 💡 **Đừng lo lắng:** Ba thuật toán này đều chạy O(n²) — nghe "chậm" đúng không? Nhưng đừng skip chúng. Chúng là **foundation**. Bạn cần hiểu tại sao chúng chậm, thì mới thấy Merge Sort, Quick Sort ở chương sau hay ở chỗ nào. Giống như học cộng trừ trước rồi mới học nhân chia — không ai nhảy thẳng được. Hơn nữa, Insertion Sort thực tế được dùng **rất nhiều** bên trong các thuật toán sort cao cấp (Timsort, pdqsort). Nên đây không phải kiến thức "học cho có" đâu.
+
 Bạn đã bao giờ sắp xếp bài khi chơi tiến lên chưa? Ba thuật toán sắp xếp cơ bản này chính là những cách tự nhiên nhất mà con người thường làm khi sắp xếp thứ gì đó bằng tay.
 
 ### Bubble Sort — sắp xếp nổi bọt
@@ -132,6 +134,76 @@ Kết quả: [1, 2, 3, 5, 8]
 
 ---
 
+## Stable vs Unstable Sort — tại sao quan trọng?
+
+Trước khi xem code, cần hiểu một khái niệm quan trọng: **stability** (tính ổn định).
+
+Tưởng tượng bạn có danh sách sinh viên, đã sắp xếp theo **tên** (A-Z). Giờ bạn muốn sắp xếp lại theo **điểm**:
+
+```
+Ban đầu (đã sort theo tên):
+  An     - 8 điểm
+  Bình   - 9 điểm
+  Chi    - 8 điểm
+  Dũng   - 9 điểm
+```
+
+**Stable sort** (sắp xếp ổn định): giữ nguyên thứ tự tương đối của các phần tử **bằng nhau**. An và Chi cùng 8 điểm — An vẫn đứng trước Chi vì An đứng trước trong danh sách gốc:
+
+```
+Stable sort theo điểm:
+  An     - 8 điểm   ← An trước Chi (giữ thứ tự cũ)
+  Chi    - 8 điểm
+  Bình   - 9 điểm   ← Bình trước Dũng (giữ thứ tự cũ)
+  Dũng   - 9 điểm
+```
+
+**Unstable sort**: không đảm bảo thứ tự cũ. Có thể Chi đứng trước An:
+
+```
+Unstable sort theo điểm:
+  Chi    - 8 điểm   ← Chi trước An?! Thứ tự cũ bị phá
+  An     - 8 điểm
+  Dũng   - 9 điểm
+  Bình   - 9 điểm
+```
+
+Vậy thuật toán nào stable, thuật toán nào không?
+
+| Thuật toán | Stable? | Tại sao? |
+|-----------|---------|----------|
+| **Bubble Sort** | Stable | Chỉ đổi chỗ khi `>` (strict), phần tử bằng nhau không bị đổi |
+| **Selection Sort** | **Unstable** | Đổi chỗ xa nhau, có thể phá thứ tự. Ví dụ: `[3a, 2, 3b]` → tìm min=2, swap với 3a → `[2, 3a, 3b]`? Không! Thực tế: `[2, 3a?, 3b?]` — phụ thuộc implementation |
+| **Insertion Sort** | Stable | Dịch phần tử sang phải, chèn vào đúng chỗ. Phần tử bằng nhau giữ thứ tự cũ |
+
+> **Tại sao cần quan tâm?** Khi bạn sort 2 lần (theo tên rồi theo điểm), stable sort giữ kết quả lần sort đầu. Unstable sort phá nó. Trong thực tế, database sorting, UI table sorting đều cần stable sort.
+
+---
+
+## Adaptive Sorting — ai thông minh hơn?
+
+Một tính chất ít ai nói nhưng rất quan trọng: **adaptive** — thuật toán có nhanh hơn khi dữ liệu đã gần sorted không?
+
+```
+Mảng gần sorted: [1, 2, 4, 3, 5, 6, 7, 8, 9, 10]
+                           ^--^ chỉ 2 phần tử sai chỗ
+```
+
+- **Insertion Sort**: ADAPTIVE. Mỗi phần tử chỉ cần dịch 1-2 bước → gần O(n). Đây là **bí mật** tại sao nó được dùng trong Timsort và pdqsort.
+- **Bubble Sort**: Phiên bản có `swapped` flag thì dừng sớm được → có chút adaptive, nhưng vẫn chậm hơn Insertion Sort nhiều.
+- **Selection Sort**: KHÔNG adaptive. Luôn quét hết mảng tìm min, dù mảng đã sorted hay chưa → luôn O(n²).
+
+```
+          Mảng đã sorted    Mảng ngẫu nhiên    Mảng ngược
+          (best case)       (avg case)          (worst case)
+          ─────────────     ──────────────      ──────────────
+Insertion   O(n) ⚡           O(n²)              O(n²)
+Bubble      O(n) ⚡           O(n²)              O(n²)
+Selection   O(n²)  💀        O(n²)              O(n²)
+```
+
+---
+
 ## Code Rust
 
 ```rust
@@ -187,27 +259,191 @@ pub fn insertion_sort<T: Ord>(arr: &mut [T]) {
 - `arr.swap(i, j)` đổi chỗ 2 phần tử mà không gặp vấn đề với borrow checker. Nếu bạn viết `arr[i] = arr[j]` sẽ bị lỗi vì Rust không cho mượn mutable 2 lần.
 - `saturating_sub` tránh lỗi tràn số khi trừ số không dấu (unsigned). Ví dụ: `0usize - 1` sẽ panic, nhưng `0usize.saturating_sub(1)` trả về `0`.
 
+> **Tại sao Insertion Sort dùng `>` chứ không phải `>=`?** Vì dùng `>` (strict greater) thì phần tử bằng nhau KHÔNG bị đổi chỗ → giữ thứ tự cũ → **stable**. Nếu đổi thành `>=` thì mất stability.
+
 ---
 
 ## Độ phức tạp
 
-| Thuật toán | Tốt nhất | Trung bình | Xấu nhất | Bộ nhớ | Ổn định? |
-|-----------|---------|-----------|---------|--------|---------|
-| Bubble Sort | O(n) | O(n^2) | O(n^2) | O(1) | Có |
-| Selection Sort | O(n^2) | O(n^2) | O(n^2) | O(1) | Không |
-| Insertion Sort | O(n) | O(n^2) | O(n^2) | O(1) | Có |
+### Bảng so sánh chi tiết
+
+| | Bubble Sort | Selection Sort | Insertion Sort |
+|---|---|---|---|
+| **Best** | O(n) | O(n²) | O(n) |
+| **Average** | O(n²) | O(n²) | O(n²) |
+| **Worst** | O(n²) | O(n²) | O(n²) |
+| **Bộ nhớ** | O(1) | O(1) | O(1) |
+| **Stable?** | Có | Không | Có |
+| **In-place?** | Có | Có | Có |
+| **Adaptive?** | Có (swapped flag) | Không | Có |
+| **So sánh** | O(n²) | O(n²) | O(n²) |
+| **Swaps** | O(n²) | O(n) | O(n²) |
 
 **Giải thích thực tế:**
 
-- **O(n^2)** nghĩa là: nếu mảng có 1.000 phần tử, cần khoảng 1.000.000 phép tính. Với 10.000 phần tử -> 100.000.000 phép tính. Quá chậm cho dữ liệu lớn!
+- **O(n²)** nghĩa là: nếu mảng có 1.000 phần tử, cần khoảng 1.000.000 phép tính. Với 10.000 phần tử -> 100.000.000 phép tính. Quá chậm cho dữ liệu lớn!
 - **O(n)** ở trường hợp tốt nhất: khi mảng gần như đã sắp xếp, Bubble Sort và Insertion Sort chỉ cần duyệt qua một lần.
-- **Ổn định (stable)**: giữ nguyên thứ tự tương đối của các phần tử bằng nhau. Ví dụ: nếu có 2 sinh viên cùng điểm, thứ tự của họ không bị đảo lộn.
+- Selection Sort có **ít swap nhất** — O(n) swaps. Hữu ích khi swap tốn kém (ví dụ: di chuyển file lớn trên disk).
 
-**Khi nào nên dùng?**
+### Khi nào dùng cái nào?
 
-- Mảng nhỏ (< 50 phần tử): Insertion Sort rất nhanh và đơn giản.
-- Mảng gần như đã sắp xếp: Insertion Sort là lựa chọn tốt nhất.
-- Thực tế: nhiều thuật toán sort nâng cao (như Timsort trong Python và Java) dùng Insertion Sort cho các đoạn nhỏ.
+| Tình huống | Chọn | Tại sao |
+|-----------|------|---------|
+| Mảng nhỏ (< 20-50 phần tử) | **Insertion Sort** | Overhead thấp, hằng số nhỏ, nhanh hơn cả Quick Sort cho mảng nhỏ |
+| Mảng gần sorted | **Insertion Sort** | O(n) — nhanh gần như linear |
+| Cần ít swap nhất | **Selection Sort** | Chỉ O(n) swaps |
+| Cần stable + đơn giản | **Insertion Sort** | Stable + adaptive + nhanh trên mảng nhỏ |
+| Mảng lớn (> 1000) | **Không dùng cả 3** | Dùng Merge Sort hoặc Quick Sort (chương sau) |
+| Giảng dạy / demo | **Bubble Sort** | Dễ hiểu nhất, visual nhất |
+
+---
+
+## Insertion Sort — ngôi sao ẩn giấu
+
+Insertion Sort xứng đáng được nói thêm vì nó **thực sự được dùng trong production**.
+
+### Bí mật: O(n) trên mảng gần sorted
+
+Khi mảng gần sorted, mỗi phần tử chỉ cần dịch 1-2 bước. Tổng số swap ít, nên chạy gần O(n):
+
+```
+Mảng gần sorted: [1, 2, 3, 5, 4, 6, 7, 8]
+                              ^--^ chỉ cần swap 1 lần
+
+Insertion Sort chỉ cần 1 pass + 1 swap → gần O(n)!
+```
+
+### Hybrid sorting algorithms dùng Insertion Sort
+
+Các thuật toán sort "xịn" nhất hiện nay đều dùng Insertion Sort cho mảng nhỏ:
+
+```
+Timsort (Python, Java, Rust sort()):
+  1. Chia mảng thành các "run" nhỏ (32-64 phần tử)
+  2. Sort mỗi run bằng... INSERTION SORT! ← đây nè
+  3. Merge các run lại (giống Merge Sort)
+
+pdqsort (C++, Rust sort_unstable()):
+  1. Quick Sort cho mảng lớn
+  2. Khi partition nhỏ (< ~24 phần tử) → chuyển sang INSERTION SORT
+  3. Khi detect mảng gần sorted → dùng Insertion Sort luôn
+```
+
+Tại sao không dùng Quick Sort/Merge Sort cho mảng nhỏ luôn? Vì overhead của recursion (tạo stack frame — nhớ chương Recursion không?) + cache miss khiến chúng chậm hơn Insertion Sort đơn giản trên mảng nhỏ.
+
+---
+
+## Pitfalls — sai lầm hay gặp
+
+### Pitfall 1: Nghĩ O(n²) "vô dụng, không cần học"
+
+❌ **Sai:** "O(n²) chậm vậy thì skip, học thẳng Quick Sort đi."
+
+✅ **Đúng:** O(n²) sort là foundation. Insertion Sort được dùng bên trong Timsort và pdqsort — hai thuật toán sort phổ biến nhất thế giới.
+
+💡 **Tại sao:** Hiểu O(n²) sort giúp bạn: (1) appreciate tại sao O(n log n) sort hay hơn, (2) biết khi nào O(n²) lại nhanh hơn (mảng nhỏ, mảng gần sorted), (3) trả lời phỏng vấn khi được hỏi "tại sao không dùng Insertion Sort cho mảng lớn?"
+
+### Pitfall 2: Nhầm stable vs unstable
+
+❌ **Sai:** "Stable/unstable chỉ là lý thuyết, code thế nào chẳng được."
+
+✅ **Đúng:** Stable sort quan trọng khi bạn sort nhiều lần theo các tiêu chí khác nhau (sort theo tên rồi sort theo điểm).
+
+💡 **Tại sao:** Trong Rust, `sort()` là stable (Timsort) và `sort_unstable()` là unstable (pdqsort). Nếu bạn dùng sai, kết quả sort có thể khác mong đợi. Xem phần Rust Ecosystem bên dưới.
+
+### Pitfall 3: Nghĩ Bubble Sort và Insertion Sort "giống nhau vì đều O(n²)"
+
+❌ **Sai:** "Cả 2 đều O(n²), chọn cái nào cũng vậy."
+
+✅ **Đúng:** Insertion Sort nhanh hơn Bubble Sort trên hầu hết mọi input thực tế.
+
+💡 **Tại sao:** Bubble Sort mỗi lần swap chỉ dịch phần tử 1 bước. Insertion Sort dịch phần tử đến đúng vị trí luôn. Số phép so sánh giống nhau, nhưng Insertion Sort ít swap hơn nhiều. Thêm nữa, Insertion Sort adaptive còn Bubble Sort thì chậm chạp.
+
+---
+
+## Rust Ecosystem — sort trong thực tế
+
+Rust standard library cung cấp 2 method sort:
+
+```rust
+let mut v = vec![3, 1, 4, 1, 5, 9, 2, 6];
+
+// sort() — Timsort, stable, O(n log n)
+// Giữ thứ tự tương đối của phần tử bằng nhau
+v.sort();
+
+// sort_unstable() — pdqsort, unstable, O(n log n)
+// Nhanh hơn sort() ~10-30% vì không cần allocate thêm memory
+// Nhưng không đảm bảo thứ tự phần tử bằng nhau
+v.sort_unstable();
+```
+
+### Khi nào dùng `sort()` vs `sort_unstable()`?
+
+```
+sort()           sort_unstable()
+──────────────   ──────────────────
+Timsort          pdqsort
+Stable           Unstable
+O(n) extra mem   O(1) extra mem (in-place)
+Chậm hơn ~10%   Nhanh hơn ~10%
+
+Dùng khi:        Dùng khi:
+- Cần stable     - Không quan tâm thứ tự phần tử bằng nhau
+- Sort struct    - Sort số (i32, f64...)
+  theo nhiều     - Performance-critical code
+  tiêu chí
+```
+
+**Cả hai đều dùng Insertion Sort cho mảng nhỏ bên trong.** Kiến thức bạn học ở chương này không phí đâu.
+
+### sort_by và sort_by_key
+
+```rust
+#[derive(Debug)]
+struct Student {
+    name: String,
+    score: u32,
+}
+
+let mut students = vec![
+    Student { name: "An".into(), score: 8 },
+    Student { name: "Bình".into(), score: 9 },
+    Student { name: "Chi".into(), score: 8 },
+];
+
+// sort_by — stable, giữ thứ tự An trước Chi (cùng 8 điểm)
+students.sort_by(|a, b| a.score.cmp(&b.score));
+
+// sort_by_key — stable, ngắn gọn hơn
+students.sort_by_key(|s| s.score);
+
+// sort_unstable_by — unstable, nhanh hơn
+students.sort_unstable_by(|a, b| a.score.cmp(&b.score));
+```
+
+### KaCrab integration
+
+Trong crate `rust_ds2a`, bạn đã có sẵn 3 hàm sort cơ bản để thực hành:
+
+```rust
+use rust_ds2a::sorting::{bubble_sort, selection_sort, insertion_sort};
+
+let mut v = vec![5, 3, 8, 1, 2];
+insertion_sort(&mut v);
+assert_eq!(v, vec![1, 2, 3, 5, 8]);
+```
+
+So sánh với standard library:
+
+```rust
+// Bạn tự viết — để học
+insertion_sort(&mut v);
+
+// Production code — dùng standard library
+v.sort();           // stable (Timsort, bên trong có Insertion Sort)
+v.sort_unstable();  // unstable nhưng nhanh hơn (pdqsort)
+```
 
 ---
 
@@ -231,3 +467,83 @@ let mut v = vec![4, 1, 3, 2];
 insertion_sort(&mut v);
 assert_eq!(v, vec![1, 2, 3, 4]);
 ```
+
+---
+
+## Practice — luyện tập
+
+### LeetCode 75. Sort Colors
+
+> Cho mảng chỉ chứa 0, 1, 2. Sắp xếp in-place.
+
+Bài này có thể giải bằng nhiều cách — thử dùng Insertion Sort hoặc Selection Sort trước, rồi tối ưu bằng counting sort hoặc Dutch National Flag algorithm (3-way partition — sẽ gặp lại ở Quick Sort).
+
+```rust
+// Cách 1: Dùng Insertion Sort — đúng nhưng O(n²)
+fn sort_colors_insertion(nums: &mut Vec<i32>) {
+    for i in 1..nums.len() {
+        let mut j = i;
+        while j > 0 && nums[j - 1] > nums[j] {
+            nums.swap(j - 1, j);
+            j -= 1;
+        }
+    }
+}
+
+// Cách 2: Counting sort — O(n), tận dụng chỉ có 3 giá trị
+fn sort_colors(nums: &mut Vec<i32>) {
+    let (mut c0, mut c1, mut c2) = (0, 0, 0);
+    for &x in nums.iter() {
+        match x {
+            0 => c0 += 1,
+            1 => c1 += 1,
+            _ => c2 += 1,
+        }
+    }
+    let mut i = 0;
+    for _ in 0..c0 { nums[i] = 0; i += 1; }
+    for _ in 0..c1 { nums[i] = 1; i += 1; }
+    for _ in 0..c2 { nums[i] = 2; i += 1; }
+}
+```
+
+### LeetCode 147. Insertion Sort List
+
+> Sắp xếp linked list bằng Insertion Sort.
+
+Bài này giúp bạn hiểu Insertion Sort trên linked list (khác array). Trên array, bạn dịch phần tử sang phải. Trên linked list, bạn thay đổi pointer. Nhớ lại chương Singly Linked List — thao tác insert vào giữa list cần giữ tham chiếu đến node trước đó.
+
+---
+
+## Tổng kết
+
+```
+Ba thuật toán O(n²) — chậm nhưng quan trọng:
+
+  Bubble Sort    → dễ hiểu, dễ dạy, ít khi dùng thực tế
+  Selection Sort → ít swap, unstable, không adaptive
+  Insertion Sort → NGÔI SAO: stable, adaptive, dùng trong Timsort/pdqsort
+
+Key takeaways:
+  ✅ Stable sort giữ thứ tự phần tử bằng nhau
+  ✅ Adaptive sort nhanh hơn trên mảng gần sorted
+  ✅ Insertion Sort = O(n) trên mảng gần sorted
+  ✅ Rust: sort() = stable, sort_unstable() = nhanh hơn
+  ✅ Cả 3 đều in-place (O(1) memory)
+```
+
+---
+
+## Chương tiếp theo: Merge Sort
+
+Ba thuật toán này đều O(n²) — quá chậm cho mảng lớn. Có cách nào nhanh hơn không?
+
+Có! **Merge Sort** đạt O(n log n) bằng cách áp dụng **Divide and Conquer** (chia để trị) — chia mảng thành 2 nửa, sort từng nửa (bằng recursion — nhớ chương trước không?), rồi gộp lại. Thú vị hơn: Merge Sort cũng stable, và là nền tảng của Timsort mà bạn vừa nghe nói ở chương này.
+
+Câu hỏi để suy nghĩ trước: *"Nếu chia mảng thành 2 nửa đã sorted, gộp chúng lại mất bao lâu?"*
+
+---
+
+---
+
+[← Recursion](./01-recursion.md) | [Merge Sort →](./03-merge-sort.md)

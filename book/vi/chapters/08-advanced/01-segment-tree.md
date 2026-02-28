@@ -1,8 +1,16 @@
 # Segment Tree
 
-## Đây là gì?
+## Bạn cần gì trước khi đọc chương này?
 
-Bạn đã học Binary Tree ở Phần 3 và Recursion ở Phần 6. Segment Tree kết hợp cả hai để trả lời câu hỏi **"tổng/min/max từ i đến j"** trong O(log n).
+> 💡 **Đừng lo lắng:** Bạn chỉ cần hai thứ:
+> - **Binary Tree** (chương 3) — cách cây nhị phân chia nhánh trái/phải
+> - **Recursion** (chương 6) — gọi hàm chính nó, chia nhỏ bài toán
+>
+> Nếu đã qua hai chương đó thì yên tâm. Segment Tree chỉ là **mỗi node lưu sẵn kết quả tổng hợp (aggregate) cho một đoạn liên tục** của mảng. Vậy thôi.
+
+---
+
+## Đây là gì?
 
 Hãy tưởng tượng bạn là **quản lý chuỗi cửa hàng** có 16 chi nhánh. Sếp hay hỏi: "Doanh thu từ chi nhánh 5 đến 12 là bao nhiêu?" Nếu mỗi lần phải gọi điện từng chi nhánh hỏi số, rất chậm. Thay vào đó, bạn tổ chức theo **cấp bậc**: mỗi quản lý vùng phụ trách 2 quản lý nhỏ hơn, mỗi người đó lại phụ trách 2 nhóm nhỏ hơn nữa, cho đến từng chi nhánh. Mỗi quản lý luôn **cập nhật sẵn tổng doanh thu** vùng mình. Khi sếp hỏi, bạn chỉ cần hỏi vài quản lý vùng, gộp lại là xong. Khi một chi nhánh thay đổi doanh thu, chỉ cần cập nhật **dọc theo chuỗi quản lý** lên trên — không cần tính lại tất cả.
 
@@ -33,7 +41,18 @@ Prefix sum:  [2, 7, 8, 12, 21, 24]
 Tổng [1..4] = prefix[4] - prefix[0] = 21 - 2 = 19   --> O(1)!
 ```
 
-Nhưng nếu **cập nhật** giá trị (ví dụ: thay đổi sách trên kệ)? Phải tính lại toàn bộ prefix sum --> O(n).
+Nhưng nếu **cập nhật** giá trị (ví dụ: chi nhánh 3 báo doanh thu mới)? Phải tính lại toàn bộ prefix sum --> O(n).
+
+### Cầu nối: Prefix Sum --> Segment Tree
+
+Đây là trade-off kinh điển:
+
+```
+Prefix Sum:    Query O(1)      Update O(n)     ← đọc nhanh, sửa chậm
+Segment Tree:  Query O(log n)  Update O(log n) ← cả hai đều nhanh
+```
+
+Prefix Sum giống **cuốn sổ ghi tay** — tra cực nhanh, nhưng mỗi lần sửa một dòng thì phải viết lại cả trang. Segment Tree giống **bảng tính Excel có công thức** — tra chậm hơn một chút, nhưng sửa một ô thì các ô liên quan tự cập nhật.
 
 ### Segment Tree — cân bằng cả hai
 
@@ -68,9 +87,9 @@ Mỗi node lưu **tổng của một đoạn liên tục**:
 
 ### Lưu trữ trong mảng phẳng
 
-Giống Binary Heap, ta dùng mảng 1-indexed:
+Giống Binary Heap (chương 3), ta dùng mảng 1-indexed:
 - Node `i` có con trái ở `2*i`, con phải ở `2*i+1`
-- Kích thước mảng: `4 * n` (đủ cho mọi trường hợp)
+- Kích thước mảng: **`4 * n`** (xem phần Pitfalls bên dưới để hiểu tại sao)
 
 ```
 Index:  1    2    3    4    5    6    7    8    9   10   11
@@ -160,6 +179,8 @@ Trước:                              Sau:
 Đi từ lá lên root, cập nhật lại tổng mỗi node trên đường đi.
 ```
 
+Giống hệt việc quản lý chi nhánh báo doanh thu mới — chỉ cần cập nhật **dọc theo chuỗi quản lý** lên trên, không cần động tới các nhánh khác.
+
 **Time:** O(log n) — chỉ cập nhật các node trên một nhánh.
 
 ---
@@ -172,7 +193,7 @@ Nếu muốn **cộng thêm 5 vào tất cả phần tử từ index 1 đến 4*
 
 ### Ý tưởng: "Lười biếng" (Lazy)
 
-Thay vì cập nhật ngay tất cả node con, ta **ghi nhớ** (lazy) ở node cha: "Các con tôi cần cộng thêm 5, nhưng tôi chưa làm". Chỉ khi nào thực sự cần truy cập node con, ta mới **đẩy** (push down) giá trị lazy xuống.
+Quay lại ẩn dụ chuỗi cửa hàng: sếp nói "thưởng thêm 5 triệu cho chi nhánh 1 đến 4". Bạn **không** gọi từng chi nhánh. Bạn ghi vào sổ quản lý vùng: "vùng này cần cộng thêm 5 triệu". Chỉ khi nào ai đó hỏi chi tiết từng chi nhánh, bạn mới thực sự phân phối xuống.
 
 ```
 range_update [1..4], +5:
@@ -276,8 +297,10 @@ Thay đổi duy nhất: **phép kết hợp**.
 | Sum  | `left + right` | `0` |
 | Min  | `min(left, right)` | `i64::MAX` |
 | Max  | `max(left, right)` | `i64::MIN` |
+| GCD  | `gcd(left, right)` | `0` |
+| XOR  | `left ^ right` | `0` |
 
-Cấu trúc cây và thuật toán query/update **hoàn toàn giống nhau**.
+Cấu trúc cây và thuật toán query/update **hoàn toàn giống nhau**. Đây là sức mạnh của Segment Tree — bạn chỉ cần thay đổi **một dòng code** (phép kết hợp) để giải một loại bài toán hoàn toàn khác.
 
 ---
 
@@ -292,22 +315,232 @@ Cấu trúc cây và thuật toán query/update **hoàn toàn giống nhau**.
 
 ---
 
+## Pitfalls — Những lỗi hay gặp
+
+### 1. Kích thước mảng: 4n, không phải 2n
+
+❌ **Sai:** `tree = vec![0; 2 * n]` — "Cây nhị phân có 2n node mà?"
+
+✅ **Đúng:** `tree = vec![0; 4 * n]`
+
+💡 **Tại sao:** Khi `n` không phải lũy thừa của 2, cây không hoàn hảo (perfect binary tree). Một số node ở tầng cuối bị lệch, index có thể vượt `2n`. Dùng `4n` là an toàn cho mọi trường hợp. Trong Rust code của KaCrab, bạn thấy dòng `vec![0i64; 4 * n.max(1)]` — đó là lý do.
+
+```
+n = 5, dùng 2*n = 10 slots?
+
+          1
+        /   \
+       2     3
+      / \   / \
+     4   5 6   7       ← index 7 rồi
+    / \  |
+   8  9 10              ← index 10, vẫn ổ nếu 2n
+
+Nhưng nếu n = 6:
+          1
+        /   \
+       2     3
+      / \   / \
+     4   5 6   7
+    / \ / \  |   |
+   8  9 10 11 12 13     ← index 13 > 2*6 = 12. BÙM! 💥
+```
+
+### 2. Lazy push_down — PHẢI gọi trước khi đi xuống con
+
+❌ **Sai:** Query hoặc update con mà quên push_down trước
+
+```rust
+// Sai: đi xuống con mà chưa push lazy
+fn query_inner(&mut self, node, start, end, l, r) {
+    let mid = (start + end) / 2;
+    // Ủa, node này có lazy chưa đẩy xuống mà đã hỏi con???
+    self.query_inner(2 * node, start, mid, l, r)  // SAI!
+}
+```
+
+✅ **Đúng:** Luôn `push_down` trước khi chia đôi
+
+```rust
+fn query_inner(&mut self, node, start, end, l, r) {
+    self.push_down(node, start, end);  // ← LUÔN gọi trước
+    let mid = (start + end) / 2;
+    self.query_inner(2 * node, start, mid, l, r)
+}
+```
+
+💡 **Tại sao:** Nếu node cha đang giữ lazy value mà bạn hỏi con, con sẽ trả về giá trị **cũ** (chưa được cộng thêm). Kết quả sai mà khó debug vì chỉ sai trong một số trường hợp cụ thể.
+
+### 3. Range boundaries — inclusive hay exclusive?
+
+❌ **Sai:** Nhầm lẫn `[l, r]` inclusive với `[l, r)` exclusive
+
+✅ **Đúng:** Chọn một convention và giữ nhất quán. Code của KaCrab dùng **inclusive `[l, r]`** — cả `l` và `r` đều tính.
+
+💡 **Tại sao:** Nhầm boundary off-by-one là bug phổ biến nhất với Segment Tree. Khi đi từ LeetCode (0-indexed, thường inclusive) sang competitive programming (đôi khi 1-indexed), phải cẩn thận.
+
+### 4. Overflow khi tính mid
+
+❌ **Sai:** `mid = (start + end) / 2` — có thể overflow nếu `start + end` lớn
+
+✅ **Đúng:** `mid = start + (end - start) / 2`
+
+💡 **Tại sao:** Với `usize` trong Rust thì ít gặp overflow (vì usize rất lớn), nhưng đây là thói quen tốt. Code trong `segment_tree.rs` đã dùng cách đúng.
+
+---
+
+## Segment Tree vs Fenwick Tree — Khi nào dùng cái nào?
+
+Chương tiếp theo sẽ nói chi tiết về Fenwick Tree (Binary Indexed Tree), nhưng đây là bảng so sánh nhanh:
+
+| Tiêu chí | Segment Tree | Fenwick Tree |
+|----------|:---:|:---:|
+| Range Sum query | O(log n) | O(log n) |
+| Point update | O(log n) | O(log n) |
+| Range update (lazy) | O(log n) | Phức tạp hơn |
+| Range Min/Max query | O(log n) | Khó / Không hỗ trợ |
+| Bộ nhớ | 4n | n |
+| Code complexity | Dài hơn (~60 dòng) | Ngắn (~20 dòng) |
+| Constant factor | Chậm hơn | **Nhanh hơn** |
+| Linh hoạt | **Rất cao** | Trung bình |
+
+**Tóm lại:**
+- **Fenwick Tree** nếu bài toán chỉ cần **sum + point update** — code ngắn, chạy nhanh hơn
+- **Segment Tree** nếu cần **min/max**, **range update** (lazy), hoặc các phép kết hợp phức tạp (GCD, merge sort tree...)
+- Khi không chắc → dùng Segment Tree. Nó xử lý được mọi thứ Fenwick Tree làm được, và nhiều hơn.
+
+---
+
 ## Khi nào dùng Segment Tree?
 
-- Bài toán có **nhiều lần query** trên đoạn (tổng, min, max, GCD...)
-- **Vừa query vừa update** — prefix sum không đủ
-- Dữ liệu thay đổi liên tục (online)
-- Competitive programming: rất phổ biến!
+| Tình huống | Dùng gì? | Tại sao? |
+|-----------|----------|----------|
+| Chỉ query sum, không update | Prefix Sum | O(1) query, đơn giản |
+| Query sum + point update | Segment Tree hoặc Fenwick Tree | Cả hai O(log n) |
+| Query min/max + point update | **Segment Tree** | Fenwick Tree không hỗ trợ min/max tốt |
+| Range update + range query | **Segment Tree + Lazy** | Fenwick Tree phức tạp hơn nhiều |
+| Dữ liệu rất nhỏ (n < 1000) | Brute force | Đơn giản, đủ nhanh |
+| Query GCD/XOR + update | **Segment Tree** | Chỉ cần đổi phép kết hợp |
+| Đếm phần tử < x trong range | **Segment Tree + Merge Sort Tree** | Nâng cao, nhưng cùng ý tưởng |
 
-**Không cần** nếu:
+**Không cần** Segment Tree nếu:
 - Chỉ query, không update → dùng prefix sum (O(1) query)
 - Chỉ update, không query → dùng mảng thường
 - Dữ liệu rất nhỏ → duyệt brute force cũng được
 
 ---
 
+## Persistent Segment Tree — Nâng cao
+
+> Đây là kiến thức nâng cao. Bạn không cần hiểu ngay, nhưng nên biết nó tồn tại.
+
+Persistent Segment Tree cho phép bạn **giữ lại lịch sử** — sau mỗi update, bạn có thể query **phiên bản cũ** của cây. Giống như Git: mỗi commit tạo version mới, nhưng version cũ vẫn truy cập được.
+
+**Ý tưởng:** Khi update một node, thay vì sửa trực tiếp, tạo **node mới** và chỉ copy đường đi từ lá lên root. Các node không bị ảnh hưởng vẫn share với version cũ.
+
+```
+Version 0:         Version 1 (sau update index 2):
+
+    [0..3]=10          [0..3]=15      ← node mới
+   /        \         /        \
+ [0..1]=3  [2..3]=7  [0..1]=3  [2..3]=12  ← node mới
+                        │ share    /    \
+                                [2]=10  [3]=2  ← node mới
+                                  ↑
+                                (cũ là 5)
+```
+
+**Ứng dụng:** Query "tổng từ i đến j **tại thời điểm t**", hoặc bài K-th smallest element in range.
+
+**Space:** O(n log n) vì mỗi update tạo O(log n) node mới.
+
+---
+
+## Rust Ecosystem
+
+### Crate `rust_ds2a` (KaCrab)
+
+Thư viện của chúng ta có 3 struct trong module `segment_tree`:
+
+| Struct | Chức năng |
+|--------|-----------|
+| `SegmentTree` | Range sum + point update |
+| `SegmentTreeMin` | Range min + point update |
+| `LazySegmentTree` | Range sum + lazy range update |
+
+Code dùng `Vec<i64>` với size `4 * n`, 1-indexed. Xem file `src/segment_tree.rs` để đọc implementation đầy đủ (~90 dòng cho mỗi variant).
+
+### Crates bên ngoài
+
+| Crate | Mô tả |
+|-------|-------|
+| [`ac-library-rs`](https://crates.io/crates/ac-library-rs) | Port của AtCoder Library. Có `Segtree` generic với trait `Monoid` — bạn chỉ cần implement phép kết hợp |
+| [`competitive-programming-rs`](https://github.com/kenkoooo/competitive-programming-rs) | Collection cho competitive programming, bao gồm lazy segment tree |
+
+Nếu bạn tham gia competitive programming trên AtCoder, `ac-library-rs` rất tiện vì nó match API chính thức.
+
+### Tip: Generic Segment Tree với trait
+
+Trong Rust, bạn có thể tạo Segment Tree generic bằng trait:
+
+```rust
+trait Monoid {
+    fn identity() -> Self;       // phần tử trung tính
+    fn combine(&self, other: &Self) -> Self;  // phép kết hợp
+}
+
+// Sum
+impl Monoid for i64 {
+    fn identity() -> Self { 0 }
+    fn combine(&self, other: &Self) -> Self { self + other }
+}
+```
+
+Như vậy một struct `SegmentTree<T: Monoid>` xử lý được sum, min, max, GCD... chỉ bằng cách implement trait khác nhau. Đây là cách `ac-library-rs` làm.
+
+---
+
+## Practice — Bài tập
+
+### LeetCode
+
+| # | Bài | Gợi ý |
+|---|-----|-------|
+| 307 | [Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/) | Bài "hello world" của Segment Tree. Build + point update + range sum query. Dùng đúng code trong chương này. |
+| 315 | [Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) | Duyệt từ phải sang trái, dùng Segment Tree đếm số phần tử < giá trị hiện tại. Cần coordinate compression. |
+
+### Competitive Programming
+
+| Nguồn | Bài | Gợi ý |
+|-------|-----|-------|
+| CSES | [Range Sum Queries II](https://cses.fi/problemset/task/1648) | Segment Tree cơ bản |
+| CSES | [Range Update Queries](https://cses.fi/problemset/task/1651) | Lazy Propagation |
+| Codeforces | [Sereja and Brackets](https://codeforces.com/problemset/problem/380/C) | Segment Tree với merge phức tạp hơn |
+
+### Cách tiếp cận
+
+1. **Bắt đầu với #307** — nếu AC được bài này, bạn đã hiểu Segment Tree cơ bản
+2. Thử **CSES Range Update** — để luyện lazy propagation
+3. **#315** là bài ứng dụng sáng tạo — đừng nản nếu chưa nghĩ ra ngay
+
+---
+
 ## Tóm tắt
 
-Segment Tree giống như **cuốn sổ tổng hợp** của thư viện. Thay vì đếm từng kệ sách, bạn tra sổ và tìm đáp án nhanh chóng. Khi có sách mới hoặc bớt sách, bạn chỉ cần sửa vài dòng trong sổ — không cần viết lại toàn bộ.
+Segment Tree giống như **hệ thống quản lý chuỗi cửa hàng**. Thay vì gọi điện từng chi nhánh hỏi doanh thu, bạn tổ chức theo cấp bậc — mỗi quản lý vùng nắm sẵn tổng. Hỏi nhanh O(log n), cập nhật cũng nhanh O(log n).
 
-Lazy Propagation là phiên bản "lười biếng thông minh" — ghi nhớ thay đổi, chỉ thực hiện khi thực sự cần. Giống như bạn ghi note "cộng thêm 5 sách cho cả khu A" thay vì đi sửa từng kệ một.
+Lazy Propagation là phiên bản "lười biếng thông minh" — ghi nhớ thay đổi, chỉ thực hiện khi thực sự cần. Giống như bạn ghi note "thưởng thêm 5 triệu cho cả khu A" thay vì gọi từng chi nhánh thông báo.
+
+Nhớ:
+- **4n** cho mảng, không phải 2n
+- **push_down trước** khi đi xuống con
+- Segment Tree > Fenwick Tree khi cần min/max hoặc lazy
+- Fenwick Tree > Segment Tree khi chỉ cần sum (ngắn hơn, nhanh hơn)
+
+---
+
+## Tiếp theo
+
+---
+
+[← Tree Patterns](../07-patterns/09-tree-patterns.md) | [Fenwick Tree →](./02-fenwick-tree.md)

@@ -1,8 +1,15 @@
 # LRU Cache
 
-## Đây là gì?
+## Bạn đã biết đủ rồi!
 
-Bạn đã học HashMap ở Phần 4 và Doubly Linked List ở Phần 2. LRU Cache kết hợp cả hai để tạo ra một cấu trúc dữ liệu cực kỳ thực tế.
+Nếu bạn đang đọc tới đây mà thấy lo, hít thở sâu. LRU Cache nghe "xịn" nhưng thực ra chỉ kết hợp **2 thứ bạn đã học**:
+
+- **HashMap** (Phần 4 — Hash) → tìm nhanh O(1)
+- **Doubly Linked List** (Phần 2 — Linear Structures) → di chuyển/xóa nhanh O(1)
+
+Hai cấu trúc đã biết, chỉ ghép lại với nhau. Không có gì mới. Thật đấy.
+
+## Đây là gì?
 
 Mở điện thoại lên, vuốt lên để xem **danh sách ứng dụng gần đây** (recent apps). Bạn thấy gì?
 
@@ -23,6 +30,19 @@ Cache (bộ nhớ đệm) xuất hiện ở khắp nơi:
 
 Vấn đề chung: **bộ nhớ có hạn, phải chọn cái nào giữ, cái nào xóa**. LRU là chiến lược đơn giản và hiệu quả nhất: xóa cái lâu nhất không ai dùng.
 
+## LRU vs các chiến lược eviction khác
+
+LRU không phải cách duy nhất. Hãy so sánh:
+
+| Chiến lược | Evict cái nào? | Ưu | Nhược |
+|-----------|----------------|-----|-------|
+| **FIFO** | Cái vào **sớm nhất** | Đơn giản nhất, chỉ cần queue | Không quan tâm tần suất dùng — có thể xóa cái hay dùng |
+| **LRU** | Cái **lâu nhất chưa dùng** | Tốt cho hầu hết workload | Không tối ưu nếu có item dùng nhiều nhưng bị gián đoạn |
+| **LFU** | Cái **ít dùng nhất** (đếm lần) | Giữ item "hot" rất tốt | Phức tạp hơn, item cũ dùng nhiều khó bị evict dù đã "nguội" |
+| **Random** | **Ngẫu nhiên** | Code siêu đơn giản | Không thông minh, nhưng surprisingly không tệ lắm |
+
+**Thực tế:** LRU thắng trong hầu hết trường hợp vì nó đủ thông minh mà lại đơn giản. Đó là lý do CPU cache, database buffer pool, browser cache đều dùng LRU (hoặc biến thể của nó).
+
 ## Yêu cầu
 
 LRU Cache cần 2 thao tác, **cả hai đều O(1)**:
@@ -34,14 +54,21 @@ LRU Cache cần 2 thao tác, **cả hai đều O(1)**:
 
 O(1) cho cả hai! Đây là lý do ta cần kết hợp 2 cấu trúc dữ liệu.
 
-## Thiết kế: HashMap + Doubly Linked List
+## Thiết kế: Tại sao HashMap + Doubly Linked List?
 
-Tại sao cần cả hai?
+Hãy thử từng cấu trúc một:
 
-- **HashMap** cho O(1) lookup theo key — nhưng không biết thứ tự.
-- **Doubly Linked List** cho O(1) di chuyển/xóa node — nhưng không tìm nhanh theo key.
+**Chỉ dùng HashMap?**
+- Tìm key → O(1). Tốt.
+- Nhưng HashMap không biết **thứ tự** — bạn không biết cái nào dùng gần nhất, cái nào lâu nhất. Evict ai bây giờ?
 
-Kết hợp lại: HashMap trỏ vào node trong linked list. Linked list giữ thứ tự "gần đây → cũ".
+**Chỉ dùng Doubly Linked List?**
+- Di chuyển node → O(1). Xóa node → O(1). Tốt.
+- Nhưng tìm key → phải duyệt từ đầu đến cuối, O(n). Chậm.
+
+**Kết hợp cả hai:**
+- HashMap trỏ vào node trong linked list → tìm nhanh O(1).
+- Linked list giữ thứ tự "gần đây → cũ" → biết evict ai trong O(1).
 
 ```
                           HashMap
@@ -120,9 +147,23 @@ Bước 2: Thêm node [3] sau HEAD
              mới nhất
 ```
 
-## Vec-based Doubly Linked List
+## Vec-based Doubly Linked List — Giải pháp "Rust-friendly"
 
-Trong Rust, doubly linked list thường cần `unsafe` hoặc `Rc<RefCell<>>`. Nhưng ta có cách đơn giản hơn: **dùng Vec**.
+### Tại sao Doubly Linked List khó trong Rust?
+
+Trong C/C++, doubly linked list dùng pointer. Dễ. Nhưng Rust có **ownership rules** — một giá trị chỉ có 1 owner. Mà mỗi node trong DLL bị trỏ bởi **cả node trước lẫn node sau**. Rust sẽ không cho phép.
+
+Ba cách giải quyết:
+
+| Cách | Ưu | Nhược |
+|------|-----|-------|
+| **Vec-based** (dùng index) | An toàn, đơn giản, cache-friendly | Không thể thực sự xóa node (chỉ detach) |
+| `Rc<RefCell<>>` | Đúng kiểu linked list | Nhiều overhead, code dài dòng |
+| `unsafe` pointer | Hiệu suất cao nhất | Dễ bug, cần kinh nghiệm |
+
+**Trong bài này ta dùng Vec-based** — đơn giản nhất, an toàn nhất, và đủ tốt cho LRU Cache.
+
+### Cách hoạt động
 
 Mỗi node lưu `prev` và `next` là **index** trong Vec (không phải pointer):
 
@@ -165,6 +206,84 @@ fn attach_after_head(&mut self, idx: usize) {
 
 Gọn, an toàn, không cần `unsafe`.
 
+## Pitfalls — Những lỗi hay gặp
+
+### Pitfall 1: Capacity = 0
+
+❌ **Sai:** Cho phép tạo cache với capacity 0, rồi `put` crash.
+
+✅ **Đúng:** Kiểm tra `capacity > 0` ngay khi tạo.
+
+💡 **Tại sao:** Cache capacity 0 vô nghĩa — mỗi `put` sẽ phải evict ngay lập tức, hoặc tệ hơn, access vào node không tồn tại.
+
+```rust
+pub fn new(capacity: usize) -> Self {
+    assert!(capacity > 0, "LRU cache capacity must be > 0");
+    // ...
+}
+```
+
+### Pitfall 2: Update key nhưng quên move to front
+
+❌ **Sai:** `put(key, new_value)` chỉ update value, không di chuyển node.
+
+✅ **Đúng:** `put` key đã tồn tại = update value **VÀ** move to front.
+
+💡 **Tại sao:** `put` cũng đánh dấu key là "vừa dùng". Nếu không move to front, key đó có thể bị evict sai.
+
+```rust
+// SAI — chỉ update value
+if let Some(&idx) = self.map.get(&key) {
+    self.nodes[idx].value = value;
+    // quên detach + attach!
+}
+
+// ĐÚNG — update value + move to front
+if let Some(&idx) = self.map.get(&key) {
+    self.nodes[idx].value = value;
+    self.detach(idx);           // gỡ ra
+    self.attach_after_head(idx); // gắn lại đầu
+}
+```
+
+### Pitfall 3: Sai thứ tự pointer khi detach/attach
+
+❌ **Sai:** Update pointer của node mới trước khi lưu pointer cũ.
+
+✅ **Đúng:** Luôn đọc hết giá trị cũ trước, rồi mới ghi giá trị mới.
+
+💡 **Tại sao:** Nếu ghi đè `next` trước khi đọc `old_next`, bạn mất thông tin và linked list bị đứt.
+
+```
+Sai:
+    nodes[head].next = idx;           // ghi đè!
+    let old_first = nodes[head].next; // = idx, không phải node cũ!
+
+Đúng:
+    let old_first = nodes[head].next; // đọc trước
+    nodes[head].next = idx;           // ghi sau
+```
+
+## LRU Cache trong thực tế — Production Systems
+
+LRU Cache không phải bài tập lý thuyết. Nó chạy trong máy tính của bạn ngay lúc này:
+
+### CPU Cache
+
+CPU có L1/L2/L3 cache. Khi CPU đọc dữ liệu từ RAM, nó lưu vào cache. Cache đầy? Evict dòng ít dùng nhất. Thuật toán thực tế là **pseudo-LRU** (LRU gần đúng) vì LRU chính xác tốn quá nhiều transistor.
+
+### Database Buffer Pool
+
+MySQL, PostgreSQL giữ các trang dữ liệu (data page) trong RAM. Mỗi trang ~16KB. Buffer pool có thể lên tới vài GB. Khi đầy, evict trang LRU. MySQL dùng biến thể gọi là **LRU with midpoint insertion** — trang mới vào giữa list thay vì đầu, tránh full table scan đẩy hết hot page ra.
+
+### CDN Cache (Cloudflare, Akamai)
+
+Ảnh, video, CSS, JS được cache ở server gần user. Mỗi edge server có dung lượng giới hạn. File ít ai truy cập bị evict trước.
+
+### Browser Cache
+
+Chrome, Firefox cache file CSS/JS/ảnh. Bạn có thể thấy `304 Not Modified` trong DevTools — nghĩa là browser đang dùng cache thay vì download lại.
+
 ## Bảng độ phức tạp
 
 | Thao tác | Time | Space | Giải thích |
@@ -175,6 +294,18 @@ Gọn, an toàn, không cần `unsafe`.
 | `len()` | O(1) | O(1) | Đọc HashMap.len() |
 
 \* Amortised O(1) — HashMap có thể resize nhưng trung bình vẫn O(1).
+
+## Khi nào dùng LRU Cache?
+
+| Tình huống | Dùng LRU? | Lý do |
+|-----------|-----------|-------|
+| Cache API response, hạn chế bộ nhớ | Dùng | Classic use case |
+| Cache database query results | Dùng | Rất phổ biến, hầu hết DB đều làm |
+| Cache kết quả tính toán đắt (memoization) | Dùng | Bounded memoization |
+| Dữ liệu có "hot set" rõ ràng (vài item dùng rất nhiều) | Cân nhắc **LFU** | LFU giữ hot item tốt hơn |
+| Không cần eviction (bộ nhớ đủ) | **Không** | Dùng HashMap thường, đơn giản hơn |
+| Cần TTL (time-to-live) | **Không** đủ | LRU không biết thời gian — kết hợp LRU + TTL |
+| Cache size rất nhỏ (< 10 items) | Không cần thiết | Dùng Vec + linear scan cũng được |
 
 ## Chạy thử trong Rust
 
@@ -196,6 +327,27 @@ assert_eq!(cache.get(3), Some(3));   // vẫn còn
 assert_eq!(cache.get(4), Some(4));   // vẫn còn
 ```
 
+## Rust Ecosystem
+
+| Crate | Mô tả |
+|-------|--------|
+| [`lru`](https://crates.io/crates/lru) | LRU Cache đơn giản, API giống `HashMap`. Production-ready. |
+| [`cached`](https://crates.io/crates/cached) | Macro `#[cached]` để tự động cache kết quả function. Hỗ trợ LRU, TTL. |
+| [`moka`](https://crates.io/crates/moka) | Concurrent cache lấy cảm hứng từ Java Caffeine. Thread-safe, hỗ trợ LRU + TTL + async. |
+| [`quick_cache`](https://crates.io/crates/quick_cache) | Cache hiệu suất cao, concurrent, hỗ trợ weighted entries. |
+
+Khi nào dùng crate thay vì tự viết? **Hầu như luôn luôn** trong production. Tự viết để học, dùng crate để ship.
+
+## Practice — LeetCode
+
+| Bài | Tên | Gợi ý |
+|-----|-----|-------|
+| [#146](https://leetcode.com/problems/lru-cache/) | **LRU Cache** | Bài kinh điển. Implement `get` + `put` đúng y như chương này. |
+| [#460](https://leetcode.com/problems/lfu-cache/) | **LFU Cache** | Nâng cấp — sẽ học ở chương sau. |
+| [#1171](https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/) | Remove Zero Sum | Kết hợp HashMap + Linked List — cùng pattern. |
+
+**Gợi ý cho #146:** Copy nguyên code trong chương này, đổi `i32` thành type phù hợp. Bài này là interview classic — nếu bạn hiểu chương này, bạn đã giải được.
+
 ## Tổng kết
 
 LRU Cache là bài toán kinh điển trong interview (LeetCode #146) và cực kỳ phổ biến trong thực tế. Điểm then chốt:
@@ -204,5 +356,12 @@ LRU Cache là bài toán kinh điển trong interview (LeetCode #146) và cực 
 - **Doubly Linked List** → di chuyển/xóa nhanh O(1).
 - **Kết hợp cả hai** → mọi thao tác O(1).
 - **Sentinel nodes** (HEAD/TAIL giả) → code gọn, không cần xử lý edge case.
+- **Vec-based DLL** → giải pháp Rust-friendly, tránh ownership issues.
 
 Khi ai hỏi "tại sao cần doubly linked list?", đây là câu trả lời hoàn hảo: vì LRU Cache cần xóa node ở giữa danh sách trong O(1), mà chỉ doubly linked list mới làm được.
+
+---
+
+---
+
+[← Skip List](./03-skip-list.md) | [LFU Cache →](./05-lfu-cache.md)

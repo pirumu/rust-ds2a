@@ -1,6 +1,26 @@
 # Monotonic Stack
 
-Bạn đã học Stack ở Phần 2. Giờ mình sẽ dùng stack theo cách đặc biệt — giữ các phần tử luôn tăng (hoặc giảm) trong stack.
+> 💡 **Đừng lo lắng:** Bạn đã biết Stack rồi (Phần 2, chương 3). Monotonic Stack chỉ là Stack + 1 rule duy nhất: **pop khi vi phạm thứ tự**. Nếu bạn hiểu push/pop, bạn đã hiểu 90% rồi. Thở đi, không khó đâu.
+
+---
+
+## Từ Stack thường sang Monotonic Stack
+
+Nhớ lại Stack ở Phần 2? Push lên, pop ra, LIFO. Đơn giản.
+
+Monotonic Stack vẫn là push/pop y hệt. Khác duy nhất: ta thêm một **invariant** (bất biến) -- các phần tử trong stack phải luôn tăng dần hoặc giảm dần. Khi phần tử mới vi phạm thứ tự này, ta pop cho đến khi thứ tự được khôi phục.
+
+```
+Stack thường:       push bất kỳ, pop đỉnh
+                    [3, 7, 2, 9, 1] ← OK, không quan tâm thứ tự
+
+Monotonic Stack:    push + giữ thứ tự, pop khi vi phạm
+                    [1, 3, 7, 9]    ← luôn tăng dần (increasing)
+                    hoặc
+                    [9, 7, 3, 1]    ← luôn giảm dần (decreasing)
+```
+
+Vậy thôi. Không có phép thuật gì cả. Cùng push/pop, thêm invariant tăng/giảm.
 
 ---
 
@@ -20,12 +40,51 @@ Bạn là 180 -> không ai cao hơn. None!
 
 **Monotonic Stack** (stack đơn điệu) là stack mà các phần tử bên trong luôn giữ thứ tự tăng dần hoặc giảm dần. Khi thêm phần tử mới, ta pop hết những phần tử vi phạm thứ tự. Lúc pop chính là lúc ta tìm được câu trả lời cho phần tử bị pop.
 
-Hai loại:
+---
 
-| Loại | Trong stack giữ | Dùng khi |
-|------|----------------|----------|
-| **Monotonic Increasing** | Nhỏ -> lớn (đáy -> đỉnh) | Tìm next greater element |
-| **Monotonic Decreasing** | Lớn -> nhỏ (đáy -> đỉnh) | Tìm next smaller element |
+## Template: Increasing vs Decreasing
+
+Hai loại, hai mục đích khác nhau:
+
+| Loại | Trong stack giữ | Dùng khi | Pop khi |
+|------|----------------|----------|---------|
+| **Monotonic Increasing** | Nhỏ -> lớn (đáy -> đỉnh) | Tìm next **greater** element | Phần tử mới **lớn hơn** đỉnh |
+| **Monotonic Decreasing** | Lớn -> nhỏ (đáy -> đỉnh) | Tìm next **smaller** element | Phần tử mới **nhỏ hơn** đỉnh |
+
+### Template chung (Rust)
+
+```rust
+// Monotonic Increasing Stack — tìm next greater
+let mut stack: Vec<usize> = Vec::new();  // luôn lưu INDEX, không lưu value
+
+for i in 0..n {
+    while let Some(&top) = stack.last() {
+        if nums[top] < nums[i] {      // vi phạm thứ tự tăng
+            // top đã tìm được next greater = nums[i]
+            result[top] = nums[i];
+            stack.pop();
+        } else {
+            break;
+        }
+    }
+    stack.push(i);                     // push INDEX, không push value
+}
+```
+
+```rust
+// Monotonic Decreasing Stack — tìm next smaller
+// Y hệt, chỉ đổi dấu < thành >
+while let Some(&top) = stack.last() {
+    if nums[top] > nums[i] {          // vi phạm thứ tự giảm
+        result[top] = nums[i];
+        stack.pop();
+    } else {
+        break;
+    }
+}
+```
+
+> **Luôn push index, không push value.** Index cho bạn cả vị trí lẫn giá trị (`nums[index]`). Value chỉ cho giá trị, mất vị trí. Đây là sai lầm phổ biến nhất -- xem phần Pitfalls bên dưới.
 
 ---
 
@@ -36,8 +95,8 @@ Nếu dùng 2 vòng for lồng nhau: O(n^2). Với mảng 1 triệu phần tử,
 Monotonic Stack giải quyết trong **O(n)** vì mỗi phần tử chỉ được push và pop tối đa 1 lần.
 
 ```
-Brute force:     O(n^2)     ← 2 vòng for
-Monotonic Stack:  O(n)      ← mỗi phần tử push 1 lần, pop 1 lần
+Brute force:     O(n^2)     <- 2 vòng for
+Monotonic Stack:  O(n)      <- mỗi phần tử push 1 lần, pop 1 lần
 ```
 
 ---
@@ -264,7 +323,7 @@ pub fn largest_rectangle_histogram(heights: &[i32]) -> i64 {
 
 ## Stock Span
 
-**Bài toán:** Cho giá cổ phiếu mỗi ngày, tìm **span** — số ngày liên tiếp (kể cả hôm nay) mà giá <= giá hôm nay.
+**Bài toán:** Cho giá cổ phiếu mỗi ngày, tìm **span** -- số ngày liên tiếp (kể cả hôm nay) mà giá <= giá hôm nay.
 
 Tưởng tượng bạn nhìn lại phía sau: bao nhiêu ngày liên tiếp giá thấp hơn hoặc bằng hôm nay?
 
@@ -340,6 +399,217 @@ pub fn stock_span(prices: &[i32]) -> Vec<i32> {
 
 ---
 
+## Trapping Rain Water
+
+**Bài toán (LeetCode #42):** Cho mảng `height` biểu diễn độ cao các thanh. Tính lượng nước mưa có thể chứa giữa các thanh.
+
+### Hình ảnh thực tế
+
+Tưởng tượng bạn xây hàng rào bằng gạch có chiều cao khác nhau. Trời mưa xong, nước đọng lại giữa các thanh cao. Bạn cần tính tổng lượng nước đọng.
+
+```
+height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
+
+Nhìn từ bên cạnh:
+
+              #
+      # ~ ~ ~ # #
+  # ~ # # ~ # # # # ~ #
+──────────────────────────
+  0 1 0 2 1 0 1 3 2 1 2 1
+
+~ = nước đọng
+# = thanh gạch
+```
+
+### Ý tưởng dùng Monotonic Stack
+
+Dùng monotonic **decreasing** stack (giảm dần). Khi gặp thanh cao hơn đỉnh stack, nước bị "kẹp" giữa thanh hiện tại và thanh dưới đỉnh stack. Ta tính lượng nước theo từng "lớp ngang".
+
+```
+Nước được tính theo lớp ngang, không theo cột dọc:
+
+      #                    #
+  # ~ # ←── lớp trên   # ███ #
+  # ~ # ←── lớp dưới   # ███ #
+──────────            ──────────
+  1 0 2               tính từng lớp khi pop
+```
+
+### ASCII walkthrough
+
+```
+height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
+           0  1  2  3  4  5  6  7  8  9 10 11
+
+Stack lưu index, giữ monotonic decreasing.
+
+i=0: h=0, push.                    Stack: [0(0)]
+i=1: h=1 > 0
+     Pop 0 (h=0). Stack rỗng -> không có bờ trái -> nước = 0.
+     Push 1.                       Stack: [1(1)]
+i=2: h=0 < 1, push.               Stack: [1(1), 2(0)]
+i=3: h=2 > 0
+     Pop 2 (đáy h=0). Bờ trái = index 1 (h=1).
+       w = 3-1-1 = 1
+       water_h = min(1, 2) - 0 = 1
+       water += 1*1 = 1.           Stack: [1(1)]
+     h=2 > 1
+     Pop 1 (đáy h=1). Stack rỗng -> không có bờ trái -> nước = 0.
+     Push 3.                       Stack: [3(2)]
+i=4: h=1 < 2, push.               Stack: [3(2), 4(1)]
+i=5: h=0 < 1, push.               Stack: [3(2), 4(1), 5(0)]
+i=6: h=1 > 0
+     Pop 5 (đáy h=0). Bờ trái = index 4 (h=1).
+       w = 6-4-1 = 1
+       water_h = min(1, 1) - 0 = 1
+       water += 1.  total=2.       Stack: [3(2), 4(1)]
+     h=1 >= 1? Không strictly > -> dừng.
+     Push 6.                       Stack: [3(2), 4(1), 6(1)]
+i=7: h=3 > 1
+     Pop 6 (đáy h=1). Bờ trái = index 4 (h=1).
+       w = 7-4-1 = 2
+       water_h = min(1, 3) - 1 = 0
+       water += 0.                 Stack: [3(2), 4(1)]
+     Pop 4 (đáy h=1). Bờ trái = index 3 (h=2).
+       w = 7-3-1 = 3
+       water_h = min(2, 3) - 1 = 1
+       water += 3.  total=5.       Stack: [3(2)]
+     Pop 3 (đáy h=2). Stack rỗng -> nước = 0.
+     Push 7.                       Stack: [7(3)]
+... (tiếp tục tương tự)
+
+Tổng nước = 6.
+```
+
+### Code
+
+```rust
+pub fn trap_rain_water(height: &[i32]) -> i64 {
+    let mut stack: Vec<usize> = Vec::new();
+    let mut water: i64 = 0;
+
+    for i in 0..height.len() {
+        while let Some(&top) = stack.last() {
+            if height[top] < height[i] {
+                stack.pop();
+                // Cần bờ trái để kẹp nước
+                if let Some(&left) = stack.last() {
+                    let w = (i - left - 1) as i64;
+                    let h = (height[left].min(height[i]) - height[top]) as i64;
+                    water += w * h;
+                }
+            } else {
+                break;
+            }
+        }
+        stack.push(i);
+    }
+
+    water
+}
+```
+
+**Time:** O(n). **Space:** O(n).
+
+> Bài này cũng giải được bằng Two Pointers (O(1) space) hoặc Prefix Max (Phần 6, chương 9). Monotonic Stack là cách "tự nhiên nhất" nếu bạn đã quen pattern -- tính nước theo lớp ngang khi pop.
+
+---
+
+## Những cái bẫy hay gặp
+
+❌ **Nhầm Increasing vs Decreasing**
+```rust
+// Muốn tìm next GREATER element
+// Nhầm: dùng decreasing stack -> tìm next SMALLER
+while nums[top] < nums[i] { ... }  // increasing -> next greater  ✓
+while nums[top] > nums[i] { ... }  // decreasing -> next smaller
+```
+✅ **Nhớ rule:**
+```
+Tìm next GREATER  -> Monotonic INCREASING stack (nhỏ->lớn)
+                     Pop khi phần tử mới LỚN HƠN đỉnh
+Tìm next SMALLER  -> Monotonic DECREASING stack (lớn->nhỏ)
+                     Pop khi phần tử mới NHỎ HƠN đỉnh
+```
+💡 Nghe ngược đời? Nghĩ thế này: stack increasing giữ các phần tử nhỏ. Phần tử lớn đến, "đè" các phần tử nhỏ -> pop -> tìm được greater.
+
+---
+
+❌ **Push value thay vì index**
+```rust
+stack.push(nums[i]);          // chỉ có giá trị, mất vị trí!
+// Sau này muốn tính khoảng cách? Không được.
+// result[???] = i - ???;     // không biết index của phần tử bị pop
+```
+✅ **Luôn push index**
+```rust
+stack.push(i);                // có index -> có cả vị trí lẫn giá trị
+// nums[top] cho giá trị
+// top cho vị trí
+// i - top cho khoảng cách
+```
+💡 Index cho bạn mọi thứ: `nums[index]` = giá trị, `i - index` = khoảng cách. Value chỉ cho giá trị thôi. Đây là lý do mọi bài Monotonic Stack đều dùng `Vec<usize>` cho stack.
+
+---
+
+❌ **Quên check stack rỗng trước khi tính khoảng cách**
+```rust
+stack.pop();
+let left = stack.last().unwrap();  // PANIC nếu stack rỗng!
+let width = i - left - 1;
+```
+✅ **Luôn xử lý trường hợp stack rỗng**
+```rust
+stack.pop();
+let width = match stack.last() {
+    Some(&left) => i - left - 1,  // có bờ trái
+    None => i,                     // không có bờ trái -> width = i
+};
+```
+💡 Stack rỗng nghĩa là không có "bờ trái" nào chặn. Phần tử vừa pop có thể mở rộng tới tận đầu mảng. Bài Largest Rectangle in Histogram hay gặp bug này nhất.
+
+---
+
+❌ **Quên dọn stack sau vòng lặp**
+```rust
+for i in 0..n {
+    // ... push/pop ...
+}
+// Quên xử lý các phần tử còn lại trong stack!
+```
+✅ **Dùng sentinel hoặc xử lý stack còn lại**
+```rust
+// Cách 1: Thêm sentinel (Largest Rectangle)
+for i in 0..=n {  // <= n, thêm phần tử ảo h=0 ở cuối
+    let cur = if i < n { heights[i] } else { 0 };
+    // ...
+}
+
+// Cách 2: Phần tử còn lại = không có next greater (Next Greater Element)
+// result đã được init là None/0 -> tự động đúng
+```
+💡 Sentinel (lính gác) là trick kinh điển: thêm phần tử ảo ở cuối để ép mọi phần tử trong stack phải pop ra.
+
+---
+
+## Khi nào dùng Monotonic Stack?
+
+| Dấu hiệu trong đề bài | Monotonic Stack? | Ví dụ |
+|------------------------|------------------|-------|
+| "Next **greater/smaller** element" | Chắc chắn | LeetCode #496, #503 |
+| "Bao nhiêu ngày **chờ** đến khi..." | Chắc chắn | Daily Temperatures #739 |
+| "**Span** / bao nhiêu phần tử liên tiếp..." | Chắc chắn | Stock Span #901 |
+| "**Largest rectangle** / diện tích lớn nhất" | Chắc chắn | Histogram #84, Maximal Rectangle #85 |
+| "**Trapping** rain water / nước bị kẹp" | Rất phù hợp | #42 (cũng giải bằng two pointers) |
+| "Previous greater/smaller" | Có (duyệt ngược hoặc nhìn stack) | |
+| Cần so sánh phần tử với **hàng xóm** theo 1 chiều | Có thể | |
+| Cần tìm min/max trong **sliding window** | Dùng Monotonic **Deque** (Phần 2, chương 5) | #239 |
+
+**Quy tắc ngón tay cái:** Nếu bài toán yêu cầu tìm phần tử "gần nhất" thỏa điều kiện lớn hơn/nhỏ hơn theo 1 hướng, nghĩ đến Monotonic Stack.
+
+---
+
 ## Bảng độ phức tạp
 
 | Bài toán | Time | Space | Ghi chú |
@@ -349,12 +619,45 @@ pub fn stock_span(prices: &[i32]) -> Vec<i32> {
 | Daily Temperatures | O(n) | O(n) | Biến thể Next Greater |
 | Largest Rectangle in Histogram | O(n) | O(n) | Thêm sentinel h=0 cuối |
 | Stock Span | O(n) | O(n) | Nhìn ngược về trái |
+| Trapping Rain Water | O(n) | O(n) | Tính nước theo lớp ngang khi pop |
 
 **Pattern chung:**
-1. Duyệt mảng, push index vào stack.
+1. Duyệt mảng, push **index** vào stack.
 2. Khi phần tử mới vi phạm tính đơn điệu -> pop và ghi nhận kết quả.
 3. Mỗi phần tử push/pop tối đa 1 lần -> tổng O(n).
+
+---
+
+## Luyện tập
+
+| # | Bài | Độ khó | Gợi ý |
+|---|-----|--------|-------|
+| 496 | [Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/) | Easy | Dùng HashMap + Monotonic Stack trên nums2 |
+| 739 | [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/) | Medium | Next Greater Element, lưu khoảng cách |
+| 901 | [Online Stock Span](https://leetcode.com/problems/online-stock-span/) | Medium | Monotonic decreasing, tính span khi push |
+| 84 | [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) | Hard | Sentinel trick, tính area khi pop |
+| 42 | [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) | Hard | Stack hoặc Two Pointers, tính nước lớp ngang |
+| 85 | [Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/) | Hard | Mỗi row = histogram, gọi #84 |
+| 503 | [Next Greater Element II](https://leetcode.com/problems/next-greater-element-ii/) | Medium | Mảng vòng: duyệt 2*n, dùng i % n |
+
+> Gợi ý thứ tự: 496 -> 739 -> 901 -> 84 -> 42 -> 503 -> 85.
+
+---
+
+## Rust Ecosystem
+
+Trong Rust standard library, `Vec<T>` đã đủ để implement monotonic stack. Không cần crate ngoài. Pattern `while let Some(&top) = stack.last()` + `stack.pop()` là idiomatic Rust -- an toàn, rõ ràng, không panic.
+
+Nếu bạn dùng crate `monotonic_stack` trên crates.io, hãy cẩn thận -- hầu hết các crate này chỉ wrap lại `Vec` mà thôi. Tự viết sẽ giúp bạn hiểu sâu hơn và linh hoạt hơn khi cần customize (ví dụ: strictly increasing vs non-strictly increasing).
 
 ```rust
 // cargo test --lib monotonic_stack
 ```
+
+---
+
+[← Bit Manipulation](01-bit-manipulation.md) | [Intervals →](03-intervals.md)
+
+---
+
+[← Bit Manipulation](./01-bit-manipulation.md) | [Intervals →](./03-intervals.md)

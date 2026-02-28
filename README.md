@@ -1,12 +1,37 @@
 # DSA & Algorithms in Rust
 
-Cuốn sách học Cấu trúc dữ liệu & Giải thuật bằng Rust — viết cho những bạn thấy tư duy logic khó, không tự tin với tiếng Anh, và muốn hiểu DSA theo cách dễ nhất có thể.
+Cuốn sách học **Cấu trúc dữ liệu & Giải thuật** bằng **Rust**, viết hoàn toàn bằng tiếng Việt. Mỗi chương bắt đầu bằng ví dụ thực tế, rồi mới vào lý thuyết và code. Sách dùng **Rust Edition 2024**.
 
 **[Xem trên GitHub](book/vi/SUMMARY.md)**
 
-## Viết cho ai?
+## Tại sao cuốn sách này tồn tại?
 
-Cho những bạn như mình — từng struggle với DSA, đọc sách giáo khoa thấy khô khan, và cần ai đó giải thích như bạn bè ngồi cà phê nói chuyện. Mỗi chương bắt đầu bằng ví dụ thực tế, rồi mới vào lý thuyết.
+DSA từ trước đến nay vẫn luôn khó tiếp cận — thuật ngữ trừu tượng, tài liệu chủ yếu bằng tiếng Anh, và cảm giác "mình không đủ giỏi để hiểu mấy thứ này". Cuốn sách này muốn thay đổi điều đó: giải thích mọi thứ bằng tiếng Việt, bắt đầu từ ví dụ đời thường, rồi mới đi vào lý thuyết và code.
+
+Nhưng ngoài việc làm DSA dễ tiếp cận hơn, có một lý do sâu hơn để cuốn sách này ra đời — và nó liên quan đến chính thời đại chúng ta đang sống.
+
+**Ngày nay AI càng viết code giỏi, bạn càng cần hiểu DSA — không phải ít hơn, mà nhiều hơn.**
+
+Nghe có vẻ ngược đời. AI generate được cả một module trong vài giây, vậy học DSA làm gì? Nhưng hãy nghĩ thế này: khi bạn để AI viết code, vai trò của bạn thay đổi. Bạn không còn chỉ là người *viết* — bạn trở thành người *đánh giá*. Và đánh giá thực ra khó hơn viết.
+
+Viết code sai, compiler sẽ la bạn. Nhưng khi AI đưa ra một đoạn code chạy được, pass test, trông sạch đẹp — mà bên trong dùng sai cấu trúc dữ liệu, chọn thuật toán O(n²) trong khi O(n log n) là đủ, hoặc allocate memory một cách lãng phí — **không ai la bạn cả**. Code vẫn chạy. Bug không nổ hôm nay. Nó nổ khi traffic tăng gấp 10, khi dataset lớn lên, khi production không tha thứ cho sự thiếu hiểu biết.
+
+AI là một developer cực kỳ nhanh, cực kỳ tự tin, và hiếm khi nói "em không biết". Nó đưa ra giải pháp cho mọi thứ — nhưng nó không thể biết tường tận context hệ thống của bạn, không hiểu trade-off thực sự giữa memory và speed trong infra cụ thể của bạn, và đặc biệt nó không chịu trách nhiệm khi code của nó làm sập service lúc 2 giờ sáng. **Bạn mới là người chịu trách nhiệm đó.**
+
+Và đây chính là chỗ DSA trở thành siêu năng lực. Không phải để bạn tự tay implement Red-Black Tree mỗi ngày — mà để khi đọc code AI generate, bạn tự nhiên đặt được những câu hỏi đúng:
+- "Tại sao dùng HashMap ở đây thay vì BTreeMap?"
+- "Đoạn này có bị worst-case O(n²) không?"
+- "Memory layout này có cache-friendly không?"
+- "Có cần thiết phải clone toàn bộ vector không, hay chỉ cần một slice?"
+
+Những câu hỏi này không đến từ việc biết prompt AI. Chúng đến từ việc thực sự hiểu cách máy tính xử lý dữ liệu. Và tin tốt là: bạn không cần phải giỏi sẵn để bắt đầu. Cuốn sách này được viết chính cho những người đang ở điểm xuất phát — để từng bước xây nền tảng vững, để dù công cụ có thay đổi thế nào, bạn vẫn là người hiểu chuyện gì đang xảy ra bên dưới.
+
+## Tại sao Rust?
+
+Vì đây là ngôn ngữ mình thích và dùng hàng ngày. Rust có type system chặt chẽ, compiler khắt khe -- implement DSA trong Rust buộc bạn phải nghĩ rõ ràng về ownership, memory layout, và error handling thay vì đoán mò.
+Nếu bạn đang dùng ngôn ngữ khác, các concept DSA trong sách này vẫn áp dụng được -- chỉ cần translate syntax.
+
+> Cảnh báo thực tế: Rust có learning curve dốc hơn Python hay Go. Bạn sẽ đấm nhau với borrow checker. Nhưng khi vượt qua được, bạn hiểu máy tính hoạt động thế nào ở mức mà hầu hết developer không có.
 
 ## Nội dung
 
@@ -66,7 +91,7 @@ Cho những bạn như mình — từng struggle với DSA, đọc sách giáo k
 - [Dynamic Programming](book/vi/chapters/06-algorithms/13-dynamic-programming.md)
 - [Backtracking](book/vi/chapters/06-algorithms/14-backtracking.md)
 
-### Phần 7: Kỹ thuật giải bài — từ cơ bản đến phỏng vấn
+### Phần 7: Kỹ thuật giải bài
 - [Bit Manipulation](book/vi/chapters/07-patterns/01-bit-manipulation.md)
 - [Monotonic Stack](book/vi/chapters/07-patterns/02-monotonic-stack.md)
 - [Intervals](book/vi/chapters/07-patterns/03-intervals.md)
@@ -87,38 +112,23 @@ Cho những bạn như mình — từng struggle với DSA, đọc sách giáo k
 - [Design Structures](book/vi/chapters/08-advanced/07-design-structures.md)
 
 ## Bắt đầu
-
 ```bash
-# Clone repo
 git clone https://github.com/pirumu/rust-ds2a.git
 cd rust-ds2a
 
-# Chạy toàn bộ test
-cargo test
-
-# Build sách
-mdbook build
-
-# Đọc sách trên trình duyệt (hot reload)
-mdbook serve
+cargo test        # chạy toàn bộ test
+mdbook build      # build sách
+mdbook serve      # đọc trên trình duyệt (hot reload)
 ```
-
-## Mỗi chương gồm gì?
-
-1. **Ví dụ thực tế** — hiểu bản chất trước khi vào code
-2. **Cách hoạt động** — từng bước với sơ đồ ASCII
-3. **Code Rust** — implementation đầy đủ, có giải thích
-4. **Độ phức tạp** — Time & Space Big-O
-5. **Liên kết kiến thức** — chương này xây trên kiến thức nào, mở đường cho chương nào
 
 ## Thống kê
 
 | | Số lượng |
 |---|---|
-| Chương | 60 |
+| Chương | 58 |
 | Phần | 8 |
 | Module Rust | 41 |
-| Tests | 643 |
+| Tests | 693 |
 
 ## License
 

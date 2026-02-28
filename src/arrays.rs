@@ -98,6 +98,112 @@ pub fn find_duplicates(arr: &[i32]) -> Vec<i32> {
     result
 }
 
+/// Check whether a byte slice is a palindrome using two pointers.
+///
+/// **Time:** O(n) — **Space:** O(1)
+pub fn is_palindrome(s: &[u8]) -> bool {
+    if s.is_empty() {
+        return true;
+    }
+    let mut left = 0;
+    let mut right = s.len() - 1;
+
+    while left < right {
+        if s[left] != s[right] {
+            return false;
+        }
+        left += 1;
+        right -= 1;
+    }
+    true
+}
+
+/// Remove duplicates from a sorted `Vec` in-place (slow/fast pointer).
+///
+/// Returns the new length after deduplication.
+///
+/// **Time:** O(n) — **Space:** O(1)
+pub fn remove_duplicates_sorted(arr: &mut Vec<i32>) -> usize {
+    if arr.is_empty() {
+        return 0;
+    }
+
+    let mut slow = 0;
+    for fast in 1..arr.len() {
+        if arr[fast] != arr[slow] {
+            slow += 1;
+            arr[slow] = arr[fast];
+        }
+    }
+
+    let new_len = slow + 1;
+    arr.truncate(new_len);
+    new_len
+}
+
+/// Find duplicates in a **sorted** slice using O(1) extra space.
+///
+/// **Time:** O(n) — **Space:** O(1)
+pub fn find_duplicates_sorted(arr: &[i32]) -> Vec<i32> {
+    let mut result = Vec::new();
+    for i in 1..arr.len() {
+        if arr[i] == arr[i - 1] {
+            if result.last() != Some(&arr[i]) {
+                result.push(arr[i]);
+            }
+        }
+    }
+    result
+}
+
+/// Maximum sum of a contiguous subarray of length `k` (fixed-size sliding window).
+///
+/// Returns `None` if `k == 0` or `k > arr.len()`.
+///
+/// **Time:** O(n) — **Space:** O(1)
+pub fn max_sum_subarray_k(arr: &[i32], k: usize) -> Option<i32> {
+    if k == 0 || k > arr.len() {
+        return None;
+    }
+
+    let mut window_sum: i32 = arr[..k].iter().sum();
+    let mut max_sum = window_sum;
+
+    for i in k..arr.len() {
+        window_sum += arr[i] - arr[i - k];
+        max_sum = max_sum.max(window_sum);
+    }
+
+    Some(max_sum)
+}
+
+/// Length of the shortest subarray whose sum is ≥ `target` (variable-size sliding window).
+///
+/// Returns `None` if no such subarray exists.
+///
+/// **Time:** O(n) — **Space:** O(1)
+pub fn min_subarray_len(arr: &[i32], target: i32) -> Option<usize> {
+    let mut left = 0;
+    let mut sum = 0;
+    let mut min_len = usize::MAX;
+
+    for right in 0..arr.len() {
+        sum += arr[right];
+
+        while sum >= target {
+            min_len = min_len.min(right - left + 1);
+            sum -= arr[left];
+            left += 1;
+        }
+    }
+
+    if min_len == usize::MAX {
+        None
+    } else {
+        Some(min_len)
+    }
+}
+
 /// Maximum subarray sum using Kadane's algorithm.
 ///
 /// Finds the contiguous subarray with the largest sum.
@@ -242,5 +348,118 @@ mod tests {
     #[test]
     fn max_subarray_sum_empty() {
         assert_eq!(max_subarray_sum(&[]), 0);
+    }
+
+    // -- is_palindrome ---------------------------------------------------
+
+    #[test]
+    fn palindrome_odd() {
+        assert!(is_palindrome(b"racecar"));
+    }
+
+    #[test]
+    fn palindrome_even() {
+        assert!(is_palindrome(b"abba"));
+    }
+
+    #[test]
+    fn palindrome_not() {
+        assert!(!is_palindrome(b"hello"));
+    }
+
+    #[test]
+    fn palindrome_empty_and_single() {
+        assert!(is_palindrome(b""));
+        assert!(is_palindrome(b"x"));
+    }
+
+    // -- remove_duplicates_sorted ----------------------------------------
+
+    #[test]
+    fn remove_dups_sorted_basic() {
+        let mut v = vec![1, 1, 2, 2, 3];
+        assert_eq!(remove_duplicates_sorted(&mut v), 3);
+        assert_eq!(v, vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn remove_dups_sorted_no_dups() {
+        let mut v = vec![1, 2, 3];
+        assert_eq!(remove_duplicates_sorted(&mut v), 3);
+        assert_eq!(v, vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn remove_dups_sorted_all_same() {
+        let mut v = vec![5, 5, 5, 5];
+        assert_eq!(remove_duplicates_sorted(&mut v), 1);
+        assert_eq!(v, vec![5]);
+    }
+
+    #[test]
+    fn remove_dups_sorted_empty() {
+        let mut v: Vec<i32> = vec![];
+        assert_eq!(remove_duplicates_sorted(&mut v), 0);
+    }
+
+    // -- find_duplicates_sorted ------------------------------------------
+
+    #[test]
+    fn find_dups_sorted_basic() {
+        assert_eq!(find_duplicates_sorted(&[1, 1, 2, 3, 3, 4]), vec![1, 3]);
+    }
+
+    #[test]
+    fn find_dups_sorted_none() {
+        assert_eq!(find_duplicates_sorted(&[1, 2, 3]), Vec::<i32>::new());
+    }
+
+    #[test]
+    fn find_dups_sorted_all_same() {
+        assert_eq!(find_duplicates_sorted(&[7, 7, 7]), vec![7]);
+    }
+
+    // -- max_sum_subarray_k ----------------------------------------------
+
+    #[test]
+    fn sliding_window_fixed_basic() {
+        assert_eq!(max_sum_subarray_k(&[2, 1, 5, 1, 3, 2], 3), Some(9));
+    }
+
+    #[test]
+    fn sliding_window_fixed_k_equals_len() {
+        assert_eq!(max_sum_subarray_k(&[1, 2, 3], 3), Some(6));
+    }
+
+    #[test]
+    fn sliding_window_fixed_k_too_large() {
+        assert_eq!(max_sum_subarray_k(&[1, 2], 5), None);
+    }
+
+    #[test]
+    fn sliding_window_fixed_k_zero() {
+        assert_eq!(max_sum_subarray_k(&[1, 2, 3], 0), None);
+    }
+
+    // -- min_subarray_len ------------------------------------------------
+
+    #[test]
+    fn sliding_window_var_basic() {
+        assert_eq!(min_subarray_len(&[2, 3, 1, 2, 4, 3], 7), Some(2));
+    }
+
+    #[test]
+    fn sliding_window_var_whole_array() {
+        assert_eq!(min_subarray_len(&[1, 1, 1, 1], 4), Some(4));
+    }
+
+    #[test]
+    fn sliding_window_var_no_solution() {
+        assert_eq!(min_subarray_len(&[1, 2, 3], 100), None);
+    }
+
+    #[test]
+    fn sliding_window_var_single_element() {
+        assert_eq!(min_subarray_len(&[10, 1, 2], 7), Some(1));
     }
 }

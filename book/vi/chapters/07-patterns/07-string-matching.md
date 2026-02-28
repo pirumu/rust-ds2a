@@ -1,5 +1,7 @@
 # String Matching
 
+> 💡 **Đừng lo lắng:** Chương này dài và có nhiều công thức. Nhưng đừng lo — mình sẽ đi **từng bước một**. Bạn không cần hiểu hết ngay lần đầu. Đọc phần Naive trước, hiểu rồi mới qua KMP. KMP khó nhất nằm ở LPS table — mình sẽ trace từng bước. Rabin-Karp thì dễ hơn nếu bạn đã quen hash từ Phần 4. Cứ từ từ, không ai sinh ra đã biết KMP cả.
+
 ## Đây là gì?
 
 Bạn đã học Strings ở Phần 1 và Hashing ở Phần 4. Giờ mình kết hợp để tìm chuỗi con trong chuỗi lớn — như tìm một từ trong cuốn sách.
@@ -101,6 +103,62 @@ Giải thích từng giá trị:
 - lps[5] = 0  "ababac"  -> Không có prefix nào trùng suffix
 - lps[6] = 1  "ababaca" -> Prefix "a" == Suffix "a"         (dài 1)
 ```
+
+### Xây LPS table — trace chi tiết từng bước
+
+Đây là phần khó nhất của KMP. Mình sẽ đi **từng bước** với pattern `"aabaaab"`.
+
+Ý tưởng: ta dùng 2 con trỏ — `i` duyệt qua pattern, `len` theo dõi độ dài prefix hiện tại đang khớp.
+
+```
+Pattern:  a  a  b  a  a  a  b
+Index:    0  1  2  3  4  5  6
+
+Khởi tạo: lps = [0, 0, 0, 0, 0, 0, 0], len = 0, i = 1
+
+--- Bước 1: i=1, len=0 ---
+  p[1]='a' == p[0]='a'?  CO!
+  len = 1, lps[1] = 1, i = 2
+  lps = [0, 1, 0, 0, 0, 0, 0]
+
+--- Bước 2: i=2, len=1 ---
+  p[2]='b' == p[1]='a'?  KHONG!
+  len != 0, nên len = lps[0] = 0     (quay lại, KHONG tang i)
+
+--- Bước 3: i=2, len=0 ---
+  p[2]='b' == p[0]='a'?  KHONG!
+  len == 0, nên lps[2] = 0, i = 3
+  lps = [0, 1, 0, 0, 0, 0, 0]
+
+--- Bước 4: i=3, len=0 ---
+  p[3]='a' == p[0]='a'?  CO!
+  len = 1, lps[3] = 1, i = 4
+  lps = [0, 1, 0, 1, 0, 0, 0]
+
+--- Bước 5: i=4, len=1 ---
+  p[4]='a' == p[1]='a'?  CO!
+  len = 2, lps[4] = 2, i = 5
+  lps = [0, 1, 0, 1, 2, 0, 0]
+
+--- Bước 6: i=5, len=2 ---
+  p[5]='a' == p[2]='b'?  KHONG!
+  len != 0, nên len = lps[1] = 1     (quay lại, KHONG tang i)
+                                       ^^ day la buoc quan trong!
+
+--- Bước 7: i=5, len=1 ---
+  p[5]='a' == p[1]='a'?  CO!
+  len = 2, lps[5] = 2, i = 6
+  lps = [0, 1, 0, 1, 2, 2, 0]
+
+--- Bước 8: i=6, len=2 ---
+  p[6]='b' == p[2]='b'?  CO!
+  len = 3, lps[6] = 3, i = 7
+  lps = [0, 1, 0, 1, 2, 2, 3]
+
+KET QUA: lps = [0, 1, 0, 1, 2, 2, 3]
+```
+
+**Buoc 6 la diem mau chot:** Khi `p[5] != p[2]`, ta KHONG reset `len` ve 0 ngay. Thay vao do, ta dung `lps[len-1]` de "quay lai" mot prefix ngan hon co the van khop. Day chinh la ly do LPS table xay duoc trong O(m) — no tu dung chinh no!
 
 ### Cách xây LPS table
 
@@ -219,16 +277,45 @@ Thay vì so sánh từng ký tự, ta tính **hash** (fingerprint) cho pattern. 
 
 Cái hay là: ta dùng **rolling hash** — khi trượt cửa sổ sang phải 1 ký tự, ta chỉ cần bỏ ký tự đầu và thêm ký tự cuối, thay vì tính lại hash từ đầu.
 
-### Rolling Hash
+### Rolling Hash — tại sao O(1) mỗi lần trượt?
+
+Giả sử pattern dài `m = 3`, base = 256. Hash là polynomial:
+
+```
+Hash("abc") = a * 256² + b * 256¹ + c * 256⁰
+```
+
+Khi trượt cửa sổ từ `"abc"` sang `"bcd"`:
 
 ```
 Hash("abc") = a * 256² + b * 256¹ + c * 256⁰
 
-Trượt sang phải:
-Hash("bcd") = (Hash("abc") - a * 256²) * 256 + d
+Bước 1: Bỏ ký tự đầu (a)
+  Hash("abc") - a * 256²  =  b * 256¹ + c * 256⁰
 
-Chỉ cần O(1) cho mỗi lần trượt!
+Bước 2: Nhân tất cả với 256 (đẩy mọi ký tự lên 1 bậc)
+  (b * 256¹ + c * 256⁰) * 256  =  b * 256² + c * 256¹
+
+Bước 3: Cộng ký tự mới (d)
+  b * 256² + c * 256¹ + d * 256⁰  =  Hash("bcd")
 ```
+
+**3 phép tính: trừ, nhân, cộng. Luôn O(1), bất kể pattern dài bao nhiêu!**
+
+Đây là lý do Rabin-Karp mạnh — mỗi cửa sổ chỉ tốn O(1) thay vì O(m) để tính hash.
+
+### Hash Collision — kẻ phá bĩnh
+
+Vì hash dùng modulo (chia dư), hai chuỗi khác nhau có thể ra cùng hash. Ví dụ:
+
+```
+Hash("abc") % 1000000007 = 6382179
+Hash("xyz") % 1000000007 = 6382179    <-- trùng! (ví dụ giả định)
+```
+
+Khi hash khớp, ta **phải** kiểm tra lại từng ký tự để chắc chắn. Nếu không, kết quả sẽ sai.
+
+**Tại sao dùng modulus lớn (10^9 + 7)?** Modulus càng lớn, xác suất collision càng nhỏ. Con số `1_000_000_007` là số nguyên tố, giúp hash phân bố đều hơn.
 
 ### Minh họa
 
@@ -295,6 +382,86 @@ pub fn rabin_karp(text: &str, pattern: &str) -> Vec<usize> {
 
 ---
 
+## Pitfalls — Bẫy thường gặp
+
+### 1. Hash collision trong Rabin-Karp
+
+❌ **Sai:** Hash khớp thì chuỗi khớp, không cần kiểm tra lại.
+
+```rust
+// SAI - tin hash mù quáng
+if p_hash == t_hash {
+    result.push(i);  // Có thể sai!
+}
+```
+
+✅ **Đúng:** Luôn kiểm tra từng ký tự khi hash khớp.
+
+```rust
+// DUNG - kiem tra lai
+if p_hash == t_hash {
+    if t[i..i + m] == p[..] {  // Xác nhận thật sự khớp
+        result.push(i);
+    }
+}
+```
+
+💡 **Tại sao:** Hash collision xảy ra khi 2 chuỗi khác nhau có cùng hash value. Modulus càng nhỏ, collision càng nhiều. Nếu bỏ bước kiểm tra, bạn sẽ trả về false positive.
+
+### 2. KMP failure function off-by-one
+
+❌ **Sai:** Khi tìm thấy match (j == m), dùng `j = lps[j]`.
+
+```rust
+// SAI - index out of bounds!
+if j == m {
+    result.push(i - m);
+    j = lps[j];  // lps chi co index 0..m-1, j=m la out of bounds!
+}
+```
+
+✅ **Đúng:** Dùng `j = lps[j - 1]`.
+
+```rust
+// DUNG
+if j == m {
+    result.push(i - m);
+    j = lps[j - 1];  // Quay lai prefix dai nhat co the khop tiep
+}
+```
+
+💡 **Tại sao:** LPS table có `m` phần tử, index từ `0` đến `m-1`. Khi `j == m`, `lps[j]` vượt ngoài mảng. Ta cần `lps[j-1]` vì đó là LPS value của ký tự cuối cùng trong pattern.
+
+### 3. Quên xử lý len != 0 trong build_lps
+
+❌ **Sai:** Khi mismatch, luôn set `lps[i] = 0` và tăng `i`.
+
+```rust
+// SAI - bo qua thong tin tu prefix truoc do
+if p[i] != p[len] {
+    lps[i] = 0;
+    i += 1;
+}
+```
+
+✅ **Đúng:** Khi `len != 0`, quay lại bằng `len = lps[len-1]` mà KHÔNG tăng `i`.
+
+```rust
+// DUNG
+if p[i] != p[len] {
+    if len != 0 {
+        len = lps[len - 1];  // Thu prefix ngan hon, KHONG tang i
+    } else {
+        lps[i] = 0;
+        i += 1;
+    }
+}
+```
+
+💡 **Tại sao:** Khi mismatch tại `len > 0`, có thể một prefix ngắn hơn vẫn khớp. Nếu bỏ qua bước này, LPS table sẽ sai, dẫn đến KMP bỏ sót kết quả.
+
+---
+
 ## So sánh 3 thuật toán
 
 | Thuật toán | Ưu điểm | Nhược điểm | Khi nào dùng? |
@@ -317,11 +484,151 @@ Trong đó: **n** = độ dài text, **m** = độ dài pattern.
 
 ---
 
+## Khi nào dùng thuật toán nào?
+
+| Tình huống | Dùng gì? | Lý do |
+|-----------|---------|-------|
+| Text ngắn (< 1000 ký tự) | **Naive** | Overhead của KMP/Rabin-Karp không đáng |
+| Pattern có nhiều ký tự lặp (`"aaaa"`, `"abab"`) | **KMP** | Naive sẽ chậm vì so sánh nhiều, KMP nhảy thông minh |
+| Tìm **nhiều pattern** cùng lúc trong 1 text | **Rabin-Karp** | Tính hash 1 lần cho text, so với nhiều pattern hash |
+| Cần **worst-case guarantee** | **KMP** | Luôn O(n+m), không phụ thuộc vào hash collision |
+| Phỏng vấn, không nhớ KMP | **Rabin-Karp** | Dễ code hơn KMP nếu bạn quen hash |
+| Production code | **Dùng thư viện** | `str::find()`, `regex` crate đã tối ưu sẵn |
+
+---
+
+## Thế giới thật dùng gì?
+
+Bạn có thể thắc mắc: "OK mình học 3 thuật toán, nhưng grep hay IDE dùng gì?"
+
+### `grep` dùng Boyer-Moore
+
+`grep` (và hầu hết text editor) dùng **Boyer-Moore** hoặc biến thể của nó. Ý tưởng ngược lại với Naive — Boyer-Moore so sánh **từ cuối pattern** về đầu. Khi gặp mismatch, nó có thể nhảy **cả đoạn dài**, nhanh hơn KMP trong thực tế.
+
+```
+Text:    T H E _ C A T _ S A T _ O N _ T H E _ M A T
+Pattern: T H E _ M A T
+
+So sánh từ cuối: T vs T -> khớp, A vs A -> khớp, M vs C -> SAI!
+'C' không có trong pattern -> nhảy 7 ký tự!
+
+Rất nhanh vì phần lớn ký tự được bỏ qua hoàn toàn.
+```
+
+Boyer-Moore trung bình nhanh hơn KMP, nhưng worst case vẫn O(n*m). Vì vậy grep dùng biến thể Boyer-Moore-Horspool để cân bằng.
+
+### Rust `str::find()` dùng Two-Way Algorithm
+
+Rust standard library dùng **Two-Way algorithm** — một thuật toán ít nổi tiếng hơn nhưng rất hay:
+- **O(n + m)** worst-case (như KMP)
+- **O(1) bộ nhớ** (không cần LPS table!)
+- Chia pattern thành 2 phần, so sánh thông minh
+
+Đây là lý do bạn nên dùng `str::find()` hoặc `str::contains()` trong production code — nó đã được tối ưu hơn bất kỳ implementation nào bạn tự viết.
+
+### Regex engine
+
+Khi bạn dùng regex (crate `regex` trong Rust), engine bên trong dùng **Aho-Corasick** (multi-pattern matching trên automaton) kết hợp với **NFA/DFA** cho các pattern phức tạp.
+
+---
+
+## Rust Ecosystem
+
+```rust
+// str::find() - tim vi tri dau tien
+let text = "hello world hello";
+assert_eq!(text.find("world"), Some(6));
+
+// str::contains() - kiem tra co chua khong
+assert!(text.contains("world"));
+
+// str::matches() - dem so lan xuat hien
+let count = text.matches("hello").count();
+assert_eq!(count, 2);
+
+// str::match_indices() - lay tat ca vi tri
+let positions: Vec<(usize, &str)> = text.match_indices("hello").collect();
+assert_eq!(positions, vec![(0, "hello"), (12, "hello")]);
+
+// regex crate - pattern phuc tap
+// Cargo.toml: regex = "1"
+// use regex::Regex;
+// let re = Regex::new(r"\b\w{5}\b").unwrap();  // tim tu 5 ky tu
+// for mat in re.find_iter(text) {
+//     println!("{} at {}", mat.as_str(), mat.start());
+// }
+```
+
+**Lời khuyên:** Trong production, luôn dùng `str::find()` hoặc `regex` crate. Tự implement chỉ để học và phỏng vấn.
+
+---
+
+## Practice — Luyện tập
+
+### Implement strStr() — LeetCode #28
+
+> Tìm vị trí đầu tiên của `needle` trong `haystack`. Trả về `-1` nếu không tìm thấy.
+
+Đây là bài kinh điển để luyện string matching. Bạn có thể dùng Naive, KMP, hoặc Rabin-Karp.
+
+```rust
+// Gợi ý: đây chính là str::find() nhưng tự viết
+fn str_str(haystack: &str, needle: &str) -> i32 {
+    if needle.is_empty() { return 0; }
+    // Dùng KMP hoặc Rabin-Karp ở đây
+    // ...
+    -1
+}
+```
+
+### Repeated Substring Pattern — LeetCode #459
+
+> Cho chuỗi `s`, kiểm tra xem `s` có thể tạo từ việc lặp lại một substring hay không.
+>
+> Ví dụ: `"abab"` -> `true` (lặp `"ab"`), `"abc"` -> `false`
+
+**Mẹo hay:** Nối `s + s`, bỏ ký tự đầu và cuối. Nếu tìm thấy `s` trong chuỗi mới -> `true`. Dùng KMP để tìm.
+
+```rust
+fn repeated_substring(s: &str) -> bool {
+    let doubled = format!("{}{}",s, s);
+    let inner = &doubled[1..doubled.len() - 1];
+    // Tim s trong inner bang KMP
+    kmp_search(inner, s).len() > 0
+}
+```
+
+### Longest Happy Prefix — LeetCode #1392
+
+> Tìm chuỗi dài nhất vừa là prefix vừa là suffix (nhưng không phải cả chuỗi).
+>
+> Ví dụ: `"level"` -> `"l"`, `"ababab"` -> `"abab"`
+
+**Mẹo:** Đây chính xác là giá trị `lps[m-1]` trong KMP! Bài này kiểm tra xem bạn có thật sự hiểu LPS table không.
+
+```rust
+fn longest_happy_prefix(s: &str) -> String {
+    let lps = build_lps(s);
+    let len = lps[s.len() - 1];
+    s[..len].to_string()
+}
+```
+
+---
+
 ## Tóm tắt
 
 - **Naive Search**: cách đơn giản nhất, thử mọi vị trí. Tốt cho text ngắn.
 - **KMP**: dùng LPS table để nhảy thông minh, không bao giờ quay lại text. Luôn O(n+m).
 - **Rabin-Karp**: dùng rolling hash để so sánh nhanh, chỉ kiểm tra chi tiết khi hash khớp.
 - Ba thuật toán cho cùng kết quả, chỉ khác nhau về tốc độ và cách tiếp cận.
+- Trong thực tế: `grep` dùng Boyer-Moore, Rust `str::find()` dùng Two-Way algorithm, regex engine dùng Aho-Corasick + NFA/DFA.
+- Tự implement để hiểu, dùng thư viện trong production.
 
-Hãy nhớ: trong thực tế, hàm `str::find()` của Rust và `Ctrl+F` trong trình duyệt đều dùng các thuật toán tương tự!
+---
+
+## Tiếp theo
+
+---
+
+[← Top-K Problems](./06-top-k.md) | [Graph Patterns →](./08-graph-patterns.md)

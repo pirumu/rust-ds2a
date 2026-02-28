@@ -126,6 +126,71 @@ impl Graph {
         order
     }
 
+    // -- BFS shortest path --------------------------------------------------
+
+    /// BFS shortest path from `start` to `end`. Returns the path as a vector
+    /// of vertex indices, or `None` if no path exists.
+    /// Only correct for unweighted graphs (all edges treated as weight 1).
+    pub fn bfs_shortest_path(&self, start: usize, end: usize) -> Option<Vec<usize>> {
+        let mut visited = vec![false; self.num_vertices];
+        let mut parent: Vec<Option<usize>> = vec![None; self.num_vertices];
+        let mut queue = VecDeque::new();
+
+        visited[start] = true;
+        queue.push_back(start);
+
+        while let Some(v) = queue.pop_front() {
+            if v == end {
+                let mut path = vec![end];
+                let mut current = end;
+                while let Some(p) = parent[current] {
+                    path.push(p);
+                    current = p;
+                }
+                path.reverse();
+                return Some(path);
+            }
+            for &(neighbor, _) in &self.adjacency_list[v] {
+                if !visited[neighbor] {
+                    visited[neighbor] = true;
+                    parent[neighbor] = Some(v);
+                    queue.push_back(neighbor);
+                }
+            }
+        }
+        None
+    }
+
+    // -- BFS by level -------------------------------------------------------
+
+    /// BFS that returns vertices grouped by level (distance from start).
+    pub fn bfs_by_level(&self, start: usize) -> Vec<Vec<usize>> {
+        let mut visited = vec![false; self.num_vertices];
+        let mut levels: Vec<Vec<usize>> = Vec::new();
+        let mut queue = VecDeque::new();
+
+        visited[start] = true;
+        queue.push_back(start);
+
+        while !queue.is_empty() {
+            let level_size = queue.len();
+            let mut current_level = Vec::new();
+
+            for _ in 0..level_size {
+                let v = queue.pop_front().unwrap();
+                current_level.push(v);
+                for &(neighbor, _) in &self.adjacency_list[v] {
+                    if !visited[neighbor] {
+                        visited[neighbor] = true;
+                        queue.push_back(neighbor);
+                    }
+                }
+            }
+            levels.push(current_level);
+        }
+        levels
+    }
+
     // -- DFS ----------------------------------------------------------------
 
     /// Depth-first search from `start` (iterative). Returns the visit order.
@@ -182,6 +247,62 @@ impl Graph {
             }
         }
         dist
+    }
+
+    // -- Dijkstra with path reconstruction ------------------------------------
+
+    /// Dijkstra's single-source shortest paths from `start`, also tracking
+    /// the predecessor of each vertex so that shortest paths can be
+    /// reconstructed.
+    ///
+    /// Returns `(dist, parent)` where `parent[v]` is the vertex that leads
+    /// to `v` on the shortest path from `start` (or `None` if `v` is the
+    /// start or unreachable).
+    pub fn dijkstra_with_path(&self, start: usize) -> (Vec<i64>, Vec<Option<usize>>) {
+        use std::cmp::Reverse;
+        use std::collections::BinaryHeap;
+
+        let mut dist = vec![i64::MAX; self.num_vertices];
+        let mut parent: Vec<Option<usize>> = vec![None; self.num_vertices];
+        dist[start] = 0;
+
+        let mut heap = BinaryHeap::new();
+        heap.push(Reverse((0i64, start)));
+
+        while let Some(Reverse((d, u))) = heap.pop() {
+            if d > dist[u] {
+                continue;
+            }
+            for &(v, w) in &self.adjacency_list[u] {
+                let nd = d.saturating_add(w);
+                if nd < dist[v] {
+                    dist[v] = nd;
+                    parent[v] = Some(u);
+                    heap.push(Reverse((nd, v)));
+                }
+            }
+        }
+        (dist, parent)
+    }
+
+    /// Reconstructs the shortest path from a `parent` array (as returned by
+    /// [`dijkstra_with_path`]) to `end`. Returns `None` if `end` is
+    /// unreachable.
+    pub fn reconstruct_path(parent: &[Option<usize>], start: usize, end: usize) -> Option<Vec<usize>> {
+        if start == end {
+            return Some(vec![start]);
+        }
+        if parent[end].is_none() {
+            return None; // unreachable
+        }
+        let mut path = vec![end];
+        let mut current = end;
+        while let Some(p) = parent[current] {
+            path.push(p);
+            current = p;
+        }
+        path.reverse();
+        Some(path)
     }
 
     // -- Bellman-Ford -------------------------------------------------------
@@ -250,6 +371,98 @@ impl Graph {
             }
         }
         dist
+    }
+
+    // -- Floyd-Warshall with path reconstruction -----------------------------
+
+    /// All-pairs shortest paths with path reconstruction.
+    /// Returns `(dist, next)` where `next[i][j]` is the next vertex on the
+    /// shortest path from `i` to `j`.
+    pub fn floyd_warshall_with_path(
+        &self,
+    ) -> (Vec<Vec<i64>>, Vec<Vec<Option<usize>>>) {
+        let n = self.num_vertices;
+        let mut dist = vec![vec![i64::MAX; n]; n];
+        let mut next = vec![vec![None; n]; n];
+
+        for i in 0..n {
+            dist[i][i] = 0;
+        }
+        for u in 0..n {
+            for &(v, w) in &self.adjacency_list[u] {
+                if w < dist[u][v] {
+                    dist[u][v] = w;
+                    next[u][v] = Some(v);
+                }
+            }
+        }
+
+        for k in 0..n {
+            for i in 0..n {
+                for j in 0..n {
+                    if dist[i][k] != i64::MAX && dist[k][j] != i64::MAX {
+                        let through_k = dist[i][k] + dist[k][j];
+                        if through_k < dist[i][j] {
+                            dist[i][j] = through_k;
+                            next[i][j] = next[i][k];
+                        }
+                    }
+                }
+            }
+        }
+        (dist, next)
+    }
+
+    /// Reconstructs the shortest path from `i` to `j` using the `next` matrix
+    /// returned by [`floyd_warshall_with_path`].
+    /// Returns an empty vector if no path exists.
+    pub fn get_floyd_path(
+        next: &[Vec<Option<usize>>],
+        i: usize,
+        j: usize,
+    ) -> Vec<usize> {
+        if next[i][j].is_none() {
+            return vec![];
+        }
+        let mut path = vec![i];
+        let mut current = i;
+        while current != j {
+            current = next[current][j].unwrap();
+            path.push(current);
+        }
+        path
+    }
+
+    /// Checks whether the graph contains a negative-weight cycle.
+    /// Runs Floyd-Warshall and checks the diagonal for negative values.
+    pub fn has_negative_cycle(&self) -> bool {
+        let dist = self.floyd_warshall();
+        dist.iter().enumerate().any(|(i, row)| row[i] < 0)
+    }
+
+    /// Computes the transitive closure of the graph.
+    /// `result[i][j]` is `true` if there is a path from `i` to `j`.
+    pub fn transitive_closure(&self) -> Vec<Vec<bool>> {
+        let n = self.num_vertices;
+        let mut reach = vec![vec![false; n]; n];
+
+        for i in 0..n {
+            reach[i][i] = true;
+        }
+        for u in 0..n {
+            for &(v, _) in &self.adjacency_list[u] {
+                reach[u][v] = true;
+            }
+        }
+
+        for k in 0..n {
+            for i in 0..n {
+                for j in 0..n {
+                    reach[i][j] = reach[i][j] || (reach[i][k] && reach[k][j]);
+                }
+            }
+        }
+        reach
     }
 
     // -- Prim's MST ---------------------------------------------------------
@@ -351,6 +564,87 @@ impl Graph {
 
         if order.len() == n {
             Some(order)
+        } else {
+            None // cycle detected
+        }
+    }
+
+    // -- DFS-based Topological Sort -----------------------------------------
+
+    /// DFS-based topological sort using reverse post-order.
+    /// Returns `None` if the graph contains a cycle (detected via 3-color DFS).
+    pub fn topological_sort_dfs(&self) -> Option<Vec<usize>> {
+        let n = self.num_vertices;
+        // 0 = white (unvisited), 1 = gray (in current path), 2 = black (done)
+        let mut color = vec![0u8; n];
+        let mut stack = Vec::with_capacity(n);
+
+        for v in 0..n {
+            if color[v] == 0 {
+                if !self.topo_dfs_visit(v, &mut color, &mut stack) {
+                    return None; // cycle detected
+                }
+            }
+        }
+
+        stack.reverse();
+        Some(stack)
+    }
+
+    fn topo_dfs_visit(&self, u: usize, color: &mut [u8], stack: &mut Vec<usize>) -> bool {
+        color[u] = 1; // gray
+        for &(v, _) in &self.adjacency_list[u] {
+            if color[v] == 1 {
+                return false; // back edge → cycle
+            }
+            if color[v] == 0 && !self.topo_dfs_visit(v, color, stack) {
+                return false;
+            }
+        }
+        color[u] = 2; // black
+        stack.push(u); // post-order
+        true
+    }
+
+    // -- Kahn's with level tracking -----------------------------------------
+
+    /// Kahn's algorithm that returns vertices grouped by "wave" / level.
+    /// All vertices in the same level have in-degree 0 simultaneously and
+    /// can be processed in parallel.
+    /// Returns `None` if the graph contains a cycle.
+    pub fn topo_levels(&self) -> Option<Vec<Vec<usize>>> {
+        let n = self.num_vertices;
+        let mut in_degree = vec![0usize; n];
+
+        for u in 0..n {
+            for &(v, _) in &self.adjacency_list[u] {
+                in_degree[v] += 1;
+            }
+        }
+
+        let mut queue: VecDeque<usize> = (0..n).filter(|&v| in_degree[v] == 0).collect();
+        let mut levels = Vec::new();
+        let mut count = 0;
+
+        while !queue.is_empty() {
+            let level_size = queue.len();
+            let mut level = Vec::with_capacity(level_size);
+            for _ in 0..level_size {
+                let u = queue.pop_front().unwrap();
+                level.push(u);
+                count += 1;
+                for &(v, _) in &self.adjacency_list[u] {
+                    in_degree[v] -= 1;
+                    if in_degree[v] == 0 {
+                        queue.push_back(v);
+                    }
+                }
+            }
+            levels.push(level);
+        }
+
+        if count == n {
+            Some(levels)
         } else {
             None // cycle detected
         }
@@ -680,6 +974,116 @@ mod tests {
         assert_eq!(dist[1][3], 3); // 1->2->3
     }
 
+    #[test]
+    fn test_dijkstra_with_path() {
+        // Same graph as basic dijkstra test
+        let mut g = Graph::new(4, true);
+        g.add_edge(0, 1, 4);
+        g.add_edge(0, 2, 2);
+        g.add_edge(1, 3, 1);
+        g.add_edge(2, 3, 3);
+        let (dist, parent) = g.dijkstra_with_path(0);
+        assert_eq!(dist, vec![0, 4, 2, 5]);
+        assert_eq!(parent[0], None); // start
+        assert_eq!(parent[1], Some(0));
+        assert_eq!(parent[2], Some(0));
+        assert_eq!(parent[3], Some(2)); // 0→2→3 is shorter than 0→1→3
+        let path = Graph::reconstruct_path(&parent, 0, 3).unwrap();
+        assert_eq!(path, vec![0, 2, 3]);
+    }
+
+    #[test]
+    fn test_dijkstra_with_path_6_nodes() {
+        // A(0)--1--B(1)--6--D(4)
+        // |        |        |
+        // 4        2        1
+        // |        |        |
+        // C(2)--3--E(3)--2--F(5)
+        let mut g = Graph::new(6, false);
+        g.add_edge(0, 1, 1); // A-B
+        g.add_edge(0, 2, 4); // A-C
+        g.add_edge(1, 4, 6); // B-D
+        g.add_edge(1, 3, 2); // B-E
+        g.add_edge(2, 3, 3); // C-E
+        g.add_edge(3, 5, 2); // E-F
+        g.add_edge(4, 5, 1); // D-F
+        let (dist, parent) = g.dijkstra_with_path(0);
+        assert_eq!(dist[0], 0); // A
+        assert_eq!(dist[1], 1); // B
+        assert_eq!(dist[2], 4); // C
+        assert_eq!(dist[3], 3); // E
+        assert_eq!(dist[5], 5); // F
+        assert_eq!(dist[4], 6); // D via A→B→E→F→D, not A→B→D=7
+        // Path to D should be A→B→E→F→D
+        let path = Graph::reconstruct_path(&parent, 0, 4).unwrap();
+        assert_eq!(path, vec![0, 1, 3, 5, 4]);
+    }
+
+    #[test]
+    fn test_dijkstra_with_path_unreachable() {
+        let mut g = Graph::new(3, true);
+        g.add_edge(0, 1, 1);
+        let (dist, parent) = g.dijkstra_with_path(0);
+        assert_eq!(dist[2], i64::MAX);
+        assert!(Graph::reconstruct_path(&parent, 0, 2).is_none());
+    }
+
+    #[test]
+    fn test_reconstruct_path_start_equals_end() {
+        let parent = vec![None; 3];
+        let path = Graph::reconstruct_path(&parent, 0, 0).unwrap();
+        assert_eq!(path, vec![0]);
+    }
+
+    #[test]
+    fn test_floyd_warshall_with_path() {
+        let mut g = Graph::new(4, true);
+        g.add_edge(0, 1, 3);
+        g.add_edge(1, 2, 2);
+        g.add_edge(2, 3, 1);
+        let (dist, next) = g.floyd_warshall_with_path();
+        assert_eq!(dist[0][3], 6);
+        let path = Graph::get_floyd_path(&next, 0, 3);
+        assert_eq!(path, vec![0, 1, 2, 3]);
+    }
+
+    #[test]
+    fn test_floyd_warshall_with_path_no_path() {
+        let g = Graph::new(3, true);
+        let (_, next) = g.floyd_warshall_with_path();
+        let path = Graph::get_floyd_path(&next, 0, 2);
+        assert!(path.is_empty());
+    }
+
+    #[test]
+    fn test_has_negative_cycle() {
+        let mut g = Graph::new(3, true);
+        g.add_edge(0, 1, 1);
+        g.add_edge(1, 2, -2);
+        g.add_edge(2, 0, -1);
+        assert!(g.has_negative_cycle());
+    }
+
+    #[test]
+    fn test_no_negative_cycle() {
+        let mut g = Graph::new(3, true);
+        g.add_edge(0, 1, 1);
+        g.add_edge(1, 2, 2);
+        assert!(!g.has_negative_cycle());
+    }
+
+    #[test]
+    fn test_transitive_closure() {
+        let mut g = Graph::new(4, true);
+        g.add_edge(0, 1, 1);
+        g.add_edge(1, 2, 1);
+        g.add_edge(2, 3, 1);
+        let reach = g.transitive_closure();
+        assert!(reach[0][3]); // 0→1→2→3
+        assert!(!reach[3][0]); // no path back
+        assert!(reach[0][0]); // self
+    }
+
     // -- MST algorithms -----------------------------------------------------
 
     #[test]
@@ -766,6 +1170,84 @@ mod tests {
     }
 
     #[test]
+    fn test_topological_sort_dfs_dag() {
+        let mut g = Graph::new(5, true);
+        g.add_unweighted_edge(0, 1);
+        g.add_unweighted_edge(0, 2);
+        g.add_unweighted_edge(1, 3);
+        g.add_unweighted_edge(2, 3);
+        g.add_unweighted_edge(1, 4);
+        let order = g.topological_sort_dfs().expect("DAG");
+        let pos = |v: usize| order.iter().position(|&x| x == v).unwrap();
+        assert!(pos(0) < pos(1));
+        assert!(pos(0) < pos(2));
+        assert!(pos(1) < pos(3));
+        assert!(pos(2) < pos(3));
+        assert!(pos(1) < pos(4));
+    }
+
+    #[test]
+    fn test_topological_sort_dfs_cycle() {
+        let mut g = Graph::new(3, true);
+        g.add_unweighted_edge(0, 1);
+        g.add_unweighted_edge(1, 2);
+        g.add_unweighted_edge(2, 0);
+        assert!(g.topological_sort_dfs().is_none());
+    }
+
+    #[test]
+    fn test_topological_sort_dfs_single() {
+        let g = Graph::new(1, true);
+        assert_eq!(g.topological_sort_dfs(), Some(vec![0]));
+    }
+
+    #[test]
+    fn test_topological_sort_dfs_disconnected() {
+        let mut g = Graph::new(4, true);
+        g.add_unweighted_edge(0, 1);
+        g.add_unweighted_edge(2, 3);
+        let order = g.topological_sort_dfs().expect("DAG");
+        let pos = |v: usize| order.iter().position(|&x| x == v).unwrap();
+        assert!(pos(0) < pos(1));
+        assert!(pos(2) < pos(3));
+    }
+
+    #[test]
+    fn test_topo_levels_basic() {
+        // 0→2, 1→2, 2→3, 2→4, 3→5, 4→5
+        let mut g = Graph::new(6, true);
+        g.add_unweighted_edge(0, 2);
+        g.add_unweighted_edge(1, 2);
+        g.add_unweighted_edge(2, 3);
+        g.add_unweighted_edge(2, 4);
+        g.add_unweighted_edge(3, 5);
+        g.add_unweighted_edge(4, 5);
+        let levels = g.topo_levels().expect("DAG");
+        assert_eq!(levels.len(), 4);
+        // Level 0: {0, 1} in some order
+        assert_eq!(levels[0].len(), 2);
+        assert!(levels[0].contains(&0));
+        assert!(levels[0].contains(&1));
+        // Level 1: {2}
+        assert_eq!(levels[1], vec![2]);
+        // Level 2: {3, 4} in some order
+        assert_eq!(levels[2].len(), 2);
+        assert!(levels[2].contains(&3));
+        assert!(levels[2].contains(&4));
+        // Level 3: {5}
+        assert_eq!(levels[3], vec![5]);
+    }
+
+    #[test]
+    fn test_topo_levels_cycle() {
+        let mut g = Graph::new(3, true);
+        g.add_unweighted_edge(0, 1);
+        g.add_unweighted_edge(1, 2);
+        g.add_unweighted_edge(2, 0);
+        assert!(g.topo_levels().is_none());
+    }
+
+    #[test]
     fn test_has_cycle_directed() {
         let mut g = Graph::new(3, true);
         g.add_unweighted_edge(0, 1);
@@ -836,6 +1318,65 @@ mod tests {
         uf.union(1, 3);
         assert_eq!(uf.find(0), uf.find(2));
         assert_ne!(uf.find(0), uf.find(4));
+    }
+
+    // -- BFS shortest path & BFS by level -----------------------------------
+
+    #[test]
+    fn test_bfs_shortest_path() {
+        //  0 -- 1 -- 3 -- 5
+        //  |         |
+        //  2         4
+        let mut g = Graph::new(6, false);
+        g.add_unweighted_edge(0, 1);
+        g.add_unweighted_edge(0, 2);
+        g.add_unweighted_edge(1, 3);
+        g.add_unweighted_edge(3, 4);
+        g.add_unweighted_edge(3, 5);
+        let path = g.bfs_shortest_path(0, 5).unwrap();
+        assert_eq!(path, vec![0, 1, 3, 5]);
+    }
+
+    #[test]
+    fn test_bfs_shortest_path_same_vertex() {
+        let g = Graph::new(3, false);
+        let path = g.bfs_shortest_path(0, 0).unwrap();
+        assert_eq!(path, vec![0]);
+    }
+
+    #[test]
+    fn test_bfs_shortest_path_no_path() {
+        let mut g = Graph::new(4, false);
+        g.add_unweighted_edge(0, 1);
+        g.add_unweighted_edge(2, 3);
+        assert!(g.bfs_shortest_path(0, 3).is_none());
+    }
+
+    #[test]
+    fn test_bfs_by_level() {
+        //       0
+        //      / \
+        //     1   2
+        //    / \   \
+        //   3   4   5
+        let mut g = Graph::new(6, false);
+        g.add_unweighted_edge(0, 1);
+        g.add_unweighted_edge(0, 2);
+        g.add_unweighted_edge(1, 3);
+        g.add_unweighted_edge(1, 4);
+        g.add_unweighted_edge(2, 5);
+        let levels = g.bfs_by_level(0);
+        assert_eq!(levels.len(), 3);
+        assert_eq!(levels[0], vec![0]);
+        assert_eq!(levels[1], vec![1, 2]);
+        assert_eq!(levels[2], vec![3, 4, 5]);
+    }
+
+    #[test]
+    fn test_bfs_by_level_single() {
+        let g = Graph::new(1, false);
+        let levels = g.bfs_by_level(0);
+        assert_eq!(levels, vec![vec![0]]);
     }
 
     // -- 0-1 BFS, Multi-source BFS, Tarjan SCC -----------------------------

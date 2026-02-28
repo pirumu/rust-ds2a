@@ -46,6 +46,47 @@ impl<T> Default for Stack<T> {
     }
 }
 
+/// Tính giá trị biểu thức hậu tố (Reverse Polish Notation).
+///
+/// Mỗi token là một số nguyên hoặc một toán tử (+, -, *, /).
+/// Trả về `Some(kết quả)` nếu biểu thức hợp lệ, `None` nếu không.
+pub fn evaluate_rpn(tokens: &[&str]) -> Option<i64> {
+    let mut stack = Stack::new();
+
+    for &token in tokens {
+        match token {
+            "+" | "-" | "*" | "/" => {
+                let b = stack.pop()?; // lấy toán hạng phải
+                let a = stack.pop()?; // lấy toán hạng trái
+                let result = match token {
+                    "+" => a + b,
+                    "-" => a - b,
+                    "*" => a * b,
+                    "/" => {
+                        if b == 0 {
+                            return None;
+                        }
+                        a / b
+                    }
+                    _ => unreachable!(),
+                };
+                stack.push(result);
+            }
+            num_str => {
+                let num: i64 = num_str.parse().ok()?;
+                stack.push(num);
+            }
+        }
+    }
+
+    // Biểu thức hợp lệ: stack còn đúng 1 phần tử
+    if stack.size() == 1 {
+        stack.pop()
+    } else {
+        None
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -93,6 +134,39 @@ mod tests {
         assert_eq!(stack.size(), 2);
         stack.pop();
         assert_eq!(stack.size(), 1);
+    }
+
+    #[test]
+    fn rpn_basic() {
+        // 3 4 + = 7
+        assert_eq!(super::evaluate_rpn(&["3", "4", "+"]), Some(7));
+    }
+
+    #[test]
+    fn rpn_complex() {
+        // 3 4 + 2 * = (3+4)*2 = 14
+        assert_eq!(super::evaluate_rpn(&["3", "4", "+", "2", "*"]), Some(14));
+    }
+
+    #[test]
+    fn rpn_subtraction_and_division() {
+        // 10 3 - = 7
+        assert_eq!(super::evaluate_rpn(&["10", "3", "-"]), Some(7));
+        // 20 4 / = 5
+        assert_eq!(super::evaluate_rpn(&["20", "4", "/"]), Some(5));
+    }
+
+    #[test]
+    fn rpn_division_by_zero() {
+        assert_eq!(super::evaluate_rpn(&["5", "0", "/"]), None);
+    }
+
+    #[test]
+    fn rpn_invalid_expression() {
+        // Too many operators
+        assert_eq!(super::evaluate_rpn(&["3", "+", "+"]), None);
+        // Too many operands
+        assert_eq!(super::evaluate_rpn(&["3", "4"]), None);
     }
 
     #[test]

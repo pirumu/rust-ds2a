@@ -14,6 +14,8 @@ pub fn reverse_string(s: &str) -> String {
 
 /// Check whether a string is a palindrome (case-insensitive, alphanumeric only).
 ///
+/// Uses Vec + index approach — simple and straightforward.
+///
 /// **Time:** O(n) — **Space:** O(n) for the filtered collection
 pub fn is_palindrome(s: &str) -> bool {
     let chars: Vec<char> = s
@@ -29,6 +31,50 @@ pub fn is_palindrome(s: &str) -> bool {
         }
     }
     true
+}
+
+/// Check whether a string is a palindrome using the two-pointer technique.
+///
+/// Collects filtered chars into a Vec, then walks inward from both ends.
+///
+/// **Time:** O(n) — **Space:** O(n)
+pub fn is_palindrome_two_pointers(s: &str) -> bool {
+    let chars: Vec<char> = s
+        .chars()
+        .filter(|c| c.is_alphanumeric())
+        .map(|c| c.to_ascii_lowercase())
+        .collect();
+
+    if chars.is_empty() {
+        return true;
+    }
+
+    let mut left = 0;
+    let mut right = chars.len() - 1;
+
+    while left < right {
+        if chars[left] != chars[right] {
+            return false;
+        }
+        left += 1;
+        right -= 1;
+    }
+    true
+}
+
+/// Check whether a string is a palindrome — idiomatic Rust version.
+///
+/// Compares the forward iterator with the reversed iterator.
+///
+/// **Time:** O(n) — **Space:** O(n)
+pub fn is_palindrome_idiomatic(s: &str) -> bool {
+    let cleaned: Vec<char> = s
+        .chars()
+        .filter(|c| c.is_alphanumeric())
+        .map(|c| c.to_ascii_lowercase())
+        .collect();
+
+    cleaned.iter().eq(cleaned.iter().rev())
 }
 
 /// Check whether two strings are anagrams of each other (case-insensitive).
@@ -100,6 +146,19 @@ pub fn compress(s: &str) -> String {
     result
 }
 
+/// Run-length encoding that only returns the compressed form if it is
+/// shorter than the original. Otherwise returns the original string.
+///
+/// **Time:** O(n) — **Space:** O(n)
+pub fn compress_if_shorter(s: &str) -> String {
+    let compressed = compress(s);
+    if compressed.len() < s.len() {
+        compressed
+    } else {
+        s.to_string()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -136,6 +195,49 @@ mod tests {
     #[test]
     fn is_palindrome_false() {
         assert!(!is_palindrome("hello"));
+    }
+
+    // -- is_palindrome_two_pointers --------------------------------------
+
+    #[test]
+    fn two_pointers_palindrome_true() {
+        assert!(is_palindrome_two_pointers("racecar"));
+    }
+
+    #[test]
+    fn two_pointers_palindrome_sentence() {
+        assert!(is_palindrome_two_pointers(
+            "A man a plan a canal Panama"
+        ));
+    }
+
+    #[test]
+    fn two_pointers_palindrome_false() {
+        assert!(!is_palindrome_two_pointers("hello"));
+    }
+
+    #[test]
+    fn two_pointers_palindrome_empty() {
+        assert!(is_palindrome_two_pointers(""));
+    }
+
+    // -- is_palindrome_idiomatic -----------------------------------------
+
+    #[test]
+    fn idiomatic_palindrome_true() {
+        assert!(is_palindrome_idiomatic("racecar"));
+    }
+
+    #[test]
+    fn idiomatic_palindrome_sentence() {
+        assert!(is_palindrome_idiomatic(
+            "A man a plan a canal Panama"
+        ));
+    }
+
+    #[test]
+    fn idiomatic_palindrome_false() {
+        assert!(!is_palindrome_idiomatic("hello"));
     }
 
     // -- are_anagrams ----------------------------------------------------
@@ -188,5 +290,30 @@ mod tests {
     #[test]
     fn compress_empty() {
         assert_eq!(compress(""), "");
+    }
+
+    // -- compress_if_shorter ---------------------------------------------
+
+    #[test]
+    fn compress_if_shorter_effective() {
+        // "aaabbc" (6) -> "a3b2c1" (6) — same length, keep original
+        assert_eq!(compress_if_shorter("aaabbc"), "aaabbc");
+    }
+
+    #[test]
+    fn compress_if_shorter_longer_input() {
+        // "aaaaabbbcc" (10) -> "a5b3c2" (6) — shorter, use compressed
+        assert_eq!(compress_if_shorter("aaaaabbbcc"), "a5b3c2");
+    }
+
+    #[test]
+    fn compress_if_shorter_no_repeats() {
+        // "ab" (2) -> "a1b1" (4) — longer, keep original
+        assert_eq!(compress_if_shorter("ab"), "ab");
+    }
+
+    #[test]
+    fn compress_if_shorter_empty() {
+        assert_eq!(compress_if_shorter(""), "");
     }
 }

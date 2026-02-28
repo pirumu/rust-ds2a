@@ -1,5 +1,7 @@
 # Graph Patterns
 
+> **Anxiety check:** Thở đi. Chương này KHÔNG dạy gì mới. Đây là compilation của những patterns bạn đã học trong Phần 5 — BFS, DFS, Dijkstra, Topological Sort, Union-Find. Mình chỉ tổng hợp lại và chỉ cho bạn cách nhận diện: "Bài này dùng cái gì?" Nếu bạn đã đọc Phần 5, bạn đã biết 80% rồi.
+
 ## Đây là gì?
 
 Bạn đã học Graph, BFS, DFS, Union-Find ở Phần 5. Giờ mình áp dụng vào các bài toán phổ biến nhất trong phỏng vấn và thực tế.
@@ -14,6 +16,41 @@ Tưởng tượng bạn đã biết cách đi bộ (BFS/DFS) và cách nhóm b�
 - **"Copy đồ thị?"** → Clone Graph
 
 > **Tại sao quan trọng?** Đây là những pattern giải được hàng chục bài LeetCode medium/hard. Nắm vững những cái này = giải được phần lớn bài graph trong phỏng vấn. Cuối chương, mình cũng giới thiệu thêm 0-1 BFS, Multi-source BFS và Tarjan SCC cho bạn nào muốn đi sâu hơn.
+
+---
+
+## Flowchart: Đọc đề xong, dùng gì?
+
+Khi gặp bài graph, hỏi mấy câu này theo thứ tự:
+
+```
+Đề bài nói gì?
+│
+├─ "Đường ngắn nhất?"
+│   ├─ Không trọng số ──────────→ BFS
+│   ├─ Trọng số 0/1 ────────────→ 0-1 BFS (deque)
+│   ├─ Trọng số ≥ 0 ────────────→ Dijkstra
+│   └─ Có trọng số âm ──────────→ Bellman-Ford
+│
+├─ "Thứ tự / phụ thuộc / prerequisite?"
+│   └─ ──────────────────────────→ Topological Sort (Kahn's)
+│
+├─ "Nhóm / đảo / connected component?"
+│   ├─ Đếm nhóm ────────────────→ DFS/BFS đếm
+│   └─ Gộp nhóm / hỏi cùng nhóm → Union-Find
+│
+├─ "Chia 2 đội / 2 màu?"
+│   └─ ──────────────────────────→ Bipartite (BFS 2-color)
+│
+├─ "Có cycle không?"
+│   ├─ Đồ thị có hướng ─────────→ DFS 3-color
+│   └─ Đồ thị vô hướng ─────────→ Union-Find
+│
+└─ "Khoảng cách từ nhiều nguồn?"
+    └─ ──────────────────────────→ Multi-source BFS
+```
+
+> **Mẹo:** In flowchart này ra giấy, dán cạnh màn hình. Khi luyện bài, thử match đề vào flowchart trước khi code. Làm vài chục bài sẽ thành phản xạ.
 
 ---
 
@@ -476,8 +513,60 @@ SCC 2: {3, 4}     — vòng 3→4→3
 
 ---
 
+## Pitfalls hay gặp — tổng hợp từ Phần 5
+
+Mấy lỗi này mình thấy lặp đi lặp lại, kể cả người đã học xong Phần 5:
+
+| Sai lầm | Hậu quả | Cách tránh |
+|---|---|---|
+| BFS mà quên `visited` check trước khi push | Cùng node push nhiều lần, TLE hoặc sai kết quả | Đánh dấu visited **ngay khi push**, không phải khi pop |
+| DFS directed graph dùng 2 color thay vì 3 | Báo cycle sai (false positive) | Luôn dùng WHITE/GRAY/BLACK cho directed |
+| Dijkstra với trọng số âm | Kết quả sai, Dijkstra KHÔNG xử lý được trọng số âm | Dùng Bellman-Ford nếu có edge âm |
+| Topological Sort quên check cycle | Trả về kết quả sai nếu input có cycle | Đếm `processed`, so sánh với `n` |
+| Union-Find quên path compression | Đúng kết quả nhưng chậm, TLE | Luôn dùng cả path compression + union by rank |
+| BFS tìm shortest path trên weighted graph | Sai! BFS chỉ đúng cho unweighted | Weighted → Dijkstra hoặc 0-1 BFS |
+
+---
+
+## Practice — Top bài graph cho phỏng vấn
+
+Sắp theo độ khó tăng dần. Làm từ trên xuống.
+
+**Cơ bản (warm up):**
+- Number of Islands (LC 200) — Connected Components, DFS/BFS
+- Clone Graph (LC 133) — BFS + HashMap
+- Max Area of Island (LC 695) — DFS đếm size
+
+**Trung bình (phỏng vấn hay hỏi nhất):**
+- Course Schedule (LC 207) — Cycle Detection / Topological Sort
+- Course Schedule II (LC 210) — Topological Sort trả thứ tự
+- Is Graph Bipartite? (LC 785) — BFS 2-coloring
+- 01 Matrix (LC 542) — Multi-source BFS
+- Rotting Oranges (LC 994) — Multi-source BFS
+
+**Nâng cao (nếu muốn flex):**
+- Alien Dictionary (LC 269) — DAG + Topological Sort
+- Shortest Path in Binary Matrix (LC 1091) — BFS
+- Network Delay Time (LC 743) — Dijkstra
+- Redundant Connection (LC 684) — Union-Find cycle detection
+- Accounts Merge (LC 721) — Union-Find
+
+> **Lời khuyên thật lòng:** Đừng cố làm hết. Làm 2-3 bài mỗi pattern, hiểu kỹ, rồi mới qua pattern tiếp. Làm 5 bài mà hiểu tốt hơn làm 20 bài mà copy-paste solution.
+
+---
+
 ## Code Rust
 
 ```rust,noplayground
 {{#include ../../../../src/graph_patterns.rs}}
 ```
+
+---
+
+## Tiếp theo
+
+Chương sau: **[Tree Patterns](09-tree-patterns.md)** — áp dụng DFS/BFS lên cây. Cây chỉ là graph đặc biệt (connected, no cycle), nên nhiều kỹ thuật ở đây sẽ dùng lại được. Nếu bạn đã quen DFS trên graph, DFS trên tree sẽ dễ thở hơn nhiều.
+
+---
+
+[← String Matching](./07-string-matching.md) | [Tree Patterns →](./09-tree-patterns.md)

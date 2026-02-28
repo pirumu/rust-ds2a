@@ -111,6 +111,44 @@ impl<T: Hash + Eq + Debug + Clone> HashSet<T> {
         }
         result
     }
+
+    /// Returns a new set containing elements in either `self` or `other`, but
+    /// not in both (symmetric difference, A △ B).
+    ///
+    /// ```text
+    ///       ┌────┐ ┌────┐
+    ///       │xxA │ │ Bxx│   x = A △ B
+    ///       └────┘ └────┘
+    /// ```
+    pub fn symmetric_difference(&self, other: &HashSet<T>) -> HashSet<T> {
+        let mut result = HashSet::new();
+        for key in self.map.keys() {
+            if !other.contains(key) {
+                result.insert(key.clone());
+            }
+        }
+        for key in other.map.keys() {
+            if !self.contains(key) {
+                result.insert(key.clone());
+            }
+        }
+        result
+    }
+
+    /// Returns `true` if every element in `self` is also in `other`.
+    pub fn is_subset(&self, other: &HashSet<T>) -> bool {
+        self.map.keys().iter().all(|k| other.contains(k))
+    }
+
+    /// Returns `true` if every element in `other` is also in `self`.
+    pub fn is_superset(&self, other: &HashSet<T>) -> bool {
+        other.is_subset(self)
+    }
+
+    /// Returns `true` if `self` and `other` share no elements.
+    pub fn is_disjoint(&self, other: &HashSet<T>) -> bool {
+        self.map.keys().iter().all(|k| !other.contains(k))
+    }
 }
 
 impl<T: Hash + Eq + Debug> Default for HashSet<T> {
@@ -230,5 +268,61 @@ mod tests {
         assert!(set.insert(5));
         assert!(set.contains(&5));
         assert_eq!(set.len(), 1);
+    }
+
+    #[test]
+    fn symmetric_difference() {
+        let mut a = HashSet::new();
+        a.insert(1);
+        a.insert(2);
+        a.insert(3);
+
+        let mut b = HashSet::new();
+        b.insert(2);
+        b.insert(3);
+        b.insert(4);
+
+        let sd = a.symmetric_difference(&b);
+        assert_eq!(sd.len(), 2);
+        assert!(sd.contains(&1));
+        assert!(sd.contains(&4));
+        assert!(!sd.contains(&2));
+        assert!(!sd.contains(&3));
+    }
+
+    #[test]
+    fn subset_and_superset() {
+        let mut small = HashSet::new();
+        small.insert(1);
+        small.insert(2);
+
+        let mut big = HashSet::new();
+        big.insert(1);
+        big.insert(2);
+        big.insert(3);
+
+        assert!(small.is_subset(&big));
+        assert!(!big.is_subset(&small));
+        assert!(big.is_superset(&small));
+        assert!(!small.is_superset(&big));
+
+        // A set is a subset of itself
+        assert!(small.is_subset(&small));
+    }
+
+    #[test]
+    fn disjoint() {
+        let mut a = HashSet::new();
+        a.insert(1);
+        a.insert(2);
+
+        let mut b = HashSet::new();
+        b.insert(3);
+        b.insert(4);
+
+        assert!(a.is_disjoint(&b));
+
+        b.insert(2);
+        assert!(!a.is_disjoint(&b));
     }
 }

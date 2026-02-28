@@ -50,6 +50,55 @@ impl<T> Default for Queue<T> {
     }
 }
 
+/// A sliding-window rate limiter backed by a queue of timestamps.
+///
+/// Allows at most `max_requests` within a rolling `window_secs` window.
+#[derive(Debug, Clone)]
+pub struct RateLimiter {
+    timestamps: VecDeque<f64>,
+    max_requests: usize,
+    window_secs: f64,
+}
+
+impl RateLimiter {
+    /// Creates a new rate limiter.
+    ///
+    /// # Example
+    /// ```
+    /// use rust_ds2a::queue::RateLimiter;
+    /// let mut limiter = RateLimiter::new(5, 10.0); // 5 requests per 10 seconds
+    /// assert!(limiter.allow_request(0.0));
+    /// ```
+    pub fn new(max_requests: usize, window_secs: f64) -> Self {
+        Self {
+            timestamps: VecDeque::new(),
+            max_requests,
+            window_secs,
+        }
+    }
+
+    /// Checks whether a request at time `now` is allowed.
+    ///
+    /// Returns `true` if the request is within the rate limit, `false` otherwise.
+    pub fn allow_request(&mut self, now: f64) -> bool {
+        // Remove expired timestamps from the front
+        while let Some(&oldest) = self.timestamps.front() {
+            if now - oldest > self.window_secs {
+                self.timestamps.pop_front();
+            } else {
+                break;
+            }
+        }
+
+        if self.timestamps.len() < self.max_requests {
+            self.timestamps.push_back(now);
+            true
+        } else {
+            false
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -112,5 +161,42 @@ mod tests {
         q.dequeue();
         assert_eq!(q.size(), 0);
         assert!(q.is_empty());
+    }
+
+    #[test]
+    fn rate_limiter_allows_within_limit() {
+        let mut rl = RateLimiter::new(3, 10.0);
+        assert!(rl.allow_request(0.0));
+        assert!(rl.allow_request(1.0));
+        assert!(rl.allow_request(2.0));
+    }
+
+    #[test]
+    fn rate_limiter_rejects_over_limit() {
+        let mut rl = RateLimiter::new(3, 10.0);
+        assert!(rl.allow_request(0.0));
+        assert!(rl.allow_request(1.0));
+        assert!(rl.allow_request(2.0));
+        assert!(!rl.allow_request(3.0)); // 4th request within window → reject
+    }
+
+    #[test]
+    fn rate_limiter_allows_after_window_expires() {
+        let mut rl = RateLimiter::new(3, 10.0);
+        assert!(rl.allow_request(0.0));
+        assert!(rl.allow_request(1.0));
+        assert!(rl.allow_request(2.0));
+        assert!(!rl.allow_request(5.0)); // still within window
+        // After 10s, first request expires
+        assert!(rl.allow_request(11.0)); // t=0.0 expired → slot freed
+    }
+
+    #[test]
+    fn rate_limiter_sliding_window() {
+        let mut rl = RateLimiter::new(2, 5.0);
+        assert!(rl.allow_request(0.0));
+        assert!(rl.allow_request(3.0));
+        assert!(!rl.allow_request(4.0)); // 2 within [0,5] → reject
+        assert!(rl.allow_request(6.0));  // t=0.0 expired → allow
     }
 }

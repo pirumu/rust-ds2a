@@ -1,5 +1,7 @@
 # Design-Oriented Data Structures
 
+> **Anxiety check:** Đây là dạng bài "Design X" trong phỏng vấn. Nghe thì ghê nhưng key chỉ có 1: **kết hợp 2-3 data structures bạn đã học ở các chương trước**. Không có gì mới. Chỉ là ghép lego thôi.
+
 ## Đây là gì?
 
 Ở các chương trước, bạn học những cấu trúc dữ liệu "chuẩn" — stack, queue, heap, HashMap. Chương này khác. Ta sẽ **kết hợp** chúng lại theo cách thông minh để giải quyết 4 bài toán thiết kế kinh điển.
@@ -14,6 +16,40 @@ Mỗi bài đều có chung 1 pattern: **một cấu trúc đơn lẻ không đ�
 | 2 | **MedianFinder** | Max-heap + min-heap → O(1) find_median | LeetCode #295 |
 | 3 | **RandomizedSet** | Vec + HashMap → O(1) insert/remove/getRandom | LeetCode #380 |
 | 4 | **NestedIterator** | Stack → làm phẳng danh sách lồng nhau | LeetCode #341 |
+
+---
+
+## Design Thinking Framework
+
+Khi gặp bài "Design X", đừng hoảng. Cứ đi theo 3 bước:
+
+**Bước 1: Liệt kê operations + yêu cầu complexity**
+
+Ví dụ: cần `insert O(1)`, `delete O(1)`, `getRandom O(1)`.
+
+**Bước 2: Với mỗi operation, nghĩ xem data structure nào làm tốt nhất**
+
+| Operation | Ai giỏi? |
+|-----------|----------|
+| Lookup by key | HashMap |
+| Get min/max | Heap |
+| Ordered access | BST, sorted array |
+| Random access by index | Vec/Array |
+| LIFO (undo, nesting) | Stack |
+| FIFO (ordering) | Queue |
+| Prefix search | Trie |
+
+**Bước 3: Kết hợp**
+
+Không có 1 data structure nào giỏi tất cả. Nên ta ghép:
+
+- **HashMap + Heap** → MedianFinder, Priority Queue với update
+- **HashMap + Vec** → RandomizedSet (O(1) mọi thứ)
+- **HashMap + Doubly Linked List** → LRU Cache (đã học ở chương trước!)
+- **HashMap + Vec\<(timestamp, value)\>** → TimeMap (key-value with timestamp)
+- **Stack + Stack** → MinStack
+
+Pattern chung: HashMap cho O(1) lookup, cấu trúc kia cho O(1) operation đặc biệt.
 
 ---
 
@@ -605,3 +641,167 @@ assert!(rs.remove(10));
 assert!(!rs.remove(10));    // không còn nữa
 let _random = rs.get_random();  // trả về 20
 ```
+
+---
+
+## 5. Bonus: TimeMap — Key-Value Store với Timestamp
+
+Đây là LeetCode #981. Ý tưởng: lưu nhiều version của 1 key theo thời gian, rồi query "giá trị của key X tại thời điểm T là gì?"
+
+### Trick: HashMap + Binary Search
+
+```
+HashMap<String, Vec<(i32, String)>>
+         key  →  [(timestamp₁, value₁), (timestamp₂, value₂), ...]
+```
+
+- **set(key, value, timestamp)**: Push `(timestamp, value)` vào Vec của key. Vì timestamp luôn tăng → Vec tự động sorted.
+- **get(key, timestamp)**: Binary search trong Vec để tìm giá trị gần nhất mà `ts ≤ timestamp`.
+
+```
+set("foo", "bar", 1)
+set("foo", "baz", 3)
+set("foo", "qux", 5)
+
+HashMap: { "foo" → [(1,"bar"), (3,"baz"), (5,"qux")] }
+
+get("foo", 2) → binary search → ts=1 là lớn nhất ≤ 2 → "bar"
+get("foo", 4) → binary search → ts=3 là lớn nhất ≤ 4 → "baz"
+get("foo", 5) → exact match → "qux"
+```
+
+| Thao tác | Time | Space |
+|----------|------|-------|
+| `set` | O(1)* | O(1) |
+| `get` | O(log n) | O(1) |
+
+Binary search trên sorted Vec — cái này bạn đã biết từ chương đầu tiên rồi!
+
+---
+
+## 6. Bonus: Trie-based Design
+
+Nhớ Trie từ chương trước? Nó cũng hay xuất hiện trong design problems:
+
+- **AutocompleteSystem** (LeetCode #642): Trie + HashMap đếm frequency → gợi ý từ phổ biến nhất khi user gõ từng ký tự.
+- **Word Dictionary** (LeetCode #211): Trie + DFS → hỗ trợ search với wildcard `.`
+
+Pattern: khi bài toán liên quan đến **prefix**, nghĩ ngay đến Trie.
+
+---
+
+## Khi nào dùng gì?
+
+Bảng tra nhanh — khi đề bài yêu cầu X, hãy nghĩ đến combo Y:
+
+| Yêu cầu đề bài | Combo data structures | Ví dụ |
+|-----------------|----------------------|-------|
+| O(1) get min/max + stack operations | Stack + auxiliary stack | MinStack #155 |
+| O(1) median từ stream | Max-heap + min-heap | Find Median #295 |
+| O(1) insert + delete + random | Vec + HashMap + swap-remove | RandomizedSet #380 |
+| O(1) get/put + eviction policy | HashMap + Doubly Linked List | LRU Cache #146 |
+| Get value at timestamp | HashMap + sorted Vec + binary search | TimeMap #981 |
+| Prefix-based search/autocomplete | Trie + DFS/BFS | AutocompleteSystem #642 |
+| Flatten nested structure | Stack (simulate recursion) | NestedIterator #341 |
+
+---
+
+## Cạm bẫy thường gặp
+
+❌ **Sai**: Cố tìm 1 data structure duy nhất làm được tất cả operations trong O(1).
+
+✅ **Đúng**: Chấp nhận ghép 2-3 cái lại. Mỗi cái phụ trách 1 operation.
+
+💡 **Tại sao**: Không có data structure nào "perfect" cho mọi thứ. Đó là lý do ta học nhiều loại — để biết khi nào ghép cái nào với cái nào.
+
+---
+
+❌ **Sai**: Khi remove phần tử từ Vec, dùng `vec.remove(i)` rồi chấp nhận O(n).
+
+✅ **Đúng**: Swap với phần tử cuối rồi pop — O(1). (Nếu không cần giữ thứ tự)
+
+💡 **Tại sao**: Swap-remove là trick kinh điển. Vec chỉ O(n) khi phải dịch phần tử. Swap tránh được việc dịch.
+
+---
+
+❌ **Sai**: Dùng `BinaryHeap` để tìm median nhưng quên rằng Rust chỉ có max-heap.
+
+✅ **Đúng**: Wrap với `Reverse(x)` để biến max-heap thành min-heap: `BinaryHeap<Reverse<i32>>`.
+
+💡 **Tại sao**: Rust standard library chỉ cung cấp max-heap. `Reverse` là newtype pattern đảo ngược thứ tự so sánh.
+
+---
+
+## Rust Ecosystem
+
+Một số crate hữu ích khi làm việc với design structures trong Rust thực tế:
+
+| Crate | Dùng cho |
+|-------|----------|
+| [`std::collections::BinaryHeap`](https://doc.rust-lang.org/std/collections/struct.BinaryHeap.html) | Max-heap, dùng `Reverse` cho min-heap |
+| [`std::collections::HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) | O(1) lookup — xương sống của hầu hết design problems |
+| [`rand`](https://crates.io/crates/rand) | Random number generation cho `get_random()` |
+| [`indexmap`](https://crates.io/crates/indexmap) | HashMap giữ thứ tự insertion — đôi khi thay thế được HashMap + Vec |
+| [`priority-queue`](https://crates.io/crates/priority-queue) | Priority queue hỗ trợ `change_priority` — useful cho Dijkstra-style problems |
+| [`lru`](https://crates.io/crates/lru) | Production-ready LRU cache |
+
+---
+
+## Luyện tập
+
+Các bài LeetCode để practice design structures:
+
+| # | Bài | Combo | Độ khó |
+|---|-----|-------|--------|
+| 155 | Min Stack | Stack + Stack | Easy |
+| 295 | Find Median from Data Stream | Max-heap + Min-heap | Hard |
+| 380 | Insert Delete GetRandom O(1) | Vec + HashMap | Medium |
+| 341 | Flatten Nested List Iterator | Stack | Medium |
+| 981 | Time Based Key-Value Store | HashMap + Binary Search | Medium |
+| 146 | LRU Cache | HashMap + DLL | Medium |
+| 460 | LFU Cache | HashMap + HashMap + DLL | Hard |
+| 642 | Design Search Autocomplete System | Trie + Sorting | Hard |
+| 706 | Design HashMap | Array + Linked List (chaining) | Easy |
+| 707 | Design Linked List | Linked List | Medium |
+
+Gợi ý thứ tự: 155 → 706 → 707 → 380 → 341 → 146 → 981 → 295 → 460 → 642.
+
+---
+
+## Hết rồi. Thật sự hết rồi.
+
+Bạn vừa đọc xong **chương cuối cùng** của cuốn sách này.
+
+Hãy nhìn lại quãng đường đã đi:
+
+```
+Chương 1: Arrays, Strings         ← "Mảng là gì?"
+Chương 2: Linked List, Stack,     ← "Con trỏ là gì??"
+           Queue, Deque
+Chương 3: Trees, Heaps, BST,      ← "Recursion là gì???"
+           AVL, Red-Black, Trie
+Chương 4: HashMap, HashSet,       ← "Hash function là gì????"
+           Bloom Filter
+Chương 5: Graphs, BFS, DFS,       ← "Đồ thị ở đâu ra?????"
+           Dijkstra, Bellman-Ford
+Chương 6: Sorting algorithms       ← "Tại sao nhiều cách sort thế??????"
+Chương 7: Searching algorithms     ← "Binary search tưởng dễ mà sai hoài"
+Chương 8: Segment Tree, Fenwick,   ← "Advanced thì advanced thật"
+           Skip List, LRU, LFU,
+           Merkle Tree, và...
+           Design Structures        ← BẠN ĐANG Ở ĐÂY ✓
+```
+
+Từ "mảng là gì" đến "ghép HashMap + Heap để design cấu trúc mới" — đó không phải bước nhảy nhỏ đâu.
+
+**Bạn đã biết đủ data structures để combine cho hầu hết design problems trong phỏng vấn.** Không phải vì bạn nhớ hết mọi thứ — mà vì bạn hiểu **tại sao** mỗi cấu trúc tồn tại, nó giỏi gì, và dở gì. Khi biết điểm mạnh/yếu, việc ghép chúng lại chỉ là logic tự nhiên.
+
+Cuốn sách này được viết bởi một người từng thấy DSA rất đáng sợ. Nếu bạn đọc đến đây, bạn đã chứng minh rằng mình kiên trì hơn mình tưởng.
+
+Giờ thì đi code thôi. Mở LeetCode lên, chọn 1 bài, và bắt đầu. Bạn đã sẵn sàng.
+
+> *"The expert in anything was once a beginner."*
+
+---
+
+[← Merkle Tree](./06-merkle-tree.md)

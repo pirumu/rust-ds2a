@@ -1,5 +1,7 @@
 # Dynamic Programming
 
+> 💡 **Đừng hoảng!** DP nghe có vẻ đáng sợ, nhưng thực ra nó chỉ là **recursion + ghi nhớ kết quả**. Nếu bạn đã hiểu recursion ở [chương đệ quy](./01-recursion.md), bạn đã đi được 70% đường rồi. Phần còn lại chỉ là học cách **lưu kết quả** để không tính lại. Thở sâu, uống ngụm cà phê, rồi mình bắt đầu nhé.
+
 ## Đây là gì?
 
 Tưởng tượng bạn đang ôn thi. Mỗi lần gặp một bài toán, bạn giải xong rồi **ghi kết quả ra giấy**. Lần sau gặp lại bài y hệt, thay vì giải lại từ đầu, bạn chỉ cần **lật lại trang giấy** đã ghi.
@@ -17,6 +19,57 @@ DP loại bỏ việc tính trùng bằng cách lưu kết quả. Có 2 cách ti
 | **Tabulation** (lập bảng) | Bottom-up — từ bài nhỏ lên lớn | Bảng DP |
 
 **Tại sao cần DP?** Vì nếu không, nhiều bài toán sẽ có độ phức tạp mũ (exponential). Ví dụ: Fibonacci đệ quy thường mất O(2^n), nhưng với DP chỉ còn O(n).
+
+### DP Framework -- 4 bước giải mọi bài DP
+
+Bất kể bài DP nào, bạn đều có thể đi theo 4 bước này. Giống như công thức nấu ăn -- cứ theo bước là ra món:
+
+| Bước | Hỏi gì? | Ví dụ (Coin Change) |
+|------|---------|---------------------|
+| **1. Define state** (định nghĩa trạng thái) | `dp[i]` nghĩa là gì? | `dp[i]` = số đồng xu ít nhất để đổi ra `i` xu |
+| **2. Transition formula** (công thức chuyển) | `dp[i]` tính từ đâu? | `dp[i] = min(dp[i - c] + 1)` với mọi đồng `c` |
+| **3. Base case** (trường hợp gốc) | Bắt đầu từ đâu? | `dp[0] = 0` (đổi 0 xu cần 0 đồng) |
+| **4. Iteration order** (thứ tự duyệt) | Duyệt từ đâu đến đâu? | Từ `1` đến `amount`, vì `dp[i]` cần `dp[i-c]` (nhỏ hơn) |
+
+Mỗi bài DP trong chương này, bạn sẽ thấy mình dùng đúng 4 bước này. Cứ luyện nhiều là quen.
+
+### Nhận diện DP -- Khi nào dùng DP?
+
+Gặp bài mới, hãy hỏi 3 câu hỏi này. Nếu cả 3 đều "Có" thì gần như chắc chắn là DP:
+
+- [ ] **Optimal substructure?** -- Lời giải tối ưu có xây được từ lời giải tối ưu của bài nhỏ hơn không?
+- [ ] **Overlapping subproblems?** -- Có bài toán con nào bị tính đi tính lại không?
+- [ ] **Counting / Optimization?** -- Đề bài hỏi "bao nhiêu cách", "ít nhất", "nhiều nhất", "có thể hay không"?
+
+Nếu đề chỉ hỏi "in ra tất cả đáp án" thì thường là **backtracking** (chương sau), không phải DP.
+
+### Top-down vs Bottom-up -- cùng 1 bài, 2 cách giải
+
+Lấy Fibonacci làm ví dụ để so sánh 2 cách tiếp cận:
+
+```
+Top-down (Memoization)              Bottom-up (Tabulation)
+──────────────────────              ──────────────────────
+Bắt đầu từ bài LỚN,               Bắt đầu từ bài NHỎ,
+gọi đệ quy xuống nhỏ,             xây bảng lên lớn,
+lưu kết quả vào cache.             điền bảng từ trái sang phải.
+
+fn fib(n, memo) {                  fn fib(n) {
+  if memo[n] exists:                 dp[0] = 0; dp[1] = 1;
+    return memo[n];                  for i in 2..=n {
+  memo[n] = fib(n-1) + fib(n-2);      dp[i] = dp[i-1] + dp[i-2];
+  return memo[n];                    }
+}                                    return dp[n];
+                                   }
+
+Ưu: viết tự nhiên, chỉ tính       Ưu: không dùng stack đệ quy,
+    subproblem cần thiết.               dễ tối ưu bộ nhớ.
+Nhược: stack overflow nếu n lớn.   Nhược: phải tính TẤT CẢ
+                                        subproblem, kể cả cái
+                                        không cần.
+```
+
+Trong thực tế, bottom-up phổ biến hơn vì dễ tối ưu bộ nhớ và không lo stack overflow. Nhưng top-down tiện khi bạn mới bắt đầu suy nghĩ về bài toán.
 
 ---
 
@@ -717,6 +770,33 @@ dp[0][2]: k=0 -> dp[0][0] + dp[1][2] + 10*30*60 = 0 + 9000 + 18000 = 27000
 - Bitmask DP chỉ dùng được với n nhỏ (n <= 20) vì 2^20 = 1 triệu, 2^25 đã là 33 triệu.
 - Interval DP (Burst Balloons, Matrix Chain) tốn O(n^3) -- chấp nhận được với n vài trăm.
 
+### Space Optimization -- Rolling Array
+
+Nhiều bài DP 2D thực ra chỉ cần **hàng trước đó** để tính hàng hiện tại. Thay vì giữ cả bảng `m x n`, ta chỉ cần **2 hàng** (hoặc thậm chí 1 hàng). Kỹ thuật này gọi là **rolling array**.
+
+**Ví dụ: LCS từ O(m*n) bộ nhớ xuống O(n)**
+
+```
+Bảng đầy đủ (m+1 hàng):          Rolling array (2 hàng):
+┌───┬───┬───┬───┬───┐             ┌───┬───┬───┬───┬───┐
+│ 0 │ 0 │ 0 │ 0 │ 0 │  row 0     │ 0 │ 0 │ 0 │ 0 │ 0 │  prev
+├───┼───┼───┼───┼───┤             ├───┼───┼───┼───┼───┤
+│ 0 │ 0 │ 0 │ 0 │ 1 │  row 1     │ 0 │ 1 │ 1 │ 1 │ 1 │  curr
+├───┼───┼───┼───┼───┤             └───┴───┴───┴───┴───┘
+│ 0 │ 1 │ 1 │ 1 │ 1 │  row 2     Xong row 2 -> swap prev ↔ curr,
+├───┼───┼───┼───┼───┤             tính tiếp row 3...
+│ 0 │ 1 │ 1 │ 2 │ 2 │  row 3
+└───┴───┴───┴───┴───┘
+
+Mỗi ô dp[i][j] chỉ cần dp[i-1][j], dp[i][j-1], dp[i-1][j-1].
+Tất cả đều ở hàng trước (i-1) hoặc hàng hiện tại (i).
+-> Chỉ cần 2 hàng!
+```
+
+**Khi nào dùng được?** Khi công thức truy hồi chỉ phụ thuộc vào hàng ngay trước đó (hoặc vài hàng trước). Hầu hết Linear DP, Matrix DP, và String DP đều tối ưu được. Interval DP thì không, vì `dp[i][j]` phụ thuộc nhiều khoảng khác nhau.
+
+**Rust tip:** Dùng `std::mem::swap(&mut prev, &mut curr)` để đổi 2 hàng mà không copy dữ liệu.
+
 ---
 
 ## Phân loại DP
@@ -733,6 +813,49 @@ Sau khi học nhiều bài DP, bạn sẽ thấy chúng rơi vào các "họ" ch
 | **Bitmask DP** | Tập con = số nhị phân | Hamiltonian Path, Subset Sum |
 
 Khi gặp bài mới, hãy tự hỏi: "Bài này thuộc họ nào?" Điều đó giúp bạn chọn đúng cách tiếp cận.
+
+---
+
+## Pitfalls -- Sai lầm thường gặp
+
+**1. Sai iteration order**
+
+❌ Sai: Coin Change duyệt `dp[s]` từ trái sang phải khi dùng 0/1 Knapsack (mỗi item chỉ dùng 1 lần).
+
+✅ Đúng: Duyệt **ngược** (từ phải sang trái) để đảm bảo mỗi item chỉ được chọn 1 lần.
+
+💡 Tại sao: Nếu duyệt xuôi, `dp[s - num]` đã bị cập nhật trong cùng vòng lặp, nghĩa là item đó bị dùng nhiều lần. Duyệt ngược thì `dp[s - num]` vẫn là giá trị của vòng trước.
+
+**2. Quên base case**
+
+❌ Sai: Không set `dp[0] = 0` trong Coin Change, hoặc không set `dp[i][0] = i` trong Edit Distance.
+
+✅ Đúng: Luôn xác định base case trước khi viết vòng lặp.
+
+💡 Tại sao: Base case là "nền móng" của tòa nhà DP. Thiếu nền móng thì mọi tầng trên đều sai.
+
+**3. State definition thiếu**
+
+❌ Sai: Bài Stock with Cooldown mà chỉ dùng `dp[i]` = lợi nhuận tối đa ngày thứ `i`. Thiếu thông tin "đang giữ cổ phiếu hay không".
+
+✅ Đúng: Cần tách thành `hold[i]`, `sold[i]`, `rest[i]` -- mỗi trạng thái là một mảng riêng.
+
+💡 Tại sao: Nếu state không chứa đủ thông tin để ra quyết định, công thức truy hồi sẽ sai. Hãy tự hỏi: "Với `dp[i]`, mình có đủ thông tin để tính `dp[i+1]` không?"
+
+---
+
+## Luyện tập
+
+Bốn bài kinh điển trên LeetCode, xếp theo độ khó tăng dần:
+
+| # | Bài | Họ DP | Gợi ý |
+|---|-----|-------|-------|
+| 198 | **House Robber** | Linear DP | `dp[i] = max(dp[i-1], dp[i-2] + nums[i])`. Giống Fibonacci nhưng có chọn/không chọn. |
+| 322 | **Coin Change** | Linear DP | Đã có trong chương này. Thử tự code lại không nhìn đáp án. |
+| 1143 | **Longest Common Subsequence** | String DP | Đã có trong chương này. Thử thêm rolling array optimization. |
+| 72 | **Edit Distance** | String DP | Đã có trong chương này. Thử trace tay bảng DP cho "horse" -> "ros". |
+
+**Mẹo luyện DP:** Đừng vội code. Với mỗi bài, hãy **trace tay trên giấy** trước: vẽ bảng DP, điền từng ô, xem pattern. Khi nào hiểu rõ bảng chạy thế nào thì mới mở editor.
 
 ---
 
@@ -789,3 +912,13 @@ assert_eq!(burst_balloons(&[3, 1, 5, 8]), 167);
 // Matrix Chain Order
 assert_eq!(matrix_chain_order(&[10, 30, 5, 60]), 4500);
 ```
+
+---
+
+## Tiếp theo: Backtracking
+
+DP trả lời "đáp án tối ưu là gì?" hoặc "có bao nhiêu cách?". Nhưng nếu đề bài hỏi **"liệt kê tất cả đáp án"** thì sao? Đó là lúc **Backtracking** (quay lui) vào cuộc. Backtracking thử từng khả năng, quay lại khi đi vào ngõ cụt -- giống như đi trong mê cung. Gặp nhau ở [chương tiếp theo](./14-backtracking.md)!
+
+---
+
+[← Greedy](./12-greedy.md) | [Backtracking →](./14-backtracking.md)

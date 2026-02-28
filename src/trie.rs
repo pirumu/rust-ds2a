@@ -58,6 +58,35 @@ impl Trie {
         true
     }
 
+    /// Collects all words in the trie that start with the given prefix.
+    pub fn collect_words_with_prefix(&self, prefix: &str) -> Vec<String> {
+        let mut current = &self.root;
+        for ch in prefix.chars() {
+            match current.children.get(&ch) {
+                Some(node) => current = node,
+                None => return vec![],
+            }
+        }
+        let mut results = Vec::new();
+        let mut path = prefix.to_string();
+        Self::dfs(current, &mut path, &mut results);
+        results
+    }
+
+    fn dfs(node: &TrieNode, path: &mut String, results: &mut Vec<String>) {
+        if node.is_end {
+            results.push(path.clone());
+        }
+        // Collect keys and sort for deterministic order
+        let mut keys: Vec<&char> = node.children.keys().collect();
+        keys.sort();
+        for &ch in &keys {
+            path.push(*ch);
+            Self::dfs(&node.children[&ch], path, results);
+            path.pop();
+        }
+    }
+
     /// Deletes a word from the trie. Returns `true` if the word was found and deleted.
     pub fn delete(&mut self, word: &str) -> bool {
         fn remove(node: &mut TrieNode, word: &[char], depth: usize) -> (bool, bool) {
@@ -164,5 +193,48 @@ mod tests {
         trie.insert("cafe");
         assert!(trie.search("cafe"));
         assert!(trie.starts_with("caf"));
+    }
+
+    #[test]
+    fn collect_words_with_prefix_basic() {
+        let mut trie = Trie::new();
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("card");
+        trie.insert("care");
+        trie.insert("cap");
+        trie.insert("dog");
+
+        let mut results = trie.collect_words_with_prefix("ca");
+        results.sort();
+        assert_eq!(results, vec!["cap", "car", "card", "care", "cat"]);
+    }
+
+    #[test]
+    fn collect_words_with_prefix_no_match() {
+        let mut trie = Trie::new();
+        trie.insert("hello");
+        assert!(trie.collect_words_with_prefix("xyz").is_empty());
+    }
+
+    #[test]
+    fn collect_words_with_prefix_exact() {
+        let mut trie = Trie::new();
+        trie.insert("hello");
+        trie.insert("help");
+        let mut results = trie.collect_words_with_prefix("hello");
+        results.sort();
+        assert_eq!(results, vec!["hello"]);
+    }
+
+    #[test]
+    fn collect_words_with_prefix_empty() {
+        let mut trie = Trie::new();
+        trie.insert("a");
+        trie.insert("b");
+        trie.insert("ab");
+        let mut results = trie.collect_words_with_prefix("");
+        results.sort();
+        assert_eq!(results, vec!["a", "ab", "b"]);
     }
 }

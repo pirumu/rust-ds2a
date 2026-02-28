@@ -1,5 +1,7 @@
 # Tree Patterns
 
+> **Đừng lo lắng:** 5 patterns trong chương này cover khoảng **80% bài tree trong phỏng vấn**. Nắm vững 5 bài này, bạn sẽ tự tin giải hầu hết mọi bài tree gặp phải. Nghiêm túc đấy.
+
 ## Tại sao cần học?
 
 Bạn đã học Binary Tree và BST ở Phần 3. Giờ mình sẽ học 5 bài toán **kinh điển nhất** về tree trong phỏng vấn. Đây là những bài mà Google, Meta, Amazon hỏi đi hỏi lại.
@@ -7,6 +9,42 @@ Bạn đã học Binary Tree và BST ở Phần 3. Giờ mình sẽ học 5 bài
 Tất cả đều dùng **DFS (Depth-First Search)** hoặc **BFS (Breadth-First Search)** -- hai kỹ thuật duyệt cây bạn đã biết. Điểm khác biệt là cách mình **kết hợp thông tin** khi đệ quy quay lại.
 
 > **Quy tắc chung:** Khi bài toán hỏi về quan hệ giữa các node (cha con, đường đi, tổng), nghĩ ngay đến DFS. Khi cần xử lý theo từng tầng, nghĩ đến BFS.
+
+### BFS vs DFS trên tree -- khi nào dùng cái nào?
+
+| Dùng BFS khi... | Dùng DFS khi... |
+|---|---|
+| Cần xử lý **theo tầng** (level-order) | Cần **đường đi** từ root xuống leaf |
+| Tìm node **gần root nhất** | Cần tính toán **chiều sâu/chiều cao** |
+| Serialize/Deserialize cây | Cần **tổng hợp thông tin** từ subtree |
+| Zigzag level order, right side view | LCA, Max Path Sum, Validate BST |
+
+Nói đơn giản: **level = BFS, path/depth = DFS**. Phần lớn bài tree phỏng vấn dùng DFS.
+
+### DFS return value pattern -- thông tin từ subtree trả về parent
+
+Trong 5 bài dưới đây, bạn sẽ thấy 1 pattern lặp đi lặp lại: **hàm DFS trả về thông tin từ subtree cho node cha dùng**. Đây là xương sống của hầu hết bài tree.
+
+```
+Pattern chung:
+
+fn dfs(node) -> ThôngTinTừSubtree {
+    // 1. Hỏi nhánh trái
+    let left = dfs(node.left);
+    // 2. Hỏi nhánh phải
+    let right = dfs(node.right);
+    // 3. Kết hợp left + right + node hiện tại
+    //    --> cập nhật kết quả global (nếu cần)
+    // 4. Trả về thông tin cho node cha
+}
+```
+
+Ví dụ cụ thể:
+- **Diameter:** DFS trả về `depth` --> cha dùng `left_depth + right_depth` để tính đường kính
+- **Max Path Sum:** DFS trả về `gain 1 nhánh` --> cha dùng `left_gain + right_gain + val` để tính path sum
+- **LCA:** DFS trả về `Option<Node>` --> cha kiểm tra cả 2 bên có tìm thấy không
+
+Nắm pattern này, bạn sẽ giải được hầu hết bài tree bằng cách tự hỏi: **"subtree cần trả về thông tin gì cho cha?"**
 
 ---
 
@@ -373,6 +411,18 @@ pub fn diameter(root: &Option<Rc<RefCell<TreeNode>>>) -> usize {
 
 > **So sánh với Max Path Sum:** Cùng pattern DFS + global variable. Diameter đếm cạnh, Max Path Sum tính tổng giá trị. Nắm 1 bài là hiểu bài kia!
 
+### Path problems -- 3 dạng bạn sẽ gặp
+
+Bài Diameter và Max Path Sum thuộc nhóm **path problems** trên tree. Có 3 dạng phổ biến:
+
+| Dạng | Mô tả | Ví dụ | Cách giải |
+|------|--------|-------|-----------|
+| **Root-to-leaf** | Đường đi từ gốc xuống lá | Path Sum, Root-to-Leaf Sum | DFS truyền tổng tích lũy xuống |
+| **Root-to-any** | Đường đi bắt đầu từ gốc, kết thúc bất kỳ | Path Sum III (phần đơn giản) | DFS + prefix sum |
+| **Any-to-any** | Đường đi giữa 2 node bất kỳ | Max Path Sum, Diameter | DFS return value + global max |
+
+Dạng **any-to-any** khó nhất vì đường đi có thể "rẽ nhánh" qua 1 node. Đó là lý do ta cần trick: **cập nhật global max với cả 2 nhánh, nhưng chỉ trả về 1 nhánh cho cha**.
+
 ---
 
 ## 5. Validate BST -- Kiểm tra BST hợp lệ
@@ -481,8 +531,51 @@ Pattern chung: **DFS đi xuống, tổng hợp khi quay lên, dùng biến globa
 
 ---
 
+## Khi nào dùng pattern nào?
+
+Bạn đọc đề, thấy keyword nào thì dùng pattern tương ứng:
+
+| Keyword trong đề | Pattern | Bài |
+|---|---|---|
+| "ancestor", "common parent" | LCA (DFS bubble up) | #236 |
+| "serialize", "encode/decode", "save/load" | BFS level-order | #297 |
+| "maximum path sum", "tổng đường đi lớn nhất" | DFS + global max | #124 |
+| "diameter", "longest path", "đường đi dài nhất" | DFS + global max (đếm cạnh) | #543 |
+| "valid BST", "kiểm tra BST" | DFS + min/max bounds | #98 |
+| Xử lý **theo tầng** | BFS | #102, #199, #103 |
+| Xử lý **đường đi/chiều sâu** | DFS | #104, #111, #124 |
+
+---
+
+## Luyện tập
+
+Bạn đã hiểu 5 patterns. Giờ thực hành để nó ngấm vào máu:
+
+| Bài | LeetCode | Độ khó | Pattern |
+|-----|----------|--------|---------|
+| Lowest Common Ancestor of a Binary Tree | [#236](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) | Medium | DFS bubble up |
+| Binary Tree Maximum Path Sum | [#124](https://leetcode.com/problems/binary-tree-maximum-path-sum/) | Hard | DFS return value + global max |
+| Serialize and Deserialize Binary Tree | [#297](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/) | Hard | BFS level-order |
+| Diameter of Binary Tree | [#543](https://leetcode.com/problems/diameter-of-binary-tree/) | Easy | DFS + global max |
+| Validate Binary Search Tree | [#98](https://leetcode.com/problems/validate-binary-search-tree/) | Medium | DFS + min/max bounds |
+| Path Sum III | [#437](https://leetcode.com/problems/path-sum-iii/) | Medium | DFS + prefix sum |
+
+> **Gợi ý thứ tự:** Làm #543 (Diameter) trước vì dễ nhất. Rồi #236 (LCA), #98 (Validate BST), #124 (Max Path Sum), cuối cùng #297 (Serialize). Mỗi bài tự code từ đầu, **đừng copy** -- tay phải nhớ, không chỉ mắt.
+
+---
+
+## Tiếp theo
+
+Phần tiếp theo: **Cấu trúc nâng cao** -- bắt đầu với **Segment Tree**. Đây là cấu trúc dữ liệu mạnh mẽ cho bài toán range query (tìm min/max/sum trong 1 đoạn) với thời gian O(log n). Nếu bạn đã nắm vững DFS trên binary tree ở chương này, Segment Tree sẽ không quá khó -- vì nó cũng là một dạng binary tree đặc biệt!
+
+---
+
 ## Code Rust
 
 ```rust,noplayground
 {{#include ../../../../src/tree_patterns.rs}}
 ```
+
+---
+
+[← Graph Patterns](./08-graph-patterns.md) | [Segment Tree →](../08-advanced/01-segment-tree.md)

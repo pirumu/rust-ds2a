@@ -91,6 +91,36 @@ impl<T> SinglyLinkedList<T> {
             current: self.head.as_deref(),
         }
     }
+
+    /// Returns a reference to the nth element (0-indexed). O(n).
+    pub fn nth(&self, n: usize) -> Option<&T> {
+        self.iter().nth(n)
+    }
+
+    /// Finds the middle element using the slow/fast pointer technique. O(n).
+    ///
+    /// For even-length lists, returns the first of the two middle nodes.
+    pub fn find_middle(&self) -> Option<&T> {
+        let mut slow = self.head.as_deref()?;
+        let mut fast = self.head.as_deref()?;
+
+        while let Some(next) = fast.next.as_deref() {
+            if let Some(next_next) = next.next.as_deref() {
+                fast = next_next;
+                slow = slow.next.as_deref().unwrap();
+            } else {
+                break;
+            }
+        }
+        Some(&slow.val)
+    }
+}
+
+impl<T: PartialEq> SinglyLinkedList<T> {
+    /// Returns `true` if the list contains an element equal to `target`. O(n).
+    pub fn find(&self, target: &T) -> bool {
+        self.iter().any(|val| val == target)
+    }
 }
 
 impl<T> Default for SinglyLinkedList<T> {
@@ -123,6 +153,36 @@ impl<T> Drop for SinglyLinkedList<T> {
             current = node.next.take();
         }
     }
+}
+
+/// Merges two sorted singly linked lists into one sorted list. O(n+m).
+///
+/// Pops from the front of each list in order, pushes to a result list in
+/// reverse, then reverses the result at the end.
+pub fn merge_sorted_lists<T: Ord>(
+    mut list1: SinglyLinkedList<T>,
+    mut list2: SinglyLinkedList<T>,
+) -> SinglyLinkedList<T> {
+    let mut result = SinglyLinkedList::new();
+    loop {
+        let take_from_1 = match (list1.head.as_ref(), list2.head.as_ref()) {
+            (None, None) => break,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+            (Some(a), Some(b)) => a.val <= b.val,
+        };
+        if take_from_1 {
+            if let Some(val) = list1.pop_front() {
+                result.push_front(val);
+            }
+        } else {
+            if let Some(val) = list2.pop_front() {
+                result.push_front(val);
+            }
+        }
+    }
+    result.reverse();
+    result
 }
 
 // ---------------------------------------------------------------------------
@@ -243,6 +303,54 @@ impl<T> DoublyLinkedList<T> {
     /// Returns `true` if the list contains no elements.
     pub fn is_empty(&self) -> bool {
         self.len == 0
+    }
+
+    /// Returns an iterator that traverses from head to tail (forward).
+    pub fn iter(&self) -> DoublyIter<T> {
+        DoublyIter {
+            current: self.head.clone(),
+        }
+    }
+
+    /// Returns an iterator that traverses from tail to head (backward).
+    pub fn iter_back(&self) -> DoublyIterBack<T> {
+        DoublyIterBack {
+            current: self.tail.clone(),
+        }
+    }
+}
+
+/// Forward iterator over a `DoublyLinkedList`, yielding cloned values.
+pub struct DoublyIter<T> {
+    current: Link<T>,
+}
+
+impl<T: Clone> Iterator for DoublyIter<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.current.take().map(|node| {
+            let borrowed = node.borrow();
+            self.current = borrowed.next.clone();
+            borrowed.val.clone()
+        })
+    }
+}
+
+/// Backward iterator over a `DoublyLinkedList`, yielding cloned values.
+pub struct DoublyIterBack<T> {
+    current: Link<T>,
+}
+
+impl<T: Clone> Iterator for DoublyIterBack<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.current.take().map(|node| {
+            let borrowed = node.borrow();
+            self.current = borrowed.prev.clone();
+            borrowed.val.clone()
+        })
     }
 }
 
@@ -453,6 +561,41 @@ mod tests {
     }
 
     #[test]
+    fn doubly_iter_forward() {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);
+        list.push_back(2);
+        list.push_back(3);
+        let vals: Vec<_> = list.iter().collect();
+        assert_eq!(vals, vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn doubly_iter_back() {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);
+        list.push_back(2);
+        list.push_back(3);
+        let vals: Vec<_> = list.iter_back().collect();
+        assert_eq!(vals, vec![3, 2, 1]);
+    }
+
+    #[test]
+    fn doubly_iter_empty() {
+        let list: DoublyLinkedList<i32> = DoublyLinkedList::new();
+        assert_eq!(list.iter().count(), 0);
+        assert_eq!(list.iter_back().count(), 0);
+    }
+
+    #[test]
+    fn doubly_iter_single() {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(42);
+        assert_eq!(list.iter().collect::<Vec<_>>(), vec![42]);
+        assert_eq!(list.iter_back().collect::<Vec<_>>(), vec![42]);
+    }
+
+    #[test]
     fn doubly_len_tracks() {
         let mut list = DoublyLinkedList::new();
         list.push_front(1);
@@ -463,5 +606,113 @@ mod tests {
         list.pop_back();
         assert_eq!(list.len(), 0);
         assert!(list.is_empty());
+    }
+
+    // --- nth ---
+
+    #[test]
+    fn singly_nth() {
+        let mut list = SinglyLinkedList::new();
+        for i in 0..5 {
+            list.push_back(i);
+        }
+        assert_eq!(list.nth(0), Some(&0));
+        assert_eq!(list.nth(2), Some(&2));
+        assert_eq!(list.nth(4), Some(&4));
+        assert_eq!(list.nth(5), None);
+    }
+
+    #[test]
+    fn singly_nth_empty() {
+        let list: SinglyLinkedList<i32> = SinglyLinkedList::new();
+        assert_eq!(list.nth(0), None);
+    }
+
+    // --- find ---
+
+    #[test]
+    fn singly_find() {
+        let mut list = SinglyLinkedList::new();
+        list.push_back(1);
+        list.push_back(2);
+        list.push_back(3);
+        assert!(list.find(&2));
+        assert!(!list.find(&99));
+    }
+
+    #[test]
+    fn singly_find_empty() {
+        let list: SinglyLinkedList<i32> = SinglyLinkedList::new();
+        assert!(!list.find(&1));
+    }
+
+    // --- find_middle ---
+
+    #[test]
+    fn singly_find_middle_odd() {
+        let mut list = SinglyLinkedList::new();
+        for i in 1..=5 {
+            list.push_back(i);
+        }
+        assert_eq!(list.find_middle(), Some(&3));
+    }
+
+    #[test]
+    fn singly_find_middle_even() {
+        let mut list = SinglyLinkedList::new();
+        for i in 1..=4 {
+            list.push_back(i);
+        }
+        // For even length, returns the first of two middle nodes
+        assert_eq!(list.find_middle(), Some(&2));
+    }
+
+    #[test]
+    fn singly_find_middle_single() {
+        let mut list = SinglyLinkedList::new();
+        list.push_front(42);
+        assert_eq!(list.find_middle(), Some(&42));
+    }
+
+    #[test]
+    fn singly_find_middle_empty() {
+        let list: SinglyLinkedList<i32> = SinglyLinkedList::new();
+        assert_eq!(list.find_middle(), None);
+    }
+
+    // --- merge_sorted_lists ---
+
+    #[test]
+    fn singly_merge_sorted() {
+        let mut l1 = SinglyLinkedList::new();
+        let mut l2 = SinglyLinkedList::new();
+        for &v in &[1, 3, 5] {
+            l1.push_back(v);
+        }
+        for &v in &[2, 4, 6] {
+            l2.push_back(v);
+        }
+        let merged = merge_sorted_lists(l1, l2);
+        let vals: Vec<_> = merged.iter().copied().collect();
+        assert_eq!(vals, vec![1, 2, 3, 4, 5, 6]);
+    }
+
+    #[test]
+    fn singly_merge_sorted_empty() {
+        let l1: SinglyLinkedList<i32> = SinglyLinkedList::new();
+        let mut l2 = SinglyLinkedList::new();
+        l2.push_back(1);
+        l2.push_back(2);
+        let merged = merge_sorted_lists(l1, l2);
+        let vals: Vec<_> = merged.iter().copied().collect();
+        assert_eq!(vals, vec![1, 2]);
+    }
+
+    #[test]
+    fn singly_merge_sorted_both_empty() {
+        let l1: SinglyLinkedList<i32> = SinglyLinkedList::new();
+        let l2: SinglyLinkedList<i32> = SinglyLinkedList::new();
+        let merged = merge_sorted_lists(l1, l2);
+        assert!(merged.is_empty());
     }
 }
