@@ -1,6 +1,6 @@
 # Two Pointers
 
-> **Anxiety check:** Nếu bạn hiểu được Binary Search ở chương trước, bạn đã biết Two Pointers rồi đấy -- chỉ là chưa nhận ra thôi. Binary Search dùng 2 biến `lo` và `hi` di chuyển về giữa. Two Pointers **tổng quát hóa** pattern đó: thay vì luôn chia đôi, 2 con trỏ di chuyển theo **logic riêng** tùy bài toán. Không có toán khó, không có đệ quy, không có cấu trúc dữ liệu phức tạp. Chỉ có 2 biến chạy trên mảng. Thở đi, chương này dễ.
+> **Đừng lo lắng:** Nếu bạn hiểu được Binary Search ở chương trước, bạn đã biết Two Pointers rồi đấy -- chỉ là chưa nhận ra thôi. Binary Search dùng 2 biến `lo` và `hi` di chuyển về giữa. Two Pointers **tổng quát hóa** pattern đó: thay vì luôn chia đôi, 2 con trỏ di chuyển theo **logic riêng** tùy bài toán. Không có toán khó, không có đệ quy, không có cấu trúc dữ liệu phức tạp. Chỉ có 2 biến chạy trên mảng. Thở đi, chương này dễ.
 
 ---
 

@@ -1,8 +1,8 @@
 # Thuật toán Prim (Cây khung nhỏ nhất)
 
-## Đây là gì?
+> 💡 **Đừng lo lắng:** Nếu bạn hiểu Dijkstra, bạn **đã hiểu 90% Prim** -- code gần như giống nhau, chỉ khác **MỘT dòng**. Dijkstra push `(dist_from_source + weight, node)` vào heap (tổng khoảng cách cộng dồn). Prim push `(weight, node)` (chỉ trọng số cạnh, KHÔNG cộng dồn). Bài toán khác -- MST thay vì shortest path -- nhưng kỹ thuật GIỐNG. MST xuất hiện trong network design, clustering, image segmentation, và phỏng vấn thường hỏi "nối tất cả nodes với minimum cost".
 
-> **Đừng lo!** Nếu bạn hiểu Dijkstra, bạn **đã hiểu 90% Prim** -- code gần như giống nhau, chỉ khác **MỘT dòng**. Dijkstra push `(dist_from_source + weight, node)` vào heap (tổng khoảng cách cộng dồn). Prim push `(weight, node)` (chỉ trọng số cạnh, KHÔNG cộng dồn). Bài toán khác -- MST thay vì shortest path -- nhưng kỹ thuật GIỐNG. MST xuất hiện trong network design, clustering, image segmentation, và phỏng vấn thường hỏi "nối tất cả nodes với minimum cost".
+## Đây là gì?
 
 Hãy tưởng tượng bạn là **kỹ sư điện** cần nối điện cho tất cả các nhà trong một ngôi làng. Mỗi nhà cần được kết nối vào mạng lưới điện. Kéo dây giữa hai nhà tốn chi phí khác nhau (tùy khoảng cách, địa hình). Bạn muốn **nối tất cả các nhà** với **chi phí thấp nhất**.
 

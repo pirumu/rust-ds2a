@@ -1,16 +1,6 @@
 # Skip List
 
-## Bạn đã biết đủ rồi!
-
-> Linked List (chương 2) + multiple levels + random coin flip = **Skip List**
-
-Nếu bạn hiểu 3 thứ này, bạn hiểu Skip List:
-
-1. **Linked List**: duyệt từ đầu đến cuối, insert/delete bằng cách nối con trỏ.
-2. **Nhiều tầng**: xếp chồng nhiều linked list lên nhau, tầng cao nhảy xa hơn.
-3. **Tung đồng xu**: mỗi node insert vào, tung xu để quyết định nó cao mấy tầng.
-
-Không có rotation, không có recoloring, không có gì phức tạp. Thật đấy.
+> 💡 **Đừng lo lắng:** Skip List chỉ là linked list bạn đã học ở Phần 2, nhưng xếp chồng nhiều tầng lên nhau -- tầng cao nhảy xa, tầng thấp đi chậm, giống đường cao tốc và đường làng. Không rotation, không recoloring, không gì phức tạp. Nếu bạn hiểu linked list, bạn hiểu Skip List.
 
 ## Đây là gì?
 

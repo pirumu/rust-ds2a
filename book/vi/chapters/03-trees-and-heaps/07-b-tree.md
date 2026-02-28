@@ -1,5 +1,7 @@
 # B-Tree
 
+> 💡 **Đừng lo lắng:** B-Tree nghe "database-level" nhưng thực ra chỉ là cây mà mỗi node chứa nhiều key và có nhiều nhánh con -- thay vì chỉ 2 như binary tree. Nếu bạn hiểu BST (rẽ trái/phải), B-Tree chỉ đổi thành "chọn 1 trong nhiều nhánh". Logic y hệt, chỉ rộng hơn thôi.
+
 ## Đây là gì?
 
 Mở một cuốn sách dày ra. Phía sau có **mục lục** (index). Mục lục không liệt kê mọi dòng trong sách -- nó gom nhóm: "Chương 1: trang 1-50", "Chương 2: trang 51-100"... Bạn tìm chương cần đọc, rồi mở đúng nhóm trang.

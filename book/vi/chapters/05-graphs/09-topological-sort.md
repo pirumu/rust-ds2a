@@ -1,8 +1,8 @@
 # Sắp xếp topo (Topological Sort)
 
-## Đây là gì?
+> 💡 **Đừng lo lắng:** "Topological sort" nghe rất toán học, nhưng bạn đã làm việc này mỗi ngày mà không biết -- sắp xếp thứ tự việc cần làm sao cho không bị "thiếu điều kiện". Đã biết BFS? Kahn's algorithm = **BFS + mảng in-degree**. Đã biết DFS? DFS topo sort = **DFS + push vào stack khi return**. Không có algorithm mới -- chỉ thêm **1 trick** lên BFS hoặc DFS bạn đã biết. Và topo sort xuất hiện **cực nhiều** trong phỏng vấn (Course Schedule là top 10 bài hay gặp nhất trên LeetCode) cũng như trong production (build systems, package managers, spreadsheets).
 
-> **Anxiety check:** "Topological sort" nghe rất toán học, nhưng bạn đã làm việc này mỗi ngày mà không biết -- sắp xếp thứ tự việc cần làm sao cho không bị "thiếu điều kiện". Đã biết BFS? Kahn's algorithm = **BFS + mảng in-degree**. Đã biết DFS? DFS topo sort = **DFS + push vào stack khi return**. Không có algorithm mới -- chỉ thêm **1 trick** lên BFS hoặc DFS bạn đã biết. Và topo sort xuất hiện **cực nhiều** trong phỏng vấn (Course Schedule là top 10 bài hay gặp nhất trên LeetCode) cũng như trong production (build systems, package managers, spreadsheets).
+## Đây là gì?
 
 Hãy nghĩ về **thứ tự học môn ở đại học**. Muốn học Giải tích thì phải học Toán cao cấp trước. Muốn học Machine Learning thì phải học Xác suất trước. Muốn học Xác suất thì phải học Toán trước.
 

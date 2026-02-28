@@ -1,8 +1,8 @@
 # Consistent Hashing
 
-## Đây là gì?
+> 💡 **Đừng lo lắng:** Consistent Hashing nghe tên "hàn lâm" nhưng ý tưởng core cực kỳ đơn giản: đặt server và key lên **vòng tròn**, key đi theo chiều kim đồng hồ gặp server nào thì thuộc server đó. Thêm server? Chỉ key gần nó bị ảnh hưởng. Xóa server? Chỉ key của nó chuyển sang server kế tiếp. Bạn đã hiểu `BTreeMap::range()` từ chương B-Tree -- đó chính là tool cần cho implementation. Code ngắn hơn AVL tree nhiều! Đây là kiến thức system design **bắt buộc** -- Amazon, Google, Meta đều hỏi trong interview.
 
-> **Đừng lo!** Consistent Hashing nghe tên "hàn lâm" nhưng ý tưởng core cực kỳ đơn giản: đặt server và key lên **vòng tròn**, key đi theo chiều kim đồng hồ gặp server nào thì thuộc server đó. Thêm server? Chỉ key gần nó bị ảnh hưởng. Xóa server? Chỉ key của nó chuyển sang server kế tiếp. Bạn đã hiểu `BTreeMap::range()` từ chương B-Tree -- đó chính là tool cần cho implementation. Code ngắn hơn AVL tree nhiều! Đây là kiến thức system design **bắt buộc** -- Amazon, Google, Meta đều hỏi trong interview.
+## Đây là gì?
 
 Tưởng tượng 3 bạn sinh viên ở cùng khu trọ, chia nhau **trông xe** cho cả xóm. Cách đơn giản: đánh số xe từ 1 đến 100, xe số 1-33 giao bạn A, 34-66 giao bạn B, 67-100 giao bạn C. Ổn.
 

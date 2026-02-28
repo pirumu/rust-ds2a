@@ -1,5 +1,7 @@
 # Thuật toán Dijkstra
 
+> 💡 **Đừng lo lắng:** Dijkstra nghe "hàn lâm" nhưng ý tưởng cực kỳ đơn giản: **BFS + Priority Queue**. BFS dùng Queue (FIFO) → thăm theo số cạnh. Dijkstra dùng Priority Queue (min-distance) → thăm theo tổng weight. Nếu bạn hiểu BFS (chương trước) và Priority Queue (chương Heap), bạn đã hiểu **90% Dijkstra**. Code chỉ khác BFS khoảng 5 dòng. Dijkstra là thuật toán graph **được hỏi nhiều nhất** trong phỏng vấn, và là nền tảng của Google Maps, network routing, game AI pathfinding.
+
 ## Đây là gì?
 
 Hãy tưởng tượng bạn mở **Google Maps** để tìm đường từ nhà đến trường. Có nhiều đường đi khác nhau -- đường nào ngắn nhất? Đường nào nhanh nhất?
@@ -9,8 +11,6 @@ Hãy tưởng tượng bạn mở **Google Maps** để tìm đường từ nhà
 Tại sao BFS không đủ? BFS tìm đường ít cạnh nhất, nhưng không quan tâm trọng số. Ví dụ: đường đi qua 2 cạnh (trọng số 10 + 10 = 20) có thể dài hơn đường đi qua 5 cạnh (trọng số 1 + 1 + 1 + 1 + 1 = 5).
 
 Ý tưởng cốt lõi của Dijkstra: **tham lam** (greedy). Luôn xử lý đỉnh gần nhất chưa xử lý. Đỉnh đó chắc chắn đã có khoảng cách ngắn nhất rồi, vì mọi đường khác phải đi qua đỉnh xa hơn (trọng số không âm → chỉ có thể dài thêm).
-
-> **Đừng lo!** Dijkstra nghe "hàn lâm" nhưng ý tưởng cực kỳ đơn giản: **BFS + Priority Queue**. BFS dùng Queue (FIFO) → thăm theo số cạnh. Dijkstra dùng Priority Queue (min-distance) → thăm theo tổng weight. Nếu bạn hiểu BFS (chương trước) và Priority Queue (chương Heap), bạn đã hiểu **90% Dijkstra**. Code chỉ khác BFS khoảng 5 dòng. Dijkstra là thuật toán graph **được hỏi nhiều nhất** trong phỏng vấn, và là nền tảng của Google Maps, network routing, game AI pathfinding.
 
 ---
 

@@ -1,5 +1,7 @@
 # Priority Queue
 
+> 💡 **Đừng lo lắng:** Đây có thể là chương dễ nhất series. Nếu bạn hiểu Binary Heap ở chương trước, bạn đã hiểu 100% Priority Queue -- vì nó chỉ là heap đổi tên `push`/`pop` thành `enqueue`/`dequeue`. Không algorithm mới, không cấu trúc mới. Relax.
+
 ## Đây là gì?
 
 > **Chương này là chương DỄ NHẤT toàn series.** Nếu bạn đã hiểu Binary Heap ở chương trước, bạn đã hiểu 100% Priority Queue -- vì nó chỉ đổi tên: `push` → `enqueue`, `pop` → `dequeue`. Không có algorithm mới, không có cấu trúc mới. Giá trị thực sự của chương này là **ứng dụng**: bạn sẽ thấy Heap được dùng ở đâu trong thực tế, từ tìm đường ngắn nhất (Dijkstra) đến lập lịch hệ điều hành. Hít thở sâu, relax, và enjoy.

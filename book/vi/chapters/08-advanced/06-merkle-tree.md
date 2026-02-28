@@ -1,7 +1,5 @@
 # Merkle Tree
 
-## Bạn cần gì trước khi đọc?
-
 > 💡 **Đừng lo lắng:** Chương này dùng đúng 2 thứ bạn đã biết:
 > - **Binary Tree** (chương 3) — cây mà mỗi node có tối đa 2 con
 > - **Hash function** (chương 4) — hàm biến dữ liệu thành "dấu vân tay" cố định

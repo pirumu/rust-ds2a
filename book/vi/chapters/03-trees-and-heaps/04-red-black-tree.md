@@ -1,5 +1,7 @@
 # Red-Black Tree
 
+> 💡 **Đừng lo lắng:** Red-Black tree nổi tiếng là "boss cuối" nhưng bạn không cần thuộc lòng nó đâu. Mục tiêu chỉ là hiểu ý tưởng: thay vì đếm chiều cao như AVL, ta tô màu node. Nếu bạn đã hiểu rotation từ chương AVL, bạn đã có 70% kiến thức cần thiết rồi. Thở đi, chill thôi.
+
 ## Đây là gì?
 
 > **Trước khi bắt đầu -- hít thở sâu.**

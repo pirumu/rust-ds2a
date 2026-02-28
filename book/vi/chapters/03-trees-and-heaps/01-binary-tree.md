@@ -1,5 +1,7 @@
 # Binary Tree
 
+> 💡 **Đừng lo lắng:** "Cây" nghe trừu tượng nhưng bạn đã thấy nó mỗi ngày -- thư mục trong máy tính, mục lục sách, sơ đồ công ty. Binary tree chỉ là mỗi node có tối đa 2 nhánh con, trái và phải. Nếu bạn hiểu linked list (node trỏ tới node), bạn đã hiểu 80% rồi.
+
 ## Đây là gì?
 
 > **Nếu bạn cảm thấy choáng ngợp khi đọc chương này -- đó là hoàn toàn bình thường.** Binary Tree là bước nhảy lớn nhất trong series cho đến giờ. Ba chương trước (Stack, Queue, Deque) đều là cấu trúc tuyến tính -- mọi thứ xếp thành hàng, dễ hình dung. Chương này khác: dữ liệu **phân nhánh**. Nhưng thực ra bạn đã thấy tree mỗi ngày mà không nhận ra: thư mục trong máy tính, mục lục sách, sơ đồ tổ chức công ty, hay cái DOM tree khi bạn inspect element trên trình duyệt. Hiểu Binary Tree là nền tảng để sau này hiểu BST (tìm kiếm nhanh), Heap (priority queue), Trie (autocomplete), và cả cách database index hoạt động (B-Tree). Bạn đang xây nền móng cho rất nhiều thứ hay ho phía trước.

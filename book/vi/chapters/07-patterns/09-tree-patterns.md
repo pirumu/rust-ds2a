@@ -1,6 +1,6 @@
 # Tree Patterns
 
-> **Đừng lo lắng:** 5 patterns trong chương này cover khoảng **80% bài tree trong phỏng vấn**. Nắm vững 5 bài này, bạn sẽ tự tin giải hầu hết mọi bài tree gặp phải. Nghiêm túc đấy.
+> 💡 **Đừng lo lắng:** 5 patterns trong chương này cover khoảng **80% bài tree trong phỏng vấn**. Nắm vững 5 bài này, bạn sẽ tự tin giải hầu hết mọi bài tree gặp phải. Nghiêm túc đấy.
 
 ## Tại sao cần học?
 

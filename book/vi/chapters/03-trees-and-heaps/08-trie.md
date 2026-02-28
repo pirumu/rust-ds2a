@@ -1,5 +1,7 @@
 # Trie (Cây tiền tố)
 
+> 💡 **Đừng lo lắng:** Trie nhìn khác BST/AVL nhưng thực ra đơn giản hơn nhiều -- không so sánh, không rotation, không balance. Mỗi node chỉ là 1 ký tự, đi từ gốc xuống lá = 1 từ. Insert chỉ là vòng `for` đi qua từng chữ cái. Code ngắn đáng ngạc nhiên.
+
 ## Đây là gì?
 
 > Trie trông lạ vì khác hoàn toàn BST/AVL mà bạn vừa học -- không có so sánh trái/phải, không có rotation, không có balance factor. Thay vào đó, mỗi node là 1 ký tự, và đường đi từ root đến node = 1 chuỗi. Nếu bạn hiểu tree traversal (đi từ root xuống leaf), bạn đã hiểu core concept của Trie rồi. Phần code cũng đơn giản đáng ngạc nhiên -- insert chỉ là vòng `for` đi qua từng ký tự.

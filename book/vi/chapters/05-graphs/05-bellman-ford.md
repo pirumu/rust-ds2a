@@ -1,5 +1,7 @@
 # Thuật toán Bellman-Ford
 
+> 💡 **Đừng lo lắng:** Bellman-Ford nghe phức tạp nhưng thực ra là thuật toán **đơn giản nhất** trong tất cả shortest path algorithms. Core logic chỉ có: *"duyệt tất cả cạnh, thử cải thiện distance, lặp lại V-1 lần."* Không cần Priority Queue, không cần visited array, không cần BTreeMap. Chỉ cần **2 vòng for lồng nhau**. Nếu bạn hiểu Dijkstra (chương trước), Bellman-Ford còn đơn giản hơn -- đánh đổi tốc độ lấy sự đơn giản. Bellman-Ford ít xuất hiện trong coding interview hơn Dijkstra, nhưng hay gặp trong system design (currency exchange, arbitrage detection) và là nền tảng cho distance-vector routing (giao thức RIP).
+
 ## Đây là gì?
 
 Dijkstra như Google Maps bình thường -- chỉ xử lý được đường có chi phí dương (khoảng cách, thời gian). Nhưng đời thực có lúc **đi một đoạn lại được tiền**.
@@ -13,8 +15,6 @@ Hãy tưởng tượng bạn giao hàng giữa các thành phố. Hầu hết ch
 **Negative cycle** là gì? Là một vòng lặp mà đi quanh 1 vòng lại **giảm chi phí**. Giống như có 3 thành phố mà cứ chạy vòng A->B->C->A, mỗi vòng bạn lại lãi thêm tiền -- chạy mãi, lãi mãi, không bao giờ dừng. Khi có negative cycle, **không tồn tại đường ngắn nhất**.
 
 Cái giá phải trả: Bellman-Ford chậm hơn Dijkstra. O(V * E) vs O((V + E) log V).
-
-> **Đừng lo!** Bellman-Ford nghe phức tạp nhưng thực ra là thuật toán **đơn giản nhất** trong tất cả shortest path algorithms. Core logic chỉ có: *"duyệt tất cả cạnh, thử cải thiện distance, lặp lại V-1 lần."* Không cần Priority Queue, không cần visited array, không cần BTreeMap. Chỉ cần **2 vòng for lồng nhau**. Nếu bạn hiểu Dijkstra (chương trước), Bellman-Ford còn đơn giản hơn -- đánh đổi tốc độ lấy sự đơn giản. Bellman-Ford ít xuất hiện trong coding interview hơn Dijkstra, nhưng hay gặp trong system design (currency exchange, arbitrage detection) và là nền tảng cho distance-vector routing (giao thức RIP).
 
 ---
 

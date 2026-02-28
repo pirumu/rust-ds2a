@@ -1,10 +1,6 @@
 # Heap Sort
 
-## Đừng lo lắng!
-
-> **Đừng lo.** Nếu bạn đã hiểu Binary Heap ở chương 3, chương này gần như "miễn phí". Heap Sort chỉ là: xây heap + lấy max ra lặp lại. Không có ý tưởng mới nào cả. Nếu bạn đã sống sót qua Quick Sort (pivot, partition, worst case O(n²)...) thì Heap Sort đơn giản hơn nhiều -- luôn O(n log n), không có trường hợp xấu bất ngờ.
->
-> Và đây là chương sort cuối cùng dùng comparison (so sánh). Sau chương này, bạn sẽ có bức tranh đầy đủ về tất cả sorting algorithms phổ biến.
+> 💡 **Đừng lo lắng:** Nếu bạn đã hiểu Binary Heap ở chương 3, chương này gần như "miễn phí". Heap Sort chỉ là: xây heap + lấy max ra lặp lại. Không có ý tưởng mới nào cả. Nếu bạn đã sống sót qua Quick Sort (pivot, partition, worst case O(n²)...) thì Heap Sort đơn giản hơn nhiều -- luôn O(n log n), không có trường hợp xấu bất ngờ. Và đây là chương sort cuối cùng dùng comparison (so sánh). Sau chương này, bạn sẽ có bức tranh đầy đủ về tất cả sorting algorithms phổ biến.
 
 ---
 

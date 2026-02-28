@@ -1,5 +1,7 @@
 # Doubly Linked List
 
+> 💡 **Đừng lo lắng:** Nếu bạn đã sống sót qua singly linked list ở chương trước thì chương này chỉ thêm 1 con trỏ `prev` nữa thôi. Ý tưởng y hệt, chỉ là toa tàu giờ có móc nối 2 chiều. `Rc<RefCell<>>` nhìn lạ nhưng đọc chậm là hiểu.
+
 ## Đây là gì?
 
 > Chương này có `Rc<RefCell<>>` -- combo mà hầu hết người học Rust đều thấy đáng sợ lần đầu. Nhưng thực ra nó chỉ là **2 lớp wrapper**: `Rc` = "nhiều người cùng sở hữu", `RefCell` = "mượn lúc runtime thay vì compile time". Nếu bạn hiểu singly linked list ở chương trước, logic ở đây **y hệt** -- chỉ thêm 1 con trỏ `prev` nữa thôi. Đọc chậm, trace từng dòng code, bạn sẽ thấy nó không khó như nó trông.

@@ -1,13 +1,6 @@
 # Intervals — Bài toán khoảng thời gian
 
-## Đừng lo lắng!
-
-Nếu bạn thấy bài nào có từ "interval", "meeting", "schedule", "booking" — đừng hoảng.
-
-> **Sort by start, sweep left to right.**
-> Hầu hết interval problems follow pattern này. Thật sự chỉ có vậy.
-
-Bạn đã biết sort (Phần 6), đã biết greedy (Phần 6). Interval chỉ là **kết hợp 2 thứ đó**. Không có thuật toán mới nào cả.
+> 💡 **Đừng lo lắng:** Nếu bạn thấy bài nào có từ "interval", "meeting", "schedule", "booking" — đừng hoảng. Sort by start, sweep left to right. Hầu hết interval problems follow pattern này. Thật sự chỉ có vậy. Bạn đã biết sort (Phần 6), đã biết greedy (Phần 6). Interval chỉ là **kết hợp 2 thứ đó**. Không có thuật toán mới nào cả.
 
 ---
 

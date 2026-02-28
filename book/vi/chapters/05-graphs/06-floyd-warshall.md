@@ -1,5 +1,7 @@
 # Thuật toán Floyd-Warshall
 
+> 💡 **Đừng lo lắng:** Cái tên nghe hàn lâm nhưng code Floyd-Warshall ngắn nhất trong tất cả thuật toán shortest path bạn đã học -- chỉ 3 vòng `for` lồng nhau và 1 phép `min`. Không cần Queue, Stack, hay Priority Queue. Nếu bạn biết duyệt ma trận 2D, bạn đã đủ kiến thức rồi.
+
 ## Đây là gì?
 
 > **Đừng sợ cái tên dài.** Floyd-Warshall có tên nghe hàn lâm, nhưng code **ngắn nhất** trong tất cả shortest path algorithms bạn đã học -- chỉ 3 vòng `for` lồng nhau và 1 phép so sánh `min`. Không cần Queue, Stack, hay Priority Queue. Không cần data structure phức tạp nào. Chỉ cần **1 ma trận 2D**. Nếu bạn hiểu câu hỏi: *"đi từ i đến j, đi thẳng hay đi qua k?"* -- bạn đã hiểu Floyd-Warshall. Đây là chương **cuối cùng** về shortest path, và cũng là lần đầu tiên bạn gặp **Dynamic Programming (DP)** -- một kỹ thuật sẽ xuất hiện rất nhiều trong thuật toán nâng cao.

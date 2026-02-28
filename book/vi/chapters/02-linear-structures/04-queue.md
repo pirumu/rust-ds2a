@@ -1,5 +1,7 @@
 # Queue
 
+> 💡 **Đừng lo lắng:** Queue chỉ là hàng chờ mua trà sữa thôi -- ai đến trước được phục vụ trước. Nếu bạn hiểu Stack ở chương trước, Queue chỉ là anh em sinh đôi nhưng tính cách ngược lại. Dễ lắm.
+
 ## Đây là gì?
 
 > **Nếu bạn đang thấy hoang mang** -- hoàn toàn bình thường. "Queue" nghe lạ, nhưng thực ra bạn đã dùng nó mỗi ngày mà không biết. Mỗi lần bạn gửi tin nhắn trên Zalo, đặt đồ ăn trên ShopeeFood, hay đợi Grab đến đón -- đằng sau tất cả đều có queue đang chạy. Hiểu queue là bước đệm để sau này bạn hiểu cách hệ thống lớn (server, message broker, OS scheduler) vận hành. Chương này nhẹ nhàng thôi, đi từng bước một.

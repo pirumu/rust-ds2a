@@ -1,5 +1,7 @@
 # Binary Heap
 
+> 💡 **Đừng lo lắng:** Nếu bạn vừa sống sót qua AVL và Red-Black, tin vui: Heap đơn giản hơn rất nhiều. Không rotation, không tô màu -- chỉ là một mảng `Vec` quen thuộc với 1 quy tắc: cha luôn lớn hơn (hoặc nhỏ hơn) con. Coi chương này như nhịp nghỉ.
+
 ## Đây là gì?
 
 > **Nếu bạn vừa sống sót qua AVL và Red-Black -- chúc mừng.** Bạn đã vượt qua 2 chương khó nhất của series. Heap **đơn giản hơn rất nhiều**: không rotation, không balance factor, không color rules. Chỉ 1 quy tắc duy nhất: cha >= con (max-heap) hoặc cha <= con (min-heap). Và phần hay nhất: Heap không dùng `Box<Node>` hay pointer -- nó lưu trong **Vec**, đúng cái `Vec` quen thuộc từ chương 1. Nếu bạn nhớ "flat representation" ở chương Binary Tree (lưu cây trong mảng), Heap chính là ứng dụng thực tế hoàn hảo của nó. Coi chương này như **nhịp nghỉ** -- vẫn học cái mới, nhưng nhẹ nhàng hơn nhiều.

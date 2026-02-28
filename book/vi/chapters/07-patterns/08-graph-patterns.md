@@ -1,6 +1,6 @@
 # Graph Patterns
 
-> **Anxiety check:** Thở đi. Chương này KHÔNG dạy gì mới. Đây là compilation của những patterns bạn đã học trong Phần 5 — BFS, DFS, Dijkstra, Topological Sort, Union-Find. Mình chỉ tổng hợp lại và chỉ cho bạn cách nhận diện: "Bài này dùng cái gì?" Nếu bạn đã đọc Phần 5, bạn đã biết 80% rồi.
+> 💡 **Đừng lo lắng:** Thở đi. Chương này KHÔNG dạy gì mới. Đây là compilation của những patterns bạn đã học trong Phần 5 — BFS, DFS, Dijkstra, Topological Sort, Union-Find. Mình chỉ tổng hợp lại và chỉ cho bạn cách nhận diện: "Bài này dùng cái gì?" Nếu bạn đã đọc Phần 5, bạn đã biết 80% rồi.
 
 ## Đây là gì?
 

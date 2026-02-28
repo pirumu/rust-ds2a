@@ -1,8 +1,8 @@
 # Bubble Sort, Selection Sort & Insertion Sort
 
-## Đây là gì?
-
 > 💡 **Đừng lo lắng:** Ba thuật toán này đều chạy O(n²) — nghe "chậm" đúng không? Nhưng đừng skip chúng. Chúng là **foundation**. Bạn cần hiểu tại sao chúng chậm, thì mới thấy Merge Sort, Quick Sort ở chương sau hay ở chỗ nào. Giống như học cộng trừ trước rồi mới học nhân chia — không ai nhảy thẳng được. Hơn nữa, Insertion Sort thực tế được dùng **rất nhiều** bên trong các thuật toán sort cao cấp (Timsort, pdqsort). Nên đây không phải kiến thức "học cho có" đâu.
+
+## Đây là gì?
 
 Bạn đã bao giờ sắp xếp bài khi chơi tiến lên chưa? Ba thuật toán sắp xếp cơ bản này chính là những cách tự nhiên nhất mà con người thường làm khi sắp xếp thứ gì đó bằng tay.
 

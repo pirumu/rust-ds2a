@@ -1,10 +1,6 @@
 # LFU Cache
 
-## Đừng lo lắng!
-
-Chương này dùng lại 100% kỹ thuật bạn đã học ở chương LRU Cache: HashMap + Doubly Linked List + arena allocation. Nếu bạn đã hiểu LRU, bạn hiểu được LFU. Chỉ thêm **một ý tưởng mới**: thay vì một linked list, ta có **nhiều linked list** — mỗi cái cho một mức frequency.
-
-Nếu chưa đọc chương LRU Cache, quay lại đọc trước. Chương này build on top of nó.
+> 💡 **Đừng lo lắng:** Chương này dùng lại 100% kỹ thuật bạn đã học ở chương LRU Cache: HashMap + Doubly Linked List + arena allocation. Nếu bạn đã hiểu LRU, bạn hiểu được LFU. Chỉ thêm **một ý tưởng mới**: thay vì một linked list, ta có **nhiều linked list** — mỗi cái cho một mức frequency. Nếu chưa đọc chương LRU Cache, quay lại đọc trước. Chương này build on top of nó.
 
 ## Đây là gì?
 

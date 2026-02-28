@@ -1,5 +1,7 @@
 # Binary Search Tree (BST)
 
+> 💡 **Đừng lo lắng:** BST chỉ là binary tree bạn vừa học ở chương trước, cộng thêm đúng 1 quy tắc: bên trái nhỏ hơn, bên phải lớn hơn. Chỉ vậy thôi mà cây trở nên "thông minh" -- tìm kiếm nhanh gấp ngàn lần. Bạn đã có nền tảng, chương này chỉ xây thêm 1 tầng.
+
 ## Đây là gì?
 
 > **Trước khi bắt đầu:** Chương này có phần xóa node (delete) với 3 trường hợp -- nhìn thì đáng sợ, nhưng thực ra 2 trường hợp đầu cực kỳ đơn giản (xóa thẳng hoặc cho con lên thế). Chỉ trường hợp thứ 3 cần suy nghĩ, và ý tưởng cũng chỉ là "tìm người thay thế phù hợp nhất". Nếu bạn đã hiểu Binary Tree ở chương trước, BST chỉ thêm **1 quy tắc** duy nhất. Quy tắc đó biến cây "ngớ ngẩn" (search O(n)) thành cây "thông minh" (search O(log n)). BST là nền tảng trực tiếp của `BTreeMap` trong Rust std, database index (B-Tree), và hầu hết mọi hệ thống cần tìm kiếm nhanh.

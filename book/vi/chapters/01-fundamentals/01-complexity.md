@@ -1,5 +1,7 @@
 # Phân tích Độ phức tạp (Big-O)
 
+> 💡 **Đừng lo lắng:** Big-O nghe như toán cao cấp nhưng thực ra chỉ là đếm bước thôi. Bạn không cần giỏi toán -- chỉ cần biết trả lời câu hỏi: "nếu dữ liệu tăng gấp 10, code chạy lâu hơn bao nhiêu?" Đọc xong chương này bạn sẽ thấy nó dễ hơn bạn tưởng rất nhiều.
+
 ## Đây là gì?
 
 > **Nếu bạn đang đọc đến đây và cảm thấy "Big-O nghe đáng sợ quá"** -- bạn không cô đơn đâu. Rất nhiều lập trình viên đã đi làm 2-3 năm vẫn nhầm lẫn khi phân tích Big-O. Đây là một kỹ năng cần **luyện tập**, không phải thứ ai cũng hiểu ngay từ lần đầu. Bài này sẽ đi từng bước nhỏ, có ví dụ cụ thể cho mỗi khái niệm. Nếu đọc xong một phần mà thấy chưa hiểu, đọc lại lần nữa -- hoàn toàn bình thường.

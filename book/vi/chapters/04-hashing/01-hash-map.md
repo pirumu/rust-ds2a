@@ -1,9 +1,8 @@
 # Hash Map (Bảng băm)
 
+> 💡 **Đừng lo lắng:** HashMap là cấu trúc bạn đã dùng hàng ngày -- `HashMap::new()`, `map.insert()`, `map.get()`. Giờ bạn sẽ hiểu **bên trong** nó hoạt động ra sao. Tin vui: concept core rất đơn giản -- chỉ là "mảng + hàm tính vị trí". Phần phức tạp (collision handling, resize) cũng chỉ là 2 ý tưởng. Nếu bạn đã hiểu Vec (chương 1) và linked list concept, bạn đã có đủ nền tảng.
+
 ## Đây là gì?
-
-> **Đừng lo!** HashMap là cấu trúc bạn đã dùng hàng ngày -- `HashMap::new()`, `map.insert()`, `map.get()`. Giờ bạn sẽ hiểu **bên trong** nó hoạt động ra sao. Tin vui: concept core rất đơn giản -- chỉ là "mảng + hàm tính vị trí". Phần phức tạp (collision handling, resize) cũng chỉ là 2 ý tưởng. Nếu bạn đã hiểu Vec (chương 1) và linked list concept, bạn đã có đủ nền tảng.
-
 
 Bạn đi siêu thị, mua xong muốn gửi đồ. Bạn đưa túi cho nhân viên, họ đưa lại bạn một **số tủ** -- ví dụ tủ số 7. Lúc quay lại, bạn chỉ cần đưa số 7 là lấy được đồ ngay. Không cần mở từng tủ tìm.
 

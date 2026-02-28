@@ -1,10 +1,6 @@
 # Linked List Tricks
 
-## Đừng lo lắng!
-
-Nếu bạn đang nghĩ "trời ơi, linked list trong Rust phức tạp lắm" -- bình tĩnh. Đúng là Rust strict hơn C/Java về ownership, nhưng mấy **trick** ở đây thì logic giống hệt mọi ngôn ngữ. Bạn chỉ cần hiểu ý tưởng, code Rust mình sẽ giải thích từng dòng.
-
-Chương này không yêu cầu bạn tự viết linked list từ đầu. Bạn đã làm điều đó ở Phần 2. Giờ mình tập trung vào **patterns** -- những mẹo hay hỏi trong phỏng vấn.
+> 💡 **Đừng lo lắng:** Nếu bạn đang nghĩ "trời ơi, linked list trong Rust phức tạp lắm" -- bình tĩnh. Đúng là Rust strict hơn C/Java về ownership, nhưng mấy **trick** ở đây thì logic giống hệt mọi ngôn ngữ. Bạn chỉ cần hiểu ý tưởng, code Rust mình sẽ giải thích từng dòng. Chương này không yêu cầu bạn tự viết linked list từ đầu. Bạn đã làm điều đó ở Phần 2. Giờ mình tập trung vào **patterns** -- những mẹo hay hỏi trong phỏng vấn.
 
 ---
 

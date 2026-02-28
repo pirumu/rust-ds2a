@@ -1,12 +1,6 @@
 # Merge Sort
 
-## Đừng lo lắng!
-
-Nếu bạn đang nghĩ "Đệ quy đã khó rồi, giờ lại thêm chia mảng rồi gộp lại?" — bình tĩnh.
-
-Merge Sort nghe phức tạp nhưng ý tưởng cốt lõi cực kỳ đơn giản. Bạn đã biết đệ quy ở [chương Recursion](../06-algorithms/01-recursion.md), và bạn đã quen so sánh cặp phần tử ở [Bubble/Insertion Sort](../06-algorithms/02-basic-sorting.md). Merge Sort chỉ kết hợp 2 thứ đó lại.
-
-Thật sự, bước khó nhất là **bước gộp** (merge). Và bước đó... chỉ là so sánh 2 phần tử đầu tiên rồi chọn cái nhỏ hơn. Vậy thôi. Chương này sẽ đi từng bước rất chậm.
+> 💡 **Đừng lo lắng:** Nếu bạn đang nghĩ "Đệ quy đã khó rồi, giờ lại thêm chia mảng rồi gộp lại?" — bình tĩnh. Merge Sort nghe phức tạp nhưng ý tưởng cốt lõi cực kỳ đơn giản. Bạn đã biết đệ quy ở [chương Recursion](../06-algorithms/01-recursion.md), và bạn đã quen so sánh cặp phần tử ở [Bubble/Insertion Sort](../06-algorithms/02-basic-sorting.md). Merge Sort chỉ kết hợp 2 thứ đó lại. Thật sự, bước khó nhất là **bước gộp** (merge). Và bước đó... chỉ là so sánh 2 phần tử đầu tiên rồi chọn cái nhỏ hơn. Vậy thôi. Chương này sẽ đi từng bước rất chậm.
 
 ---
 

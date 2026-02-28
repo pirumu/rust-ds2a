@@ -1,8 +1,8 @@
 # Bloom Filter
 
-## Đây là gì?
+> 💡 **Đừng lo lắng:** Bloom Filter nghe tên lạ, và ý tưởng "chấp nhận sai" có vẻ phản trực giác. Nhưng thực ra cấu trúc cực kỳ đơn giản: chỉ là **mảng bit + vài hash function**. Insert = bật vài bit. Lookup = check vài bit. Code ngắn hơn hầu hết mọi cấu trúc trong series này. Phần khó duy nhất là hiểu **tại sao** chấp nhận sai lại hữu ích -- và đó là câu hỏi về engineering trade-off, không phải thuật toán phức tạp. Bloom Filter xuất hiện trong **phỏng vấn system design** (không phải coding), và chạy trong production ở hầu hết hệ thống lớn: Google Bigtable, Apache Cassandra, LevelDB, Chrome browser...
 
-> **Đừng lo!** Bloom Filter nghe tên lạ, và ý tưởng "chấp nhận sai" có vẻ phản trực giác. Nhưng thực ra cấu trúc cực kỳ đơn giản: chỉ là **mảng bit + vài hash function**. Insert = bật vài bit. Lookup = check vài bit. Code ngắn hơn hầu hết mọi cấu trúc trong series này. Phần khó duy nhất là hiểu **tại sao** chấp nhận sai lại hữu ích -- và đó là câu hỏi về engineering trade-off, không phải thuật toán phức tạp. Bloom Filter xuất hiện trong **phỏng vấn system design** (không phải coding), và chạy trong production ở hầu hết hệ thống lớn: Google Bigtable, Apache Cassandra, LevelDB, Chrome browser...
+## Đây là gì?
 
 Tưởng tượng bạn có một bảng đăng ký hiến máu. Mỗi người đến đăng ký, bạn không ghi tên họ (tốn giấy lắm). Thay vào đó, bạn dùng 3 cây bút màu khác nhau, mỗi bút tô vào một ô trên bảng theo "công thức" riêng từ tên người đó. Ví dụ: "Tuấn" → bút đỏ tô ô 3, bút xanh tô ô 7, bút vàng tô ô 11.
 

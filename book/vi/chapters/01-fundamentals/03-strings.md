@@ -1,5 +1,7 @@
 # String
 
+> 💡 **Đừng lo lắng:** `String` vs `&str` nghe rối nhưng thực ra chỉ là: một cái bạn sở hữu, một cái bạn mượn. Giống `Vec<T>` vs `&[T]` ở chương trước vậy thôi. Rust không cố làm khó bạn -- nó chỉ muốn bạn biết rõ ai đang giữ dữ liệu. Đọc chương này xong bạn sẽ thấy đơn giản hơn Rust làm nó trông.
+
 ## Đây là gì?
 
 > String trong Rust nổi tiếng là **phần gây bối rối nhất** cho người mới. `String` vs `&str`, UTF-8, bytes vs chars -- nghe rối lắm. Nhưng thực ra chỉ cần nhớ **2 thứ**: `String` là chuỗi bạn sở hữu (có thể thay đổi), `&str` là chuỗi bạn mượn (chỉ đọc). Còn UTF-8? Đọc xong chương này bạn sẽ thấy nó không đáng sợ như tên gọi.

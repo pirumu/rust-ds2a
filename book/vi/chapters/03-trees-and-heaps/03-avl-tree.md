@@ -1,5 +1,7 @@
 # AVL Tree
 
+> 💡 **Đừng lo lắng:** Rotation nghe đáng sợ nhưng thực ra chỉ có 4 trường hợp, và 2 trong đó là bản mirror của nhau. Nếu bạn hiểu BST ở chương trước, AVL chỉ thêm 1 bước "xoay lại cho cân" sau khi insert. Đọc chậm, trace từng bước, bạn sẽ thấy nó không khó như tiếng đồn.
+
 ## Đây là gì?
 
 > **Trước khi bắt đầu -- nếu bạn đang thấy lo lắng, đọc đoạn này trước.**

@@ -1,14 +1,10 @@
 # Segment Tree
 
-## Bạn cần gì trước khi đọc chương này?
-
 > 💡 **Đừng lo lắng:** Bạn chỉ cần hai thứ:
 > - **Binary Tree** (chương 3) — cách cây nhị phân chia nhánh trái/phải
 > - **Recursion** (chương 6) — gọi hàm chính nó, chia nhỏ bài toán
 >
 > Nếu đã qua hai chương đó thì yên tâm. Segment Tree chỉ là **mỗi node lưu sẵn kết quả tổng hợp (aggregate) cho một đoạn liên tục** của mảng. Vậy thôi.
-
----
 
 ## Đây là gì?
 

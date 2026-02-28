@@ -1,10 +1,10 @@
 # Thuật toán Kruskal (Cây khung nhỏ nhất)
 
+> 💡 **Đừng lo lắng:** Kruskal có lẽ là thuật toán MST **trực giác nhất** -- sort cạnh từ nhỏ đến lớn, lấy cạnh nếu không tạo cycle, dừng khi đủ V-1 cạnh. Nếu bạn biết sort (mọi dev đều biết) và Union-Find (sẽ học ngay bên dưới), bạn có tất cả. Code ngắn hơn Prim, ý tưởng giải thích trong 1 câu. Trong phỏng vấn, Kruskal thường được preferred hơn Prim vì **dễ implement** và **dễ giải thích** hơn.
+
 ## Đây là gì?
 
 > Kruskal nghe tên lạ nhưng ý tưởng cực kỳ tự nhiên: **sắp xếp tất cả cạnh từ nhỏ đến lớn, rồi lấy từng cạnh nếu không tạo vòng**. Nếu bạn hiểu sorting và Union-Find (chương sau/trước), bạn đã có đủ "nguyên liệu" rồi. Code cũng ngắn đáng ngạc nhiên.
-
-> **Anxiety check:** Kruskal có lẽ là thuật toán MST **trực giác nhất** -- sort cạnh từ nhỏ đến lớn, lấy cạnh nếu không tạo cycle, dừng khi đủ V-1 cạnh. Nếu bạn biết sort (mọi dev đều biết) và Union-Find (sẽ học ngay bên dưới), bạn có tất cả. Code ngắn hơn Prim, ý tưởng giải thích trong 1 câu. Trong phỏng vấn, Kruskal thường được preferred hơn Prim vì **dễ implement** và **dễ giải thích** hơn.
 
 Cùng bài toán nối điện cho làng, nhưng **cách làm khác** so với Prim.
 

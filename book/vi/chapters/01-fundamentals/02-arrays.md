@@ -1,5 +1,7 @@
 # Arrays & Slices
 
+> 💡 **Đừng lo lắng:** Nếu bạn đã từng viết `Vec::new()` hay `vec![1, 2, 3]` trong Rust, bạn đã dùng array mỗi ngày rồi đó. Chương này chỉ giúp bạn hiểu rõ hơn thứ bạn đã quen tay -- không có gì mới đáng sợ cả.
+
 ## Đây là gì?
 
 > Array là cấu trúc dữ liệu **đầu tiên** bạn học trong series này, và tin vui: nó cũng là cấu trúc **dễ hiểu nhất**. Nếu bạn đã từng dùng mảng trong bất kỳ ngôn ngữ nào (Python list, JavaScript array), bạn đã hiểu 70% rồi. Phần còn lại chỉ là Rust thêm vài "quy tắc an toàn" -- nhìn lạ nhưng quen rất nhanh.

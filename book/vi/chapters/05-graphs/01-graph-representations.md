@@ -1,8 +1,8 @@
 # Biểu diễn đồ thị (Graph Representations)
 
-## Đây là gì?
+> 💡 **Đừng lo lắng:** Graph nghe trừu tượng nhưng bạn đã biết graph rồi -- **tree chính là graph** (graph không cycle, có root). Mọi tree mà bạn học suốt series (BST, AVL, Red-Black, B-Tree) đều là graph dạng đặc biệt. Giờ ta chỉ mở rộng: cho phép cycle, cho phép nhiều đường nối, bỏ khái niệm "root". Phần biểu diễn (chương này) đơn giản: chỉ là **`Vec<Vec<...>>`** (adjacency list) hoặc **`Vec<Vec<bool>>`** (matrix). Phần thuật toán (BFS/DFS, chương sau) mới là nơi thú vị thật sự. Graph là chủ đề **nặng nhất** trong phỏng vấn -- LeetCode có 200+ bài graph. Nắm vững biểu diễn = bước đầu tiên để chinh phục tất cả.
 
-> **Đừng lo!** Graph nghe trừu tượng nhưng bạn đã biết graph rồi -- **tree chính là graph** (graph không cycle, có root). Mọi tree mà bạn học suốt series (BST, AVL, Red-Black, B-Tree) đều là graph dạng đặc biệt. Giờ ta chỉ mở rộng: cho phép cycle, cho phép nhiều đường nối, bỏ khái niệm "root". Phần biểu diễn (chương này) đơn giản: chỉ là **`Vec<Vec<...>>`** (adjacency list) hoặc **`Vec<Vec<bool>>`** (matrix). Phần thuật toán (BFS/DFS, chương sau) mới là nơi thú vị thật sự. Graph là chủ đề **nặng nhất** trong phỏng vấn -- LeetCode có 200+ bài graph. Nắm vững biểu diễn = bước đầu tiên để chinh phục tất cả.
+## Đây là gì?
 
 Hãy tưởng tượng bạn đang nhìn **bản đồ đường phố** của thành phố. Mỗi ngã tư là một điểm, mỗi con đường nối hai ngã tư lại với nhau. Đó chính là **graph** (đồ thị).
 

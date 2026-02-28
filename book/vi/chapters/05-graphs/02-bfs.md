@@ -1,8 +1,8 @@
 # Tìm kiếm theo chiều rộng (Breadth-First Search - BFS)
 
-## Đây là gì?
+> 💡 **Đừng lo lắng:** BFS nghe có vẻ abstract nhưng bạn đã **dùng BFS rồi** -- level-order traversal trong chương Binary Tree chính là BFS trên tree! Giờ chỉ mở rộng sang graph (có cycle → cần `visited`). Code BFS ngắn hơn hầu hết data structures trong series -- chỉ ~15 dòng. Và nó dùng Queue mà bạn đã học từ chương 2. BFS + DFS giải được **80% bài graph** trong phỏng vấn. Hiểu 2 thuật toán này = foundation cho Dijkstra, topological sort, connected components.
 
-> **Đừng lo!** BFS nghe có vẻ abstract nhưng bạn đã **dùng BFS rồi** -- level-order traversal trong chương Binary Tree chính là BFS trên tree! Giờ chỉ mở rộng sang graph (có cycle → cần `visited`). Code BFS ngắn hơn hầu hết data structures trong series -- chỉ ~15 dòng. Và nó dùng Queue mà bạn đã học từ chương 2. BFS + DFS giải được **80% bài graph** trong phỏng vấn. Hiểu 2 thuật toán này = foundation cho Dijkstra, topological sort, connected components.
+## Đây là gì?
 
 Hãy tưởng tượng bạn **thả một viên đá xuống mặt hồ**. Sóng lan ra theo từng vòng tròn -- vòng 1 gần nhất, vòng 2 xa hơn, vòng 3 xa hơn nữa... Mỗi vòng sóng lan đều ra mọi hướng trước khi vòng tiếp theo bắt đầu.
 

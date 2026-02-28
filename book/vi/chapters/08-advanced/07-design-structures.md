@@ -1,6 +1,6 @@
 # Design-Oriented Data Structures
 
-> **Anxiety check:** Đây là dạng bài "Design X" trong phỏng vấn. Nghe thì ghê nhưng key chỉ có 1: **kết hợp 2-3 data structures bạn đã học ở các chương trước**. Không có gì mới. Chỉ là ghép lego thôi.
+> 💡 **Đừng lo lắng:** Đây là dạng bài "Design X" trong phỏng vấn. Nghe thì ghê nhưng key chỉ có 1: **kết hợp 2-3 data structures bạn đã học ở các chương trước**. Không có gì mới. Chỉ là ghép lego thôi.
 
 ## Đây là gì?
 

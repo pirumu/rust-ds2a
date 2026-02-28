@@ -1,12 +1,6 @@
 # Prefix Sum
 
-## Đừng lo lắng!
-
-> Nếu bạn hiểu phép cộng và phép trừ, bạn hiểu được prefix sum. Nghiêm túc đấy.
->
-> Không cần toán cao siêu. Không cần thuật toán phức tạp. Chỉ cần: cộng dồn từ trái sang phải, rồi khi cần "tổng đoạn nào", lấy hai số trừ nhau. Vậy thôi.
->
-> Chương này dài vì mình trình bày kỹ, không phải vì nó khó. Đọc từ từ, chạy từng ví dụ trong đầu, bạn sẽ thấy "ủa, có vậy thôi hả?"
+> 💡 **Đừng lo lắng:** Nếu bạn hiểu phép cộng và phép trừ, bạn hiểu được prefix sum. Nghiêm túc đấy. Không cần toán cao siêu. Không cần thuật toán phức tạp. Chỉ cần: cộng dồn từ trái sang phải, rồi khi cần "tổng đoạn nào", lấy hai số trừ nhau. Vậy thôi. Chương này dài vì mình trình bày kỹ, không phải vì nó khó. Đọc từ từ, chạy từng ví dụ trong đầu, bạn sẽ thấy "ủa, có vậy thôi hả?"
 
 ---
 

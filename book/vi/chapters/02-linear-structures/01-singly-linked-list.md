@@ -1,5 +1,7 @@
 # Singly Linked List
 
+> 💡 **Đừng lo lắng:** Linked list trong Rust nổi tiếng khó vì ownership, nhưng bản thân ý tưởng cực kỳ đơn giản -- chỉ là mỗi ô nhớ trỏ tới ô tiếp theo, như đoàn tàu nối toa. Rust compiler sẽ giữ lưng bạn, không cho sai memory. Cứ thử thoải mái.
+
 ## Đây là gì?
 
 > Linked list là nơi nhiều người bắt đầu thấy "DSA khó quá". Nếu bạn cảm thấy vậy -- hoàn toàn bình thường. Khái niệm pointer (con trỏ) lúc đầu trừu tượng, nhưng chỉ cần nhìn hình vẽ và trace từng bước là sẽ hiểu. Và trong Rust, compiler sẽ **không cho bạn sai** -- nó bắt lỗi memory lúc compile, nên bạn cứ thử thoải mái.

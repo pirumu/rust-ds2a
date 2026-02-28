@@ -1,9 +1,8 @@
 # Tìm kiếm theo chiều sâu (Depth-First Search - DFS)
 
+> 💡 **Đừng lo lắng:** Nếu bạn hiểu BFS (chương trước), DFS chỉ khác **1 dòng code**: thay Queue bằng Stack. Thế thôi. Hoặc nếu dùng recursion thì còn ngắn hơn -- recursion BẢN THÂN NÓ chính là stack (call stack). DFS dùng Stack mà bạn đã học từ chương 1. Phần khó hơn BFS là các **ứng dụng**: cycle detection, topological sort, backtracking. Nhưng mỗi ứng dụng đều xây trên cùng 1 DFS core. DFS xuất hiện cực nhiều trong phỏng vấn -- đặc biệt backtracking (permutation, combination, Sudoku, N-queens).
+
 ## Đây là gì?
-
-> **Đừng lo!** Nếu bạn hiểu BFS (chương trước), DFS chỉ khác **1 dòng code**: thay Queue bằng Stack. Thế thôi. Hoặc nếu dùng recursion thì còn ngắn hơn -- recursion BẢN THÂN NÓ chính là stack (call stack). DFS dùng Stack mà bạn đã học từ chương 1. Phần khó hơn BFS là các **ứng dụng**: cycle detection, topological sort, backtracking. Nhưng mỗi ứng dụng đều xây trên cùng 1 DFS core. DFS xuất hiện cực nhiều trong phỏng vấn -- đặc biệt backtracking (permutation, combination, Sudoku, N-queens).
-
 
 Hãy tưởng tượng bạn đang **đi trong mê cung**. Chiến thuật của bạn: cứ đi thẳng vào một ngõ, đi sâu nhất có thể. Nếu gặp ngõ cụt thì quay lại ngã rẽ gần nhất, rồi thử ngõ khác. Lặp lại cho đến khi khám phá hết mê cung.
 

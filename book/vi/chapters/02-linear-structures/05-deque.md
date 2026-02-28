@@ -1,5 +1,7 @@
 # Deque (Double-Ended Queue)
 
+> 💡 **Đừng lo lắng:** Deque nghe tên lạ nhưng nếu bạn đã hiểu Stack và Queue thì Deque chỉ là gộp cả hai lại -- một hàng đợi mà cả hai đầu đều mở. Không có gì phức tạp hơn những gì bạn đã biết.
+
 ## Đây là gì?
 
 > **Deque** nghe tên có vẻ phức tạp, nhưng bạn đừng lo. Nếu bạn đã hiểu Stack (LIFO) và Queue (FIFO) ở hai chương trước, thì Deque chỉ là **gộp cả hai lại** -- một Queue mà mở thêm một đầu. Hiểu Deque là bạn đã hiểu nền tảng của sliding window algorithm -- một pattern xuất hiện cực nhiều trong phỏng vấn và trong hệ thống thực tế (scheduler, buffer management). Bạn hoàn toàn làm được.

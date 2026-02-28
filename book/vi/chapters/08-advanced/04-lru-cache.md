@@ -1,13 +1,6 @@
 # LRU Cache
 
-## Bạn đã biết đủ rồi!
-
-Nếu bạn đang đọc tới đây mà thấy lo, hít thở sâu. LRU Cache nghe "xịn" nhưng thực ra chỉ kết hợp **2 thứ bạn đã học**:
-
-- **HashMap** (Phần 4 — Hash) → tìm nhanh O(1)
-- **Doubly Linked List** (Phần 2 — Linear Structures) → di chuyển/xóa nhanh O(1)
-
-Hai cấu trúc đã biết, chỉ ghép lại với nhau. Không có gì mới. Thật đấy.
+> 💡 **Đừng lo lắng:** LRU Cache nghe "xịn" nhưng chỉ là ghép 2 thứ bạn đã biết: HashMap (Phần 4) để tìm nhanh O(1) + Doubly Linked List (Phần 2) để di chuyển nhanh O(1). Hai cấu trúc cũ, chỉ nối lại với nhau. Không có gì mới.
 
 ## Đây là gì?
 

@@ -1,8 +1,8 @@
 # Union-Find (Tập hợp rời rạc)
 
-## Đây là gì?
+> 💡 **Đừng lo lắng:** Union-Find là data structure có **tỷ lệ power/complexity cao nhất** trong toàn bộ series này. Chỉ 1 mảng `parent[]`, 2 function (`find` mỗi cái 3 dòng, `union` mỗi cái 8 dòng), performance gần O(1). Bạn đã dùng nó trong Kruskal (chương trước) -- giờ hiểu sâu hơn thôi. Không có recursion phức tạp, không cần tree rotation như AVL/Red-Black, không cần hash function. Chỉ cần hiểu **"mỗi node trỏ về cha, root trỏ về chính mình"**. Union-Find xuất hiện **cực nhiều** trong phỏng vấn (Number of Islands variant, Accounts Merge, Redundant Connection) và production (network connectivity, image processing, social networks).
 
-> **Đừng lo!** Union-Find là data structure có **tỷ lệ power/complexity cao nhất** trong toàn bộ series này. Chỉ 1 mảng `parent[]`, 2 function (`find` mỗi cái 3 dòng, `union` mỗi cái 8 dòng), performance gần O(1). Bạn đã dùng nó trong Kruskal (chương trước) -- giờ hiểu sâu hơn thôi. Không có recursion phức tạp, không cần tree rotation như AVL/Red-Black, không cần hash function. Chỉ cần hiểu **"mỗi node trỏ về cha, root trỏ về chính mình"**. Union-Find xuất hiện **cực nhiều** trong phỏng vấn (Number of Islands variant, Accounts Merge, Redundant Connection) và production (network connectivity, image processing, social networks).
+## Đây là gì?
 
 Union-Find trông như một cấu trúc "mới hoàn toàn", nhưng thực ra nó chỉ là **một mảng** -- `parent[i]` cho biết "cha" của phần tử `i`. Hai thao tác `find` và `union` mỗi cái chỉ vài dòng code. Đây là một trong những cấu trúc có **tỷ lệ sức mạnh / độ phức tạp code** cao nhất mà bạn sẽ học.
 

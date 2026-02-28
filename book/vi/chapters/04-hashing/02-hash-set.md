@@ -1,8 +1,8 @@
 # Hash Set
 
-## Đây là gì?
+> 💡 **Đừng lo lắng:** Nếu bạn hiểu HashMap ở chương trước, bạn đã hiểu **100% HashSet** -- vì HashSet = HashMap mà value là rỗng `()`. Chương này giống hệt chương Priority Queue (wrapper quanh Heap): **không có algorithm mới**, chỉ thay đổi **cách nhìn** và **ứng dụng**. Giá trị thực sự nằm ở: set operations (union, intersection, difference) và các pattern phỏng vấn dùng HashSet (dedup, contains, counting unique). Nói cách khác: **HashSet = HashMap mà quên mang value theo** -- vậy thôi!
 
-> **Đừng lo!** Nếu bạn hiểu HashMap ở chương trước, bạn đã hiểu **100% HashSet** -- vì HashSet = HashMap mà value là rỗng `()`. Chương này giống hệt chương Priority Queue (wrapper quanh Heap): **không có algorithm mới**, chỉ thay đổi **cách nhìn** và **ứng dụng**. Giá trị thực sự nằm ở: set operations (union, intersection, difference) và các pattern phỏng vấn dùng HashSet (dedup, contains, counting unique). Nói cách khác: **HashSet = HashMap mà quên mang value theo** -- vậy thôi!
+## Đây là gì?
 
 Hãy tưởng tượng buổi điểm danh đầu giờ. Cô giáo không cần biết "em ngồi bàn mấy" hay "em đến lúc mấy giờ". Cô chỉ cần biết: **"em có mặt hay vắng?"**
 

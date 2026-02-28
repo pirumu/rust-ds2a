@@ -1,6 +1,6 @@
 # Recursion
 
-> **Bạn đang lo lắng?** Đừng. Recursion nghe thì ma thuật, nhưng thực ra chỉ cần hiểu đúng 2 thứ: **base case** (khi nào dừng) và **recursive case** (gọi lại chính mình với bài toán nhỏ hơn). Nếu bạn hiểu được vòng lặp `for`, bạn hiểu được recursion. Chỉ khác ở chỗ: thay vì lặp, hàm tự gọi chính nó. Vậy thôi. Đọc xong chương này bạn sẽ thấy nó không đáng sợ như mọi người hay nói.
+> 💡 **Đừng lo lắng:** Recursion nghe thì ma thuật, nhưng thực ra chỉ cần hiểu đúng 2 thứ: **base case** (khi nào dừng) và **recursive case** (gọi lại chính mình với bài toán nhỏ hơn). Nếu bạn hiểu được vòng lặp `for`, bạn hiểu được recursion -- chỉ khác ở chỗ hàm tự gọi chính nó. Đọc xong chương này bạn sẽ thấy nó không đáng sợ như mọi người hay nói.
 
 ---
 

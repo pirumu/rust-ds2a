@@ -1,14 +1,6 @@
 # Fenwick Tree (Binary Indexed Tree)
 
-## Đừng sợ!
-
-> **"Fenwick Tree nghe fancy nhưng thực ra đơn giản hơn Segment Tree rất nhiều."**
->
-> Toàn bộ cấu trúc chỉ là **1 array** + **2 functions** (`update` và `query`), mỗi function chỉ **3 dòng code** thực sự. Nếu bạn hiểu được `i & (-i)`, bạn hiểu được Fenwick Tree. Thế thôi.
->
-> So sánh nhanh:
-> - Segment Tree: ~50-80 dòng code, tree phức tạp, dễ bug
-> - **Fenwick Tree: ~15 dòng code, 1 mảng, siêu gọn**
+> 💡 **Đừng lo lắng:** Nếu bạn vừa học xong Segment Tree, tin vui: Fenwick Tree đơn giản hơn rất nhiều. Toàn bộ cấu trúc chỉ là 1 mảng + 2 hàm, mỗi hàm chỉ 3 dòng code. Segment Tree cần 50-80 dòng, Fenwick Tree chỉ cần ~15 dòng. Siêu gọn.
 
 ---
 

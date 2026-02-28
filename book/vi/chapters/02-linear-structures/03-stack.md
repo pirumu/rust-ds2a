@@ -1,12 +1,12 @@
 # Stack
 
+> 💡 **Đừng lo lắng:** Stack nghe tên lạ, nhưng thật ra bộ não bạn cũng hoạt động kiểu LIFO mỗi ngày -- bạn nhớ việc vừa làm xong rõ hơn việc từ sáng sớm. Khi đang nấu ăn mà chuông cửa kêu, bạn dừng nấu → mở cửa → quay lại nấu. Đó là stack. Hiểu xong chương này, bạn sẽ thấy một mảnh ghép lớn trong cách máy tính thực sự hoạt động -- từ cách hàm gọi nhau đến cách debugger hoạt động.
+
 ## Đây là gì?
 
 Bạn đã từng xếp đĩa ở nhà hàng chưa? Đĩa sạch được chồng lên trên cùng. Khi cần lấy đĩa, bạn lấy đĩa trên cùng -- không ai rút đĩa ở giữa chồng cả. Đĩa cuối cùng được đặt lên sẽ là đĩa đầu tiên được lấy ra.
 
 Đó chính là **stack** -- cấu trúc dữ liệu hoạt động theo nguyên tắc **LIFO** (Last-In, First-Out: vào sau, ra trước).
-
-> **Đừng lo nếu bạn thấy khó.** Stack nghe tên lạ, nhưng thật ra bộ não bạn cũng hoạt động kiểu LIFO mỗi ngày -- bạn nhớ việc vừa làm xong rõ hơn việc từ sáng sớm. Khi đang nấu ăn mà chuông cửa kêu, bạn dừng nấu → mở cửa → quay lại nấu. Đó là stack. Hiểu xong chương này, bạn sẽ thấy một mảnh ghép lớn trong cách máy tính thực sự hoạt động -- từ cách hàm gọi nhau đến cách debugger hoạt động.
 
 ### Tại sao cần biết stack?
 

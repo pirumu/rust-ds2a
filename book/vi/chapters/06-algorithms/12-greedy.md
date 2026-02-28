@@ -1,8 +1,6 @@
 # Greedy Algorithms
 
-## 😰 Bạn đang lo lắng?
-
-Nếu bạn đang nghĩ "Greedy nghe dễ nhưng sao biết khi nào dùng được?" — yên tâm, đây là câu hỏi **mọi người** đều hỏi. Ngay cả dân competitive programming cũng phải dừng lại suy nghĩ "Greedy có đúng không?" trước khi code. Chương này mình sẽ cho bạn một **checklist cụ thể** để trả lời câu hỏi đó.
+> 💡 **Đừng lo lắng:** Greedy là thuật toán trực giác nhất bạn sẽ gặp -- chỉ là "mỗi bước, chọn cái tốt nhất ngay lúc đó". Bạn đã làm greedy mỗi ngày mà không biết: chọn đường đi ngắn nhất tới trường, chọn món rẻ nhất trong menu. Câu hỏi khó duy nhất là "khi nào greedy cho đáp án đúng?" -- và chương này sẽ cho bạn checklist cụ thể.
 
 Nếu bạn đã đọc xong [Divide and Conquer](11-divide-and-conquer.md), bạn biết D&C **chia bài toán thành các bài con** rồi gộp lại. Greedy khác hoàn toàn — nó **không chia**, mà **chọn**. Mỗi bước, chọn cái tốt nhất ngay lúc đó, rồi đi tiếp. Không quay lại. Không hối hận.
 

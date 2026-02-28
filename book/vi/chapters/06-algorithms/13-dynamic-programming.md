@@ -1,6 +1,6 @@
 # Dynamic Programming
 
-> 💡 **Đừng hoảng!** DP nghe có vẻ đáng sợ, nhưng thực ra nó chỉ là **recursion + ghi nhớ kết quả**. Nếu bạn đã hiểu recursion ở [chương đệ quy](./01-recursion.md), bạn đã đi được 70% đường rồi. Phần còn lại chỉ là học cách **lưu kết quả** để không tính lại. Thở sâu, uống ngụm cà phê, rồi mình bắt đầu nhé.
+> 💡 **Đừng lo lắng:** DP nổi tiếng là "đáng sợ nhất" nhưng thực ra nó chỉ là **recursion + ghi nhớ kết quả**. Nếu bạn đã hiểu recursion ở [chương đệ quy](./01-recursion.md), bạn đã đi được 80% đường rồi. Phần còn lại chỉ là học cách lưu kết quả để không tính lại. Thở sâu, uống ngụm cà phê, rồi mình bắt đầu nhé.
 
 ## Đây là gì?
 
