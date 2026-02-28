@@ -338,7 +338,7 @@ Giải pháp: xây Merkle Tree cho mỗi partition. Hai broker so sánh root has
 
 Tương tự, khi bạn thiết kế hệ thống file sync (như Dropbox), Merkle Tree giúp tìm ra "file nào thay đổi?" mà không cần so sánh từng file.
 
-## Pitfalls — Bẫy hay gặp
+## Những lỗi hay gặp
 
 ### 1. Chọn hash function không phù hợp
 
@@ -445,8 +445,6 @@ Trong production, bạn sẽ dùng crate thay vì tự implement — nhưng hi�
 - Dùng khắp nơi: Git, blockchain, P2P, distributed database.
 - Chọn hash function phù hợp: nhanh (xxHash) cho detect lỗi, an toàn (SHA-256) cho bảo mật.
 - Merkle Patricia Trie (Ethereum) = Trie + Merkle — biến tấu cho bài toán cụ thể.
-
----
 
 ---
 

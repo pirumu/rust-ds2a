@@ -4,7 +4,7 @@
 
 ## Đây là gì?
 
-> String trong Rust nổi tiếng là **phần gây bối rối nhất** cho người mới. `String` vs `&str`, UTF-8, bytes vs chars -- nghe rối lắm. Nhưng thực ra chỉ cần nhớ **2 thứ**: `String` là chuỗi bạn sở hữu (có thể thay đổi), `&str` là chuỗi bạn mượn (chỉ đọc). Còn UTF-8? Đọc xong chương này bạn sẽ thấy nó không đáng sợ như tên gọi.
+Chỉ cần nhớ **2 thứ**: `String` là chuỗi bạn sở hữu (có thể thay đổi), `&str` là chuỗi bạn mượn (chỉ đọc). Còn UTF-8? Nó không đáng sợ như tên gọi.
 
 Bạn nhắn tin cho bạn bè mỗi ngày. Mỗi tin nhắn là một dãy ký tự nối tiếp nhau -- chữ cái, dấu cách, emoji. Đó chính là **string** -- một dãy các ký tự liên tiếp trong bộ nhớ.
 
@@ -97,7 +97,7 @@ Thử với `"Việt"`:
 
 **Quy tắc đơn giản:** Không chắc? Dùng `.chars()`. Biết chắc ASCII? Dùng `.bytes()` để nhanh hơn.
 
-## Những cái bẫy hay gặp với String
+## Những cái bẫy hay gặp
 
 ### ❌ Bẫy 1: Panic khi slice giữa chừng multi-byte char
 
@@ -313,8 +313,6 @@ So sánh iterator xuôi với iterator ngược. Nếu bằng nhau → palindrom
 | Vec + index | Dễ hiểu, dễ debug | Mới học, cần hiểu rõ logic |
 | Two Pointers | Thể hiện hiểu pattern | Phỏng vấn, mở rộng thành bài phức tạp hơn |
 | Idiomatic | Ngắn gọn, ít bug | Production code, code review |
-
-> **Ghi chú Big-O:** Cách Two Pointers chỉ duyệt n/2 lần, nhưng ta vẫn viết O(n) vì Big-O bỏ hằng số. Nhớ lại chương 1!
 
 ### are_anagrams -- Kiểm tra đảo chữ *(Frequency Count)*
 
@@ -692,8 +690,6 @@ fn main() {
     assert_eq!(compress_if_shorter("ab"), "ab");               // giữ gốc
 }
 ```
-
----
 
 ---
 

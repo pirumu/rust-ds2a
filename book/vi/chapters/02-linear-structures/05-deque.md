@@ -4,8 +4,6 @@
 
 ## Đây là gì?
 
-> **Deque** nghe tên có vẻ phức tạp, nhưng bạn đừng lo. Nếu bạn đã hiểu Stack (LIFO) và Queue (FIFO) ở hai chương trước, thì Deque chỉ là **gộp cả hai lại** -- một Queue mà mở thêm một đầu. Hiểu Deque là bạn đã hiểu nền tảng của sliding window algorithm -- một pattern xuất hiện cực nhiều trong phỏng vấn và trong hệ thống thực tế (scheduler, buffer management). Bạn hoàn toàn làm được.
-
 ### Nhìn lại Stack và Queue
 
 Ở hai chương trước, bạn đã quen:
@@ -688,8 +686,6 @@ Bạn đã nắm được các cấu trúc linear trong Part 2: Singly Linked Li
 Nhưng thế giới không chỉ có đường thẳng. Part 3 sẽ giới thiệu **Binary Tree** -- cấu trúc mà mỗi phần tử có thể có 2 "con", tạo thành hình cây. Tree cho phép tìm kiếm, thêm, xóa trong O(log n) -- nhanh hơn nhiều so với O(n) của mảng. Trade-off? Cấu trúc phức tạp hơn, cần tư duy đệ quy.
 
 Đó là bài học quan trọng trong CS: **không có cấu trúc nào hoàn hảo -- chỉ có cấu trúc phù hợp.**
-
----
 
 ---
 

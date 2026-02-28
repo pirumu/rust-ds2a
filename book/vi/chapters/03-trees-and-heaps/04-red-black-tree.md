@@ -905,6 +905,4 @@ Chương tiếp theo sẽ giới thiệu **Binary Heap** -- cấu trúc đơn gi
 
 ---
 
----
-
 [← AVL Tree](./03-avl-tree.md) | [Binary Heap →](./05-binary-heap.md)

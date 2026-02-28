@@ -1,10 +1,8 @@
 # Priority Queue
 
-> 💡 **Đừng lo lắng:** Đây có thể là chương dễ nhất series. Nếu bạn hiểu Binary Heap ở chương trước, bạn đã hiểu 100% Priority Queue -- vì nó chỉ là heap đổi tên `push`/`pop` thành `enqueue`/`dequeue`. Không algorithm mới, không cấu trúc mới. Relax.
+> 💡 **Đừng lo lắng:** Đây có thể là chương dễ nhất series. Nếu bạn hiểu Binary Heap ở chương trước, bạn đã hiểu 100% Priority Queue -- vì nó chỉ là heap đổi tên `push`/`pop` thành `enqueue`/`dequeue`. Không algorithm mới, không cấu trúc mới. Giá trị thực sự của chương này là **ứng dụng**: bạn sẽ thấy heap được dùng ở đâu, từ Dijkstra tìm đường ngắn nhất đến lập lịch hệ điều hành. Relax.
 
 ## Đây là gì?
-
-> **Chương này là chương DỄ NHẤT toàn series.** Nếu bạn đã hiểu Binary Heap ở chương trước, bạn đã hiểu 100% Priority Queue -- vì nó chỉ đổi tên: `push` → `enqueue`, `pop` → `dequeue`. Không có algorithm mới, không có cấu trúc mới. Giá trị thực sự của chương này là **ứng dụng**: bạn sẽ thấy Heap được dùng ở đâu trong thực tế, từ tìm đường ngắn nhất (Dijkstra) đến lập lịch hệ điều hành. Hít thở sâu, relax, và enjoy.
 
 Bạn đến **phòng cấp cứu bệnh viện**. Ở đây không phải ai đến trước được khám trước. Người bị đau tim được khám trước người bị trầy xước, dù người bị trầy xước đến trước 2 tiếng. Ai **nặng nhất** (priority cao nhất) được phục vụ trước.
 
@@ -20,7 +18,7 @@ Bên trong, priority queue dùng **binary heap** (chương trước) làm "độ
 
 ## Priority Queue vs Queue vs Stack -- ba anh em
 
-Đặt Priority Queue trong bức tranh tổng series. Bạn đã học Stack (chương 3), Queue (chương 4), giờ là anh em cuối cùng:
+Đặt Priority Queue trong bức tranh tổng series. Bạn đã học Stack (Phần 2, mục 3), Queue (Phần 2, mục 4), giờ là anh em cuối cùng:
 
 | | Stack | Queue | Priority Queue |
 |---|-------|-------|---------------|
@@ -30,7 +28,7 @@ Bên trong, priority queue dùng **binary heap** (chương trước) làm "độ
 | `pop`/`dequeue` | O(1) | O(1) | O(log n) |
 | `peek` | O(1) | O(1) | O(1) |
 | Engine bên trong | Vec | VecDeque | **BinaryHeap** |
-| Chương | 3 | 4 | 6 (này) |
+| Xem lại | [Stack](../02-linear-structures/03-stack.md) | [Queue](../02-linear-structures/04-queue.md) | Chương này |
 
 **"Ba anh em: Stack biết ai *mới nhất*, Queue biết ai *cũ nhất*, Priority Queue biết ai *quan trọng nhất*."**
 
@@ -598,8 +596,6 @@ Dùng min-PQ, y hệt trace ở phần Dijkstra trên. Sau khi chạy xong, answ
 Priority Queue kết thúc hành trình "lấy max/min hiệu quả". Bạn đã đi từ cây đơn giản nhất (Binary Tree) qua search trees (BST → AVL → Red-Black), đến heap-based structures (Binary Heap → Priority Queue).
 
 Chương tiếp theo chuyển sang **B-Tree** -- "ông trùm" cuối cùng của gia đình tree. B-Tree không giới hạn 2 con per node mà cho phép **hàng trăm key per node**. Đây là cấu trúc đằng sau database index (MySQL, PostgreSQL) và `BTreeMap` trong Rust std. Nếu bạn từng thắc mắc "tại sao database nhanh thế?" -- câu trả lời nằm ở chương tiếp.
-
----
 
 ---
 

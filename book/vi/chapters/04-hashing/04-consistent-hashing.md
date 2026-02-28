@@ -644,6 +644,4 @@ Consistent Hashing giải quyết bài toán phân phối data trên nhiều ser
 
 ---
 
----
-
 [← Bloom Filter](./03-bloom-filter.md) | [Biểu diễn đồ thị →](../05-graphs/01-graph-representations.md)

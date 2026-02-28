@@ -94,7 +94,7 @@ P[4] - P[1] = arr[1] + arr[2] + arr[3] = 4 + 1 + 3 = 8
 
 ---
 
-## 1D Prefix Sum -- Code Rust
+## 1D Prefix Sum — Code Rust
 
 ```rust
 pub fn prefix_sum(arr: &[i64]) -> Vec<i64> {
@@ -125,7 +125,7 @@ let total = range_sum(&p, 1, 3);   // 8
 
 ---
 
-## Pitfalls -- Những lỗi hay mắc phải
+## Pitfalls — Những cái bẫy hay gặp
 
 ### Pitfall 1: Off-by-one trong công thức
 
@@ -684,7 +684,7 @@ Xem file `src/prefix_sum.rs` để đọc implementation đầy đủ với test
 
 ---
 
-## Practice -- Luyện tập
+## Practice — Luyện tập
 
 ### LeetCode #303: Range Sum Query - Immutable
 
@@ -748,7 +748,7 @@ Bài này hay ở chỗ: nó chứng minh **prefix idea** không chỉ giới h�
 
 ---
 
-## Preview: Sliding Window
+## Tiếp theo
 
 Prefix Sum giúp bạn tính tổng đoạn O(1), nhưng cần O(n) space cho mảng prefix.
 

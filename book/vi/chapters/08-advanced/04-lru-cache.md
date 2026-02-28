@@ -199,7 +199,7 @@ fn attach_after_head(&mut self, idx: usize) {
 
 Gọn, an toàn, không cần `unsafe`.
 
-## Pitfalls — Những lỗi hay gặp
+## Những lỗi hay gặp
 
 ### Pitfall 1: Capacity = 0
 
@@ -303,7 +303,7 @@ Chrome, Firefox cache file CSS/JS/ảnh. Bạn có thể thấy `304 Not Modifie
 ## Chạy thử trong Rust
 
 ```rust
-use rust_dsa::lru_cache::LRUCache;
+use rust_ds2a::lru_cache::LRUCache;
 
 let mut cache = LRUCache::new(2);
 
@@ -352,8 +352,6 @@ LRU Cache là bài toán kinh điển trong interview (LeetCode #146) và cực 
 - **Vec-based DLL** → giải pháp Rust-friendly, tránh ownership issues.
 
 Khi ai hỏi "tại sao cần doubly linked list?", đây là câu trả lời hoàn hảo: vì LRU Cache cần xóa node ở giữa danh sách trong O(1), mà chỉ doubly linked list mới làm được.
-
----
 
 ---
 

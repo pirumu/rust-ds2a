@@ -4,8 +4,6 @@
 
 ## Đây là gì?
 
-> Kruskal nghe tên lạ nhưng ý tưởng cực kỳ tự nhiên: **sắp xếp tất cả cạnh từ nhỏ đến lớn, rồi lấy từng cạnh nếu không tạo vòng**. Nếu bạn hiểu sorting và Union-Find (chương sau/trước), bạn đã có đủ "nguyên liệu" rồi. Code cũng ngắn đáng ngạc nhiên.
-
 Cùng bài toán nối điện cho làng, nhưng **cách làm khác** so với Prim.
 
 **Prim** bắt đầu từ 1 nhà, mở rộng dần (giống vết dầu loang).
@@ -540,8 +538,6 @@ N computers, connections list. Tìm min moves to connect all computers.
 ## Chương tiếp theo
 
 Kruskal dùng Union-Find như black box -- "cùng nhóm chưa?" + "gộp 2 nhóm". Chương tiếp theo sẽ deep dive vào **Topological Sort** -- sắp xếp thứ tự trong directed graph. Còn **Union-Find** (Disjoint Set Union) sẽ được explore kỹ ở chương riêng -- data structure cho phép find + union trong gần O(1). Path compression + union by rank là 2 kỹ thuật tạo nên performance gần thần kỳ này. Union-Find là tool powerful cho mọi bài toán connectivity -- từ MST đến cycle detection đến network components.
-
----
 
 ---
 

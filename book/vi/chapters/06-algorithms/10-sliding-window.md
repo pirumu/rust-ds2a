@@ -706,6 +706,4 @@ Chương tiếp theo là [**Divide and Conquer**](11-divide-and-conquer.md) -- c
 
 ---
 
----
-
 [← Prefix Sum](./09-prefix-sum.md) | [Divide & Conquer →](./11-divide-and-conquer.md)

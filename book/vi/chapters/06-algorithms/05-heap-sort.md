@@ -480,6 +480,4 @@ Nhưng nếu ta biết thêm thông tin về data (ví dụ: toàn bộ là số
 
 ---
 
----
-
 [← Quick Sort](./04-quick-sort.md) | [Radix Sort →](./06-radix-sort.md)

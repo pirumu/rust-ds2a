@@ -582,6 +582,4 @@ Dijkstra giải quyết shortest path cho **non-negative weights**. Nhưng đờ
 
 ---
 
----
-
 [← DFS](./03-dfs.md) | [Bellman-Ford →](./05-bellman-ford.md)

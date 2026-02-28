@@ -567,6 +567,4 @@ Bellman-Ford hoàn thiện bộ **single-source** shortest path: BFS (unweighted
 
 ---
 
----
-
 [← Dijkstra](./04-dijkstra.md) | [Floyd-Warshall →](./06-floyd-warshall.md)

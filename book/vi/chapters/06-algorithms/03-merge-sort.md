@@ -442,7 +442,7 @@ Merge Sort sinh ra cho việc này:
 
 ---
 
-## Pitfalls: Lỗi thường gặp
+## Pitfalls — Những cái bẫy hay gặp
 
 ### 1. Quên allocate temp array
 
@@ -577,7 +577,7 @@ assert_eq!(words, vec!["alpha", "bravo", "charlie", "delta"]);
 
 ---
 
-## Practice
+## Practice — Luyện tập
 
 | Bài | Tên | Gợi ý |
 |-----|-----|-------|
@@ -589,7 +589,7 @@ assert_eq!(words, vec!["alpha", "bravo", "charlie", "delta"]);
 
 ---
 
-## Nhìn về phía trước: Quick Sort
+## Tiếp theo
 
 Merge Sort chia mảng rất đơn giản (cắt đôi ở giữa) nhưng gộp thì tốn công (cần mảng tạm). [Quick Sort](./04-quick-sort.md) làm ngược lại — **chia thì tốn công** (partition, phân hoạch phần tử quanh pivot) nhưng **không cần gộp** gì cả, vì sau khi partition xong thì mọi thứ đã đúng vị trí.
 

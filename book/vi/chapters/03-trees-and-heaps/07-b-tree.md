@@ -900,6 +900,4 @@ B-Tree tối ưu cho disk I/O, mỗi node chứa nhiều key để cây "nông" 
 
 ---
 
----
-
 [← Priority Queue](./06-priority-queue.md) | [Trie →](./08-trie.md)

@@ -215,7 +215,7 @@ Sau put(C, 30):
   freq=1:  [B] ←→ [C]
 ```
 
-## Pitfalls
+## Những lỗi hay gặp
 
 ### Pitfall 1: Quên tăng frequency khi `put` update
 
@@ -249,7 +249,7 @@ Sau put(C, 30):
 
 💡 **Tại sao**: Node mới có freq = 1. Đó chắc chắn là frequency thấp nhất (không ai có freq = 0). Nếu không set `min_freq = 1`, lần evict tiếp sẽ tìm sai bucket.
 
-## Code Rust
+## Code trong Rust
 
 ```rust
 use std::collections::HashMap;
@@ -466,7 +466,7 @@ Bài #460 là bài Hard nổi tiếng. Nếu bạn hiểu được thiết kế 
 
 Trong production, hầu như không ai tự viết LFU cache. Dùng `moka` hoặc `quick_cache` — chúng thread-safe, đã tối ưu, và có frequency aging built-in. Tự viết chỉ để học và phỏng vấn.
 
-## Chương tiếp theo
+## Tiếp theo
 
 Tiếp theo ta sẽ học **Merkle Tree** — cấu trúc dữ liệu đứng sau Git, blockchain, và hệ thống phân tán. Thay vì cache, Merkle Tree giải quyết một vấn đề khác: **làm sao biết dữ liệu có bị thay đổi không?**
 

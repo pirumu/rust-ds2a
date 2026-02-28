@@ -2,8 +2,6 @@
 
 > 💡 **Đừng lo lắng:** Nếu bạn vừa học xong Segment Tree, tin vui: Fenwick Tree đơn giản hơn rất nhiều. Toàn bộ cấu trúc chỉ là 1 mảng + 2 hàm, mỗi hàm chỉ 3 dòng code. Segment Tree cần 50-80 dòng, Fenwick Tree chỉ cần ~15 dòng. Siêu gọn.
 
----
-
 ## Đây là gì?
 
 Bạn đã học **Prefix Sum** ở Phần 6 và **Bit Manipulation** ở Phần 7. Fenwick Tree kết hợp cả hai — như prefix sum nhưng **cập nhật được trong O(log n)**.
@@ -252,7 +250,7 @@ pub fn range_sum(&self, l: usize, r: usize) -> i64 {
 
 ---
 
-## Những lỗi hay gặp (Pitfalls)
+## Những lỗi hay gặp
 
 ### 1. Dùng 0-indexed thay vì 1-indexed
 
@@ -431,17 +429,6 @@ impl FenwickTree2D {
 
 ---
 
-## Khi nào dùng Fenwick Tree?
-
-- Bài toán prefix sum mà **mảng bị thay đổi** liên tục
-- Đếm số phần tử nhỏ hơn x (dùng Fenwick Tree trên giá trị)
-- Đếm **inversions** trong mảng
-- Competitive programming — Fenwick Tree code rất ngắn, dễ nhớ
-
-> **Mẹo:** Trong competitive programming, Fenwick Tree là vũ khí yêu thích vì code ngắn gọn (khoảng 15 dòng) mà hiệu quả cao. Nếu bài chỉ cần tổng + cập nhật, hãy nghĩ đến Fenwick Tree trước Segment Tree.
-
----
-
 ## Practice — Luyện tập
 
 ### LeetCode 307: Range Sum Query - Mutable
@@ -535,10 +522,6 @@ Tuy nhiên, Fenwick Tree code quá ngắn (15-20 dòng) nên hầu hết mọi n
 │  Space: O(n)                                     │
 └──────────────────────────────────────────────────┘
 ```
-
----
-
-## Tiếp theo
 
 ---
 

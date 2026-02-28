@@ -544,6 +544,4 @@ Hãy nhớ: hầu hết bài interval chỉ là **sorting + greedy** — không 
 
 ---
 
----
-
 [← Monotonic Stack](./02-monotonic-stack.md) | [Matrix Traversal →](./04-matrix-traversal.md)

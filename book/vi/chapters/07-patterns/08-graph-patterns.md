@@ -513,7 +513,7 @@ SCC 2: {3, 4}     — vòng 3→4→3
 
 ---
 
-## Pitfalls hay gặp — tổng hợp từ Phần 5
+## Pitfalls — Những lỗi hay gặp
 
 Mấy lỗi này mình thấy lặp đi lặp lại, kể cả người đã học xong Phần 5:
 

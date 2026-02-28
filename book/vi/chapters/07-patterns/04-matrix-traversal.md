@@ -319,7 +319,7 @@ Tưởng tượng bạn đang ở góc trên-trái của một mê cung lưới.
 
 ---
 
-## Pitfalls — Những lỗi hay gặp
+## Pitfalls — Những cái bẫy hay gặp
 
 ### 1. Quên kiểm tra out-of-bounds
 

@@ -497,6 +497,4 @@ Prim giải MST bằng cách **grow tree từ 1 node**. Kruskal giải cùng bà
 
 ---
 
----
-
 [← Floyd-Warshall](./06-floyd-warshall.md) | [Kruskal →](./08-kruskal.md)

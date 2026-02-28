@@ -4,8 +4,6 @@
 
 ## Đây là gì?
 
-> **Nếu bạn cảm thấy choáng ngợp khi đọc chương này -- đó là hoàn toàn bình thường.** Binary Tree là bước nhảy lớn nhất trong series cho đến giờ. Ba chương trước (Stack, Queue, Deque) đều là cấu trúc tuyến tính -- mọi thứ xếp thành hàng, dễ hình dung. Chương này khác: dữ liệu **phân nhánh**. Nhưng thực ra bạn đã thấy tree mỗi ngày mà không nhận ra: thư mục trong máy tính, mục lục sách, sơ đồ tổ chức công ty, hay cái DOM tree khi bạn inspect element trên trình duyệt. Hiểu Binary Tree là nền tảng để sau này hiểu BST (tìm kiếm nhanh), Heap (priority queue), Trie (autocomplete), và cả cách database index hoạt động (B-Tree). Bạn đang xây nền móng cho rất nhiều thứ hay ho phía trước.
-
 Bạn biết **cây gia phả** (family tree) không? Ông bà ở trên cùng, bố mẹ ở giữa, con cháu ở dưới. Mỗi người có thể có con hoặc không. **Binary tree** (cây nhị phân) cũng giống vậy -- nhưng có một quy tắc: mỗi "người" (node) chỉ được có **tối đa 2 con**, gọi là con trái (left child) và con phải (right child).
 
 Tại sao lại cần cấu trúc này? Vì rất nhiều thứ trong máy tính có dạng phân nhánh:
@@ -705,8 +703,6 @@ fn deepest(tree: &BinaryTree<i32>) -> Option<i32> {
 ## Chương tiếp theo -- Binary Search Tree (BST)
 
 Binary Tree chương này chỉ **chứa** dữ liệu -- không có quy tắc sắp xếp. Muốn tìm 1 giá trị? Phải duyệt hết O(n). Chương tiếp theo sẽ thêm **1 quy tắc duy nhất**: mọi giá trị bên trái < gốc < mọi giá trị bên phải. Quy tắc đơn giản này biến tìm kiếm từ O(n) thành O(log n) -- nhanh hơn **hàng nghìn lần** khi cây có 1 triệu node. Đó là sức mạnh của Binary Search Tree (BST).
-
----
 
 ---
 

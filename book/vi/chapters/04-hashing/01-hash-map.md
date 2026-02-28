@@ -735,6 +735,4 @@ Xa hơn nữa, khi bạn qua phần Graph, bạn sẽ thấy HashMap xuất hi�
 
 ---
 
----
-
 [← Trie](../03-trees-and-heaps/08-trie.md) | [Hash Set →](./02-hash-set.md)

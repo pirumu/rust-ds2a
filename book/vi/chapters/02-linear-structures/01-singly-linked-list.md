@@ -4,8 +4,6 @@
 
 ## Đây là gì?
 
-> Linked list là nơi nhiều người bắt đầu thấy "DSA khó quá". Nếu bạn cảm thấy vậy -- hoàn toàn bình thường. Khái niệm pointer (con trỏ) lúc đầu trừu tượng, nhưng chỉ cần nhìn hình vẽ và trace từng bước là sẽ hiểu. Và trong Rust, compiler sẽ **không cho bạn sai** -- nó bắt lỗi memory lúc compile, nên bạn cứ thử thoải mái.
-
 Hình dung một **đoàn tàu hỏa**. Mỗi toa tàu chứa hàng hóa bên trong, và có một móc nối duy nhất -- nối tới toa **phía sau**. Toa cuối cùng không nối với gì cả. Và quan trọng: mỗi toa **chỉ biết toa tiếp theo**, không biết toa trước mình là toa nào.
 
 ```
@@ -102,83 +100,6 @@ struct Node {
 ```
 
 Còn **`Option`** thì sao? `Option<Box<Node>>` nghĩa là: "có thể có node tiếp theo (`Some`), hoặc không có gì (`None`)". Đây là cách Rust thay thế cho null pointer. An toàn hơn nhiều.
-
-## Những cái bẫy hay gặp
-
-Trước khi đi vào code, hãy biết trước mấy "hố" mà hầu hết người mới đều rơi vào:
-
-### ❌ Bẫy 1: Dùng `push_back` trong vòng lặp
-
-```rust
-// ❌ Tạo list bằng push_back -- O(n) mỗi lần → tổng O(n²)!
-let mut list = SinglyLinkedList::new();
-for i in 0..10000 {
-    list.push_back(i);  // Mỗi lần phải đi bộ từ đầu tới cuối
-}
-```
-
-```rust
-// ✅ push_front rồi reverse -- O(1) mỗi lần + O(n) reverse = O(n) tổng
-let mut list = SinglyLinkedList::new();
-for i in (0..10000).rev() {
-    list.push_front(i);
-}
-// Hoặc: push_front tất cả rồi reverse()
-```
-
-> 💡 Mỗi `push_back` phải đi bộ từ đầu tới cuối. 10,000 node → đi bộ trung bình 5,000 bước mỗi lần. Tổng cộng ~50 triệu bước. `push_front` thì luôn chỉ 1 bước.
-
-### ❌ Bẫy 2: Không hiểu tại sao không thể có 2 `&mut` cùng lúc
-
-```rust
-// ❌ Rust sẽ KHÔNG cho phép điều này compile
-fn swap_adjacent(list: &mut SinglyLinkedList<i32>) {
-    let a = &mut list[0];  // mutable borrow thứ 1
-    let b = &mut list[1];  // mutable borrow thứ 2 -- LỖI!
-    std::mem::swap(a, b);
-}
-```
-
-```rust
-// ✅ Dùng .take() để tạm "rút" node ra, xử lý xong rồi gắn lại
-// Rust đảm bảo tại mỗi thời điểm chỉ có 1 người sở hữu/chỉnh sửa
-```
-
-> 💡 Đây là safety guarantee của Rust: nếu 2 nơi cùng sửa 1 dữ liệu, sẽ có data race. Rust bắt lỗi này lúc compile. Với linked list, pattern phổ biến là dùng `.take()` để tạm lấy node ra khỏi list, xử lý xong rồi gắn lại.
-
-### ❌ Bẫy 3: Dùng linked list khi không cần
-
-```rust
-// ❌ "Tôi cần danh sách, dùng linked list đi!"
-let mut tasks = SinglyLinkedList::new();
-tasks.push_back("task 1");
-tasks.push_back("task 2");
-// ... rồi chỉ duyệt qua, không bao giờ thêm/xóa ở đầu
-```
-
-```rust
-// ✅ Vec đơn giản hơn, nhanh hơn trong hầu hết trường hợp
-let mut tasks = vec!["task 1", "task 2"];
-```
-
-> 💡 Trong thực tế, `Vec` thường **nhanh hơn** linked list ngay cả khi Big-O nói linked list tốt hơn. Lý do: **cache locality** -- các phần tử Vec nằm liền nhau trong bộ nhớ, CPU đọc nhanh hơn nhiều so với nhảy lung tung trên heap. Chỉ dùng linked list khi thêm/xóa ở đầu là thao tác chính.
-
-### ❌ Bẫy 4: Nhầm ownership khi move node
-
-```rust
-// ❌ Không thể "copy" node như Java/Python
-let node = Box::new(SinglyNode { val: 42, next: None });
-let copy = node;  // Đây KHÔNG phải copy -- đây là MOVE!
-// println!("{:?}", node);  // LỖI! node đã bị move rồi
-```
-
-```rust
-// ✅ Trong Rust, mỗi node chỉ có 1 chủ. Muốn chuyển thì phải "move".
-// Sau khi move, biến cũ không dùng được nữa. Đây là điểm khác biệt lớn
-// nhất so với Java/Python/C++ (nơi bạn thoải mái copy reference).
-```
-
-> 💡 Trong Java/Python, nhiều biến có thể trỏ tới cùng 1 object. Trong Rust, mỗi `Box<Node>` chỉ có đúng 1 chủ. Muốn chia sẻ thì phải dùng `Rc` (reference counting) -- như ở doubly linked list.
 
 ## Hoạt động như thế nào?
 
@@ -903,7 +824,88 @@ let merged = merge_sorted_lists(odds, evens);
 - Khi cần thêm/xóa ở cuối nhanh -- dùng doubly linked list hoặc Vec.
 - Khi performance quan trọng hơn Big-O lý thuyết -- Vec thường thắng nhờ cache locality.
 
+## Những cái bẫy hay gặp
+
 ---
+
+❌ **Dùng `push_back` trong vòng lặp**
+
+```rust
+// ❌ Tạo list bằng push_back -- O(n) mỗi lần → tổng O(n²)!
+let mut list = SinglyLinkedList::new();
+for i in 0..10000 {
+    list.push_back(i);  // Mỗi lần phải đi bộ từ đầu tới cuối
+}
+```
+
+```rust
+// ✅ push_front rồi reverse -- O(1) mỗi lần + O(n) reverse = O(n) tổng
+let mut list = SinglyLinkedList::new();
+for i in (0..10000).rev() {
+    list.push_front(i);
+}
+// Hoặc: push_front tất cả rồi reverse()
+```
+
+💡 **Tại sao:** Mỗi `push_back` phải đi bộ từ đầu tới cuối. 10,000 node → đi bộ trung bình 5,000 bước mỗi lần. Tổng cộng ~50 triệu bước. `push_front` thì luôn chỉ 1 bước.
+
+---
+
+❌ **Không hiểu tại sao không thể có 2 `&mut` cùng lúc**
+
+```rust
+// ❌ Rust sẽ KHÔNG cho phép điều này compile
+fn swap_adjacent(list: &mut SinglyLinkedList<i32>) {
+    let a = &mut list[0];  // mutable borrow thứ 1
+    let b = &mut list[1];  // mutable borrow thứ 2 -- LỖI!
+    std::mem::swap(a, b);
+}
+```
+
+```rust
+// ✅ Dùng .take() để tạm "rút" node ra, xử lý xong rồi gắn lại
+// Rust đảm bảo tại mỗi thời điểm chỉ có 1 người sở hữu/chỉnh sửa
+```
+
+💡 **Tại sao:** Rust safety guarantee: nếu 2 nơi cùng sửa 1 dữ liệu, sẽ có data race. Rust bắt lỗi này lúc compile. Với linked list, pattern phổ biến là dùng `.take()` để tạm lấy node ra khỏi list, xử lý xong rồi gắn lại.
+
+---
+
+❌ **Dùng linked list khi không cần**
+
+```rust
+// ❌ "Tôi cần danh sách, dùng linked list đi!"
+let mut tasks = SinglyLinkedList::new();
+tasks.push_back("task 1");
+tasks.push_back("task 2");
+// ... rồi chỉ duyệt qua, không bao giờ thêm/xóa ở đầu
+```
+
+```rust
+// ✅ Vec đơn giản hơn, nhanh hơn trong hầu hết trường hợp
+let mut tasks = vec!["task 1", "task 2"];
+```
+
+💡 **Tại sao:** Trong thực tế, `Vec` thường **nhanh hơn** linked list ngay cả khi Big-O nói linked list tốt hơn. Lý do: **cache locality** -- các phần tử Vec nằm liền nhau trong bộ nhớ, CPU đọc nhanh hơn nhiều so với nhảy lung tung trên heap. Chỉ dùng linked list khi thêm/xóa ở đầu là thao tác chính.
+
+---
+
+❌ **Nhầm ownership khi move node**
+
+```rust
+// ❌ Không thể "copy" node như Java/Python
+let node = Box::new(SinglyNode { val: 42, next: None });
+let copy = node;  // Đây KHÔNG phải copy -- đây là MOVE!
+// println!("{:?}", node);  // LỖI! node đã bị move rồi
+```
+
+```rust
+// ✅ Trong Rust, mỗi node chỉ có 1 chủ. Muốn chuyển thì phải "move".
+// Sau khi move, biến cũ không dùng được nữa. Đây là điểm khác biệt lớn
+// nhất so với Java/Python/C++ (nơi bạn thoải mái copy reference).
+```
+
+💡 **Tại sao:** Trong Java/Python, nhiều biến có thể trỏ tới cùng 1 object. Trong Rust, mỗi `Box<Node>` chỉ có đúng 1 chủ. Muốn chia sẻ thì phải dùng `Rc` (reference counting) -- như ở doubly linked list.
 
 ---
 

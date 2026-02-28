@@ -547,7 +547,7 @@ Bạn đọc đề, thấy keyword nào thì dùng pattern tương ứng:
 
 ---
 
-## Luyện tập
+## Practice — Luyện tập
 
 Bạn đã hiểu 5 patterns. Giờ thực hành để nó ngấm vào máu:
 

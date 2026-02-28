@@ -4,7 +4,7 @@
 
 ## Đây là gì?
 
-> **Nếu bạn đang thấy hoang mang** -- hoàn toàn bình thường. "Queue" nghe lạ, nhưng thực ra bạn đã dùng nó mỗi ngày mà không biết. Mỗi lần bạn gửi tin nhắn trên Zalo, đặt đồ ăn trên ShopeeFood, hay đợi Grab đến đón -- đằng sau tất cả đều có queue đang chạy. Hiểu queue là bước đệm để sau này bạn hiểu cách hệ thống lớn (server, message broker, OS scheduler) vận hành. Chương này nhẹ nhàng thôi, đi từng bước một.
+Bạn đã dùng queue mỗi ngày mà không biết. Mỗi lần bạn gửi tin nhắn trên Zalo, đặt đồ ăn trên ShopeeFood, hay đợi Grab đến đón -- đằng sau tất cả đều có queue đang chạy. Hiểu queue là bước đệm để sau này bạn hiểu cách hệ thống lớn (server, message broker, OS scheduler) vận hành.
 
 Bạn xếp hàng mua trà sữa. Ai đến trước được phục vụ trước. Ai đến sau đứng cuối hàng. Không ai được chen ngang (trừ khi muốn bị nhìn dữ).
 
@@ -507,8 +507,6 @@ Queue chỉ cho enqueue ở cuối và dequeue ở đầu. Nhưng nếu bạn c�
 **Deque** (Double-Ended Queue) là sự kết hợp của cả Stack và Queue -- push/pop được cả đầu lẫn cuối. Thực ra `VecDeque` mà ta đang dùng bên trong đã là Deque rồi -- ta chỉ đang *giới hạn* nó lại thành Queue thôi.
 
 Chương sau sẽ mở khóa toàn bộ sức mạnh của Deque.
-
----
 
 ---
 

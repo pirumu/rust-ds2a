@@ -659,6 +659,4 @@ Chương tiếp theo sẽ giới thiệu **BFS** (tìm kiếm theo chiều rộn
 
 ---
 
----
-
 [← Consistent Hashing](../04-hashing/04-consistent-hashing.md) | [BFS →](./02-bfs.md)

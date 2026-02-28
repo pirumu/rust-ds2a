@@ -614,6 +614,4 @@ Rust + recursion   = cẩn thận stack 8MB, không có TCO
 
 ---
 
----
-
 [← Union-Find](../05-graphs/10-union-find.md) | [Basic Sorting →](./02-basic-sorting.md)

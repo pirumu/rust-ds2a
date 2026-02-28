@@ -4,7 +4,7 @@
 
 ## Đây là gì?
 
-> **Nếu bạn vừa sống sót qua AVL và Red-Black -- chúc mừng.** Bạn đã vượt qua 2 chương khó nhất của series. Heap **đơn giản hơn rất nhiều**: không rotation, không balance factor, không color rules. Chỉ 1 quy tắc duy nhất: cha >= con (max-heap) hoặc cha <= con (min-heap). Và phần hay nhất: Heap không dùng `Box<Node>` hay pointer -- nó lưu trong **Vec**, đúng cái `Vec` quen thuộc từ chương 1. Nếu bạn nhớ "flat representation" ở chương Binary Tree (lưu cây trong mảng), Heap chính là ứng dụng thực tế hoàn hảo của nó. Coi chương này như **nhịp nghỉ** -- vẫn học cái mới, nhưng nhẹ nhàng hơn nhiều.
+Heap không dùng `Box<Node>` hay pointer -- nó lưu trong **Vec**, đúng cái `Vec` quen thuộc từ chương 1. Nếu bạn nhớ "flat representation" ở chương Binary Tree (lưu cây trong mảng), Heap chính là ứng dụng thực tế hoàn hảo của nó.
 
 Hình dung **bảng xếp hạng** (leaderboard) trong game. Người có điểm cao nhất luôn đứng đầu. Khi có người mới vào, họ được xếp vào đúng vị trí. Khi người đứng đầu bị loại, người có điểm cao tiếp theo tự động lên thay.
 
@@ -793,15 +793,9 @@ Total = 8 slots
 
 Ứng dụng thực tế: merge messages từ nhiều Kafka partition theo timestamp → min-heap chứa head message mỗi partition, pop message cũ nhất. Buffer management: heap track buffer nào "gần hết hạn" cần flush trước.
 
-## Tiếp theo: B-Tree
+## Tiếp theo: Priority Queue
 
-Heap lưu trong Vec → cache-friendly, nhưng chỉ biết max/min. BST family biết sorted order nhưng pointer-based → cache-unfriendly.
-
-Có cách nào **vừa sorted vừa cache-friendly** không?
-
-Chương tiếp theo giới thiệu **B-Tree** -- mỗi node chứa **nhiều key liên tiếp** (không phải chỉ 1 như binary tree). Nhờ vậy, B-Tree tận dụng cache line và disk block tối ưu. Đây là cấu trúc đằng sau database index, filesystem, và `BTreeMap` trong Rust std.
-
----
+Heap là "động cơ" -- mạnh nhưng API chưa nói rõ mục đích. Chương tiếp theo bọc heap lại thành **Priority Queue** với interface rõ ràng hơn: `enqueue` / `dequeue` thay vì `push` / `pop`. Quan trọng hơn, bạn sẽ thấy heap được dùng trong những bài toán thực tế lớn: Dijkstra tìm đường ngắn nhất, Huffman coding nén dữ liệu, event-driven systems -- tất cả đều chạy trên cùng cái heap bạn vừa học.
 
 ---
 

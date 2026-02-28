@@ -4,8 +4,6 @@
 
 ## Đây là gì?
 
-> Chương này có `Rc<RefCell<>>` -- combo mà hầu hết người học Rust đều thấy đáng sợ lần đầu. Nhưng thực ra nó chỉ là **2 lớp wrapper**: `Rc` = "nhiều người cùng sở hữu", `RefCell` = "mượn lúc runtime thay vì compile time". Nếu bạn hiểu singly linked list ở chương trước, logic ở đây **y hệt** -- chỉ thêm 1 con trỏ `prev` nữa thôi. Đọc chậm, trace từng dòng code, bạn sẽ thấy nó không khó như nó trông.
-
 Ở chương trước, đoàn tàu chỉ có móc nối **một chiều** -- mỗi toa chỉ biết toa sau. Bây giờ hãy tưởng tượng **đoàn tàu 2 chiều**: mỗi toa có **2 móc nối** -- một nối tới toa **trước**, một nối tới toa **sau**.
 
 ```
@@ -225,19 +223,20 @@ match weak_ref.upgrade() {
 
 **Kết luận:** Trong tài liệu này ta dùng Approach 1 (Rc cả 2 chiều) vì dễ hiểu hơn cho người mới. Nhưng khi viết production code, hãy dùng Weak cho back-pointer -- đó là best practice trong Rust.
 
-## Những cái bẫy hay gặp với Rc\<RefCell\<>>
+## Những cái bẫy hay gặp
 
-### Bẫy 1: `borrow_mut()` panic lúc runtime
+---
 
-❌ Gọi `borrow_mut()` khi đang có `borrow()` active:
+❌ **`borrow_mut()` panic lúc runtime**
+
 ```rust
 let node = Rc::new(RefCell::new(DoublyNode { val: 1, prev: None, next: None }));
 let borrowed = node.borrow();       // immutable borrow active
 node.borrow_mut().val = 2;          // 💥 PANIC! Đang có borrow() rồi
 ```
 
-✅ Đảm bảo borrow scope kết thúc trước khi `borrow_mut`:
 ```rust
+// ✅ Đảm bảo borrow scope kết thúc trước khi borrow_mut
 {
     let borrowed = node.borrow();    // scope bắt đầu
     println!("{}", borrowed.val);
@@ -246,11 +245,12 @@ node.borrow_mut().val = 2;          // 💥 PANIC! Đang có borrow() rồi
 node.borrow_mut().val = 2;          // ✓ OK, không ai đang borrow
 ```
 
-💡 Đây là điểm yếu của `RefCell`: lỗi lúc **runtime**, không phải compile time. Quy tắc: dùng `borrow()` trong scope **nhỏ nhất** có thể.
+💡 **Tại sao:** Đây là điểm yếu của `RefCell`: lỗi lúc **runtime**, không phải compile time. Quy tắc: dùng `borrow()` trong scope **nhỏ nhất** có thể.
 
-### Bẫy 2: Clone Rc không phải clone data
+---
 
-❌ Nghĩ `.clone()` tạo node mới độc lập:
+❌ **Clone Rc không phải clone data**
+
 ```rust
 let node = Rc::new(RefCell::new(DoublyNode { val: 1, prev: None, next: None }));
 let node2 = node.clone();     // node2 trỏ vào CÙNG node!
@@ -259,17 +259,18 @@ node2.borrow_mut().val = 999;
 println!("{}", node.borrow().val);  // In ra 999! Cả 2 chung data
 ```
 
-✅ Hiểu `clone()` chỉ tăng reference count, vẫn trỏ vào **cùng** node:
 ```
+// ✅ clone() chỉ tăng reference count, vẫn trỏ vào cùng node:
   node ───Rc───> [val: 1]     clone()     node ───Rc───> [val: 1] <───Rc─── node2
                                            count: 1  →  count: 2
 ```
 
-💡 Nếu muốn data mới thực sự, phải tạo node mới hoàn toàn. `Rc::clone()` rẻ (chỉ tăng số đếm), nhưng **không** tạo bản sao data.
+💡 **Tại sao:** Nếu muốn data mới thực sự, phải tạo node mới hoàn toàn. `Rc::clone()` rẻ (chỉ tăng số đếm), nhưng **không** tạo bản sao data.
 
-### Bẫy 3: Quên ngắt cycle trước khi drop
+---
 
-❌ Drop list mà không clear references → memory leak:
+❌ **Quên ngắt cycle trước khi drop**
+
 ```rust
 {
     let mut list = DoublyLinkedList::new();
@@ -280,8 +281,8 @@ println!("{}", node.borrow().val);  // In ra 999! Cả 2 chung data
 // Nodes vẫn tồn tại trong memory! Không ai giải phóng!
 ```
 
-✅ Luôn implement custom `Drop` hoặc dùng `Weak` cho back-pointer:
 ```rust
+// ✅ Luôn implement custom Drop hoặc dùng Weak cho back-pointer
 impl<T> Drop for DoublyLinkedList<T> {
     fn drop(&mut self) {
         while self.pop_front().is_some() {}  // Ngắt từng connection
@@ -289,11 +290,12 @@ impl<T> Drop for DoublyLinkedList<T> {
 }
 ```
 
-💡 Cách kiểm tra: dùng `Rc::strong_count()` để xem reference count. Nếu count không về 0 sau khi drop, có leak.
+💡 **Tại sao:** Cách kiểm tra: dùng `Rc::strong_count()` để xem reference count. Nếu count không về 0 sau khi drop, có leak.
 
-### Bẫy 4: Dùng Rc\<RefCell\<>> khi không cần
+---
 
-❌ Dùng `Rc<RefCell<>>` cho mọi thứ vì "an toàn":
+❌ **Dùng Rc\<RefCell\<>> khi không cần**
+
 ```rust
 // ĐỪNG! Singly linked list không cần Rc<RefCell<>>
 struct BadSinglyNode<T> {
@@ -302,16 +304,15 @@ struct BadSinglyNode<T> {
 }
 ```
 
-✅ Chỉ dùng khi **thực sự** cần shared mutable ownership:
 ```rust
-// Singly: mỗi node chỉ có 1 chủ → Box là đủ
+// ✅ Singly: mỗi node chỉ có 1 chủ → Box là đủ
 struct GoodSinglyNode<T> {
     val: T,
     next: Option<Box<GoodSinglyNode<T>>>,  // Đơn giản, nhanh
 }
 ```
 
-💡 `Rc<RefCell<>>` chậm hơn `Box` vì runtime check + reference counting. Với single ownership, `Box` **luôn** là lựa chọn tốt hơn.
+💡 **Tại sao:** `Rc<RefCell<>>` chậm hơn `Box` vì runtime check + reference counting. Với single ownership, `Box` **luôn** là lựa chọn tốt hơn.
 
 ## Hoạt động như thế nào?
 
@@ -757,6 +758,8 @@ Với singly linked list dùng `Box`, overhead gần như bằng 0.
 **Complexity:** Time O(1) cho back/forward, O(k) cho "vào trang mới" (k = số trang forward bị xóa). Space O(n) với n là số trang trong lịch sử.
 </details>
 
+---
+
 **Bài 2:** Bạn đang viết text editor. Cần hỗ trợ Undo (Ctrl+Z) và Redo (Ctrl+Y). Mỗi thao tác chỉnh sửa là một "action". Khi Undo rồi gõ gì đó mới, lịch sử Redo bị xóa. Dùng cấu trúc gì?
 
 *Gợi ý:* Tương tự browser history nhưng với các editing action.
@@ -771,6 +774,8 @@ Với singly linked list dùng `Box`, overhead gần như bằng 0.
 **Complexity:** Time O(1) cho undo/redo. Space O(n) với n là số action trong lịch sử.
 </details>
 
+---
+
 **Bài 3:** Implement LRU Cache với capacity = k. Hỗ trợ `get(key)` và `put(key, value)`, cả 2 phải O(1). Dùng cấu trúc gì?
 
 *Gợi ý:* Cần tìm nhanh theo key VÀ biết thứ tự "mới dùng → cũ nhất".
@@ -784,6 +789,8 @@ Với singly linked list dùng `Box`, overhead gần như bằng 0.
 
 **Complexity:** Time O(1) cho cả get và put. Space O(k) với k là capacity.
 </details>
+
+---
 
 **Bài 4:** Cho một doubly linked list nhiều tầng: mỗi node ngoài `prev` và `next`, còn có `child` trỏ xuống một doubly linked list con. Flatten toàn bộ thành 1 doubly linked list duy nhất. Giải thuật gì?
 
@@ -862,8 +869,6 @@ assert!(!list.is_empty());
 | Nguy hiểm | Vòng tròn tham chiếu → memory leak |
 | Cách tránh (học tập) | Tự viết `Drop` để phá vòng tròn |
 | Cách tránh (production) | Dùng `Weak<T>` cho back-pointer |
-
----
 
 ---
 

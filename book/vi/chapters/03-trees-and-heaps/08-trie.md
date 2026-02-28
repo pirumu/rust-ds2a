@@ -4,7 +4,7 @@
 
 ## Đây là gì?
 
-> Trie trông lạ vì khác hoàn toàn BST/AVL mà bạn vừa học -- không có so sánh trái/phải, không có rotation, không có balance factor. Thay vào đó, mỗi node là 1 ký tự, và đường đi từ root đến node = 1 chuỗi. Nếu bạn hiểu tree traversal (đi từ root xuống leaf), bạn đã hiểu core concept của Trie rồi. Phần code cũng đơn giản đáng ngạc nhiên -- insert chỉ là vòng `for` đi qua từng ký tự.
+Trie khác hoàn toàn BST/AVL -- không có so sánh trái/phải, không có rotation, không có balance factor. Thay vào đó, mỗi node là 1 ký tự, và đường đi từ root đến node = 1 chuỗi.
 
 Mở điện thoại lên, gõ "xin" vào thanh tìm kiếm. Ngay lập tức xuất hiện gợi ý: "xin chào", "xin lỗi", "xin phép"... Bạn chưa gõ xong mà máy đã đoán được. Làm sao nó làm được?
 
@@ -748,8 +748,6 @@ Topic name lookup trong Kafka-like systems có thể dùng Trie nếu hỗ trợ
 Trie dùng `HashMap` bên trong mỗi node cho children lookup. Nhưng HashMap bản thân nó hoạt động như thế nào? Hashing là gì, collision xảy ra khi nào và giải quyết ra sao?
 
 Chương tiếp theo sẽ khám phá **Hash Map** -- cấu trúc có O(1) lookup được dùng nhiều nhất trong mọi ngôn ngữ lập trình. Bạn sẽ hiểu tại sao `HashMap` trong Rust nhanh đến vậy, và khi nào nó KHÔNG phải lựa chọn tốt nhất.
-
----
 
 ---
 

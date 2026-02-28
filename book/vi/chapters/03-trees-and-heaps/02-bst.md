@@ -4,7 +4,7 @@
 
 ## Đây là gì?
 
-> **Trước khi bắt đầu:** Chương này có phần xóa node (delete) với 3 trường hợp -- nhìn thì đáng sợ, nhưng thực ra 2 trường hợp đầu cực kỳ đơn giản (xóa thẳng hoặc cho con lên thế). Chỉ trường hợp thứ 3 cần suy nghĩ, và ý tưởng cũng chỉ là "tìm người thay thế phù hợp nhất". Nếu bạn đã hiểu Binary Tree ở chương trước, BST chỉ thêm **1 quy tắc** duy nhất. Quy tắc đó biến cây "ngớ ngẩn" (search O(n)) thành cây "thông minh" (search O(log n)). BST là nền tảng trực tiếp của `BTreeMap` trong Rust std, database index (B-Tree), và hầu hết mọi hệ thống cần tìm kiếm nhanh.
+BST là nền tảng trực tiếp của `BTreeMap` trong Rust std, database index (B-Tree), và hầu hết mọi hệ thống cần tìm kiếm nhanh.
 
 ### Từ Binary Tree sang BST -- chỉ thêm 1 quy tắc
 
@@ -653,8 +653,6 @@ Vài điều hữu ích khi làm việc với Rust:
 BST có 1 điểm yếu chí mạng: nếu data insert theo thứ tự sorted, cây bị lệch thành linked list, mọi thao tác thành O(n). Làm sao để cây **tự cân bằng**?
 
 Chương tiếp theo sẽ giới thiệu **AVL Tree** -- BST đầu tiên biết tự cân bằng. AVL theo dõi "balance factor" (chênh lệch height giữa cây trái và phải) và dùng **rotation** để sửa khi cây lệch. Kết quả: guaranteed O(log n) cho mọi thao tác, bất kể thứ tự insert.
-
----
 
 ---
 

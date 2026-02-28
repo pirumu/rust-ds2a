@@ -16,7 +16,7 @@ Câu trả lời: dùng **hai con trỏ chạy với tốc độ khác nhau**.
 
 ---
 
-## Dummy Node Trick -- Vũ khí bí mật
+## Dummy Node Trick — Vũ khí bí mật
 
 Trước khi vào các bài chính, mình giới thiệu một trick nhỏ nhưng cực kỳ hữu ích: **dummy node** (node giả).
 
@@ -469,7 +469,7 @@ pub fn reverse_k_group(vals: &[i32], k: usize) -> Vec<i32> {
 
 ---
 
-## Pitfalls -- Bẫy hay gặp
+## Pitfalls — Bẫy hay gặp
 
 ### Bẫy 1: Null pointer khi traverse
 
@@ -568,7 +568,7 @@ while fast.is_some() && fast.as_ref().unwrap().next.is_some() {
 
 ---
 
-## Rust Ecosystem -- Linked list trong thực tế
+## Rust Ecosystem — Linked list trong thực tế
 
 ### `std::collections::LinkedList`
 
@@ -609,7 +609,7 @@ for val in &list {
 
 ---
 
-## Practice -- Luyện tập
+## Practice — Luyện tập
 
 ### Đã nắm vững (bài trong chương):
 
@@ -663,7 +663,9 @@ Nhớ: trong phỏng vấn, linked list trick luôn hỏi về **two pointers**.
 
 ---
 
-## Tiếp theo: Top-K Problems
+## Tiếp theo
+
+Chương sau: **[Top-K Problems](./06-top-k.md)** — tìm K phần tử lớn/nhỏ nhất hiệu quả. Bạn đã biết Heap từ Phần 3 và Quick Sort từ Phần 6 — chương sau chỉ là ghép hai thứ đó lại: min-heap size K và Quick Select.
 
 ---
 

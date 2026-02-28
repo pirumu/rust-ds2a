@@ -467,7 +467,7 @@ pub fn subsets<T: Clone>(arr: &[T]) -> Vec<Vec<T>> {
 
 ---
 
-## Pitfalls -- Bẫy thường gặp
+## Pitfalls — Những cái bẫy hay gặp
 
 ### 1. Quên undo -> State bị corrupt
 
@@ -549,10 +549,10 @@ pub fn subsets<T: Clone>(arr: &[T]) -> Vec<Vec<T>> {
 
 | Dấu hiệu | Ví dụ | Dùng Backtracking? |
 |-----------|-------|--------------------|
-| "Tìm TẤT CẢ lời giải" | All permutations, all subsets | Co |
-| "Tìm MỘT lời giải thỏa ràng buộc" | Sudoku, N-Queens | Co |
+| "Tìm TẤT CẢ lời giải" | All permutations, all subsets | Có |
+| "Tìm MỘT lời giải thỏa ràng buộc" | Sudoku, N-Queens | Có |
 | "Tìm giá trị TỐI ƯU" (min/max) | Knapsack, coin change | DP thường tốt hơn |
-| Input nhỏ (n <= 15-20) | Bitmask problems | Co (hoặc bitmask) |
+| Input nhỏ (n <= 15-20) | Bitmask problems | Có (hoặc bitmask) |
 | Input lớn (n > 25) | - | Thường TLE, cần DP hoặc Greedy |
 | "Có bao nhiêu cách?" (chỉ đếm) | Counting subsets | DP nếu có overlapping |
 
@@ -602,7 +602,7 @@ assert_eq!(sets.len(), 8);          // 2^3 = 8
 
 ---
 
-## Practice -- Bài tập thực hành
+## Practice — Luyện tập
 
 Sắp xếp từ dễ đến khó. Mỗi bài map với 1 pattern ở trên:
 

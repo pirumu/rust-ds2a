@@ -4,8 +4,6 @@
 
 ## Đây là gì?
 
-> **Đừng sợ cái tên dài.** Floyd-Warshall có tên nghe hàn lâm, nhưng code **ngắn nhất** trong tất cả shortest path algorithms bạn đã học -- chỉ 3 vòng `for` lồng nhau và 1 phép so sánh `min`. Không cần Queue, Stack, hay Priority Queue. Không cần data structure phức tạp nào. Chỉ cần **1 ma trận 2D**. Nếu bạn hiểu câu hỏi: *"đi từ i đến j, đi thẳng hay đi qua k?"* -- bạn đã hiểu Floyd-Warshall. Đây là chương **cuối cùng** về shortest path, và cũng là lần đầu tiên bạn gặp **Dynamic Programming (DP)** -- một kỹ thuật sẽ xuất hiện rất nhiều trong thuật toán nâng cao.
-
 Bạn đã từng thấy **bảng khoảng cách giữa các thành phố** trên bản đồ chưa? Kiểu như:
 
 ```
@@ -673,8 +671,6 @@ dist[1] = [INF, 0, 2, 3] → 2 cities within threshold
 Floyd-Warshall kết thúc chặng đường **graph shortest path algorithms**. Bạn đã master: biểu diễn đồ thị, BFS, DFS, Dijkstra, Bellman-Ford, Floyd-Warshall -- đủ để giải hầu hết bài graph trong phỏng vấn và thực tế.
 
 Nhưng graph chưa hết! Chương tiếp theo: **Prim's algorithm** -- tìm cây khung nhỏ nhất (Minimum Spanning Tree). Bài toán khác hoàn toàn: không phải "đường ngắn nhất" mà là "nối tất cả với chi phí thấp nhất".
-
----
 
 ---
 

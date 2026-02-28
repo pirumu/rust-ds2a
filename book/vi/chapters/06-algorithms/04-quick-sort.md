@@ -390,7 +390,7 @@ Tại sao kết hợp 3 thuật toán?
 
 ---
 
-## Pitfalls
+## Pitfalls — Những cái bẫy hay gặp
 
 **1. O(n^2) trên mảng đã sort (Lomuto)**
 
@@ -566,7 +566,7 @@ v.select_nth_unstable(2);
 
 ---
 
-## Practice
+## Practice — Luyện tập
 
 ### Sort Colors (LeetCode #75) — 3-way partition
 

@@ -4,9 +4,7 @@
 
 ## Đây là gì?
 
-> **Trước khi bắt đầu -- nếu bạn đang thấy lo lắng, đọc đoạn này trước.**
->
-> AVL Tree là chương nhiều người bỏ cuộc nhất trong cả series DSA. Nhìn vào: 4 loại rotation, code dài hơn hẳn các chương trước, và ownership trong Rust làm rotation thêm phức tạp. Hoàn toàn bình thường nếu bạn đọc lần đầu mà thấy rối. Nhưng thực ra: (1) bạn chỉ cần hiểu **1 phép xoay** (right rotate), phép còn lại là mirror; (2) LR và RL chỉ là **2 bước đơn giản ghép lại**; (3) code insert AVL = code insert BST + **1 dòng gọi rebalance**. Nếu bạn hiểu BST chương trước, bạn đã có 80% kiến thức cần thiết. Và trong thực tế, hiếm khi phải tự implement AVL -- Rust std dùng B-Tree, Java dùng Red-Black. Nhưng hiểu AVL giúp bạn hiểu **tại sao** self-balancing trees hoạt động, và đó là kiến thức phỏng vấn quan trọng.
+AVL Tree là BST tự cân bằng -- sau mỗi lần insert hay delete, nó tự xoay (rotate) để không bị lệch. Trong thực tế, Rust std dùng B-Tree, Java dùng Red-Black -- nhưng hiểu AVL giúp bạn hiểu **tại sao** self-balancing trees hoạt động.
 
 ### Vấn đề mà AVL giải quyết
 
@@ -790,8 +788,6 @@ Complexity: Xác định case O(log n) -- theo đường đi từ root đến no
 
 </details>
 
----
-
 **Bài 2: Trace insert sequence**
 
 Insert `[10, 20, 30, 15, 25]` vào AVL tree rỗng. Vẽ cây sau mỗi bước, bao gồm rotation.
@@ -847,8 +843,6 @@ Complexity: 5 inserts, 1 rotation. Time O(n log n) cho n inserts.
 
 </details>
 
----
-
 **Bài 3: Đếm số rotation**
 
 Insert N số ngẫu nhiên vào AVL tree. Trong worst case, tối đa bao nhiêu rotation xảy ra cho **1 lần insert**? Cho **toàn bộ N lần insert**?
@@ -881,8 +875,6 @@ Complexity: Insert O(log n) time, tối đa 2 rotations. Delete O(log n) time, t
 AVL tree cân bằng **nghiêm ngặt** -- balance factor chỉ cho phép -1, 0, +1. Kết quả: search rất nhanh, nhưng insert/delete có thể cần nhiều rotation.
 
 Chương tiếp theo sẽ giới thiệu **Red-Black Tree** -- một cách cân bằng "lỏng hơn" bằng cách tô màu node đỏ/đen. Red-Black cho phép cây lệch hơn AVL một chút, đổi lại insert/delete cần ít rotation hơn. Đây là cây mà Java `TreeMap`, C++ `std::map` chọn dùng -- và hiểu nó sẽ giúp bạn hiểu tại sao Rust lại chọn B-Tree thay thế.
-
----
 
 ---
 

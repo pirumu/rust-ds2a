@@ -158,7 +158,7 @@ Khởi tạo: lps = [0, 0, 0, 0, 0, 0, 0], len = 0, i = 1
 KET QUA: lps = [0, 1, 0, 1, 2, 2, 3]
 ```
 
-**Buoc 6 la diem mau chot:** Khi `p[5] != p[2]`, ta KHONG reset `len` ve 0 ngay. Thay vao do, ta dung `lps[len-1]` de "quay lai" mot prefix ngan hon co the van khop. Day chinh la ly do LPS table xay duoc trong O(m) — no tu dung chinh no!
+**Bước 6 là điểm mấu chốt:** Khi `p[5] != p[2]`, ta KHÔNG reset `len` về 0 ngay. Thay vào đó, ta dùng `lps[len-1]` để "quay lại" một prefix ngắn hơn có thể vẫn khớp. Đây chính là lý do LPS table xây được trong O(m) — nó tự dùng chính nó!
 
 ### Cách xây LPS table
 
@@ -616,7 +616,7 @@ fn longest_happy_prefix(s: &str) -> String {
 
 ---
 
-## Tóm tắt
+## Tổng kết
 
 - **Naive Search**: cách đơn giản nhất, thử mọi vị trí. Tốt cho text ngắn.
 - **KMP**: dùng LPS table để nhảy thông minh, không bao giờ quay lại text. Luôn O(n+m).
@@ -628,6 +628,8 @@ fn longest_happy_prefix(s: &str) -> String {
 ---
 
 ## Tiếp theo
+
+Chương sau: **[Graph Patterns](./08-graph-patterns.md)** — tổng hợp các pattern graph bạn đã học ở Phần 5: BFS, DFS, Union-Find, Topological Sort. Chương đó không dạy gì mới — chỉ chỉ cho bạn cách nhận diện "bài này dùng cái gì" qua một flowchart đơn giản.
 
 ---
 

@@ -238,12 +238,12 @@ assert_eq!(sl.len(), 5);  // [5, 5, 5, 15, 20]
 
 ## Bảng độ phức tạp
 
-| Operation | Average    | Worst case | Space     |
-|-----------|-----------|------------|-----------|
-| Search    | O(log n)  | O(n)*      | O(1)      |
-| Insert    | O(log n)  | O(n)*      | O(log n)  |
-| Delete    | O(log n)  | O(n)*      | O(log n)  |
-| Space     | —         | —          | O(n log n)|
+| Thao tác | Trung bình | Tệ nhất | Bộ nhớ |
+|----------|-----------|---------|--------|
+| Search   | O(log n)  | O(n)*   | O(1)      |
+| Insert   | O(log n)  | O(n)*   | O(log n)  |
+| Delete   | O(log n)  | O(n)*   | O(log n)  |
+| Tổng     | —         | —       | O(n log n)|
 
 *Worst case O(n) xảy ra khi tung đồng xu cực kỳ xui — tất cả node cùng chiều cao. Xác suất cực kỳ thấp.*
 
@@ -293,16 +293,16 @@ Redis ZSET thực tế:
 
 | Tình huống | Dùng Skip List? | Tại sao |
 |---|---|---|
-| Cần sorted data + insert/delete nhanh | **Co** | O(log n) cho mọi thao tác |
-| Cần range query (lấy phần tử trong khoảng) | **Co** | Duyệt level 0 sau khi tìm điểm bắt đầu |
-| Cần concurrent access (multi-thread) | **Co** | Dễ lock-free hơn tree |
-| Code cần đơn giản, dễ debug | **Co** | Không rotation, không recoloring |
-| Cần worst-case guarantee O(log n) | **Khong** | Dùng AVL/Red-Black Tree |
-| Memory cực kỳ hạn chế | **Khong** | Skip List tốn thêm con trỏ ở mỗi tầng |
-| Data ít (< 100 phần tử) | **Khong** | Sorted array + binary search đủ rồi |
-| Cần persistent/immutable structure | **Khong** | Tree dễ share subtree hơn |
+| Cần sorted data + insert/delete nhanh | **Có** | O(log n) cho mọi thao tác |
+| Cần range query (lấy phần tử trong khoảng) | **Có** | Duyệt level 0 sau khi tìm điểm bắt đầu |
+| Cần concurrent access (multi-thread) | **Có** | Dễ lock-free hơn tree |
+| Code cần đơn giản, dễ debug | **Có** | Không rotation, không recoloring |
+| Cần worst-case guarantee O(log n) | **Không** | Dùng AVL/Red-Black Tree |
+| Memory cực kỳ hạn chế | **Không** | Skip List tốn thêm con trỏ ở mỗi tầng |
+| Data ít (< 100 phần tử) | **Không** | Sorted array + binary search đủ rồi |
+| Cần persistent/immutable structure | **Không** | Tree dễ share subtree hơn |
 
-## Pitfalls — bẫy hay gặp
+## Những lỗi hay gặp
 
 ### 1. Random seed quality
 
@@ -314,7 +314,7 @@ Redis ZSET thực tế:
 rng_state: 12345,
 ```
 
-✅ **Dung**: Dùng seed từ nguồn entropy tốt (thời gian, OS random).
+✅ **Đúng**: Dùng seed từ nguồn entropy tốt (thời gian, OS random).
 
 ```rust
 // Trong production, dùng thread_rng() hoặc tương tự
@@ -324,7 +324,7 @@ rng_state: std::time::SystemTime::now()
     .as_nanos() as u64,
 ```
 
-💡 **Tai sao**: Nếu attacker biết seed, họ có thể craft input khiến mọi node cùng level -> O(n) search. Đây là dạng **algorithmic complexity attack**.
+💡 **Tại sao**: Nếu attacker biết seed, họ có thể craft input khiến mọi node cùng level -> O(n) search. Đây là dạng **algorithmic complexity attack**.
 
 ### 2. Không giới hạn max level
 
@@ -340,7 +340,7 @@ fn random_level(&mut self) -> usize {
 }
 ```
 
-✅ **Dung**: Luôn cap max level.
+✅ **Đúng**: Luôn cap max level.
 
 ```rust
 const MAX_LEVEL: usize = 16; // đủ cho ~65,000 phần tử
@@ -355,20 +355,20 @@ fn random_level(&mut self) -> usize {
 }
 ```
 
-💡 **Tai sao**: Không giới hạn -> xui thì tung được ngửa 1000 lần liên tiếp -> node có 1000 tầng -> tốn memory vô nghĩa. MAX_LEVEL = log₂(n_max) là đủ.
+💡 **Tại sao**: Không giới hạn -> xui thì tung được ngửa 1000 lần liên tiếp -> node có 1000 tầng -> tốn memory vô nghĩa. MAX_LEVEL = log₂(n_max) là đủ.
 
 ### 3. Memory overhead bị coi thường
 
 ❌ **Sai**: Nghĩ Skip List tốn memory giống linked list thường.
 
-✅ **Dung**: Mỗi node trung bình có `1/(1-p)` con trỏ.
+✅ **Đúng**: Mỗi node trung bình có `1/(1-p)` con trỏ.
 
 ```
 p = 0.5:  mỗi node trung bình 2 con trỏ    (gấp đôi linked list)
 p = 0.25: mỗi node trung bình 1.33 con trỏ  (chấp nhận được)
 ```
 
-💡 **Tai sao**: Nếu dữ liệu nhỏ (ví dụ: node chỉ chứa 1 số i32), thì overhead con trỏ có thể lớn hơn chính dữ liệu. Cân nhắc khi memory quan trọng.
+💡 **Tại sao**: Nếu dữ liệu nhỏ (ví dụ: node chỉ chứa 1 số i32), thì overhead con trỏ có thể lớn hơn chính dữ liệu. Cân nhắc khi memory quan trọng.
 
 ### 4. Quên shrink level sau delete
 
@@ -381,9 +381,9 @@ while self.level > 0 && self.nodes[0].forward[self.level].is_none() {
 }
 ```
 
-✅ **Dung**: Luôn kiểm tra và shrink sau delete.
+✅ **Đúng**: Luôn kiểm tra và shrink sau delete.
 
-💡 **Tai sao**: Nếu không shrink, search phải duyệt qua các tầng trống — tốn thời gian vô ích, O(max_level) thay vì O(current_level).
+💡 **Tại sao**: Nếu không shrink, search phải duyệt qua các tầng trống — tốn thời gian vô ích, O(max_level) thay vì O(current_level).
 
 ## Rust Ecosystem
 
@@ -434,8 +434,6 @@ Bạn gặp Skip List trong thực tế ở:
 - **Lucene** — posting list trong search engine
 
 Nếu bạn hiểu linked list và biết tung đồng xu, bạn đã hiểu Skip List!
-
----
 
 ---
 

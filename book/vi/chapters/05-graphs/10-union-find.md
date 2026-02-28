@@ -1,10 +1,12 @@
 # Union-Find (Tập hợp rời rạc)
 
-> 💡 **Đừng lo lắng:** Union-Find là data structure có **tỷ lệ power/complexity cao nhất** trong toàn bộ series này. Chỉ 1 mảng `parent[]`, 2 function (`find` mỗi cái 3 dòng, `union` mỗi cái 8 dòng), performance gần O(1). Bạn đã dùng nó trong Kruskal (chương trước) -- giờ hiểu sâu hơn thôi. Không có recursion phức tạp, không cần tree rotation như AVL/Red-Black, không cần hash function. Chỉ cần hiểu **"mỗi node trỏ về cha, root trỏ về chính mình"**. Union-Find xuất hiện **cực nhiều** trong phỏng vấn (Number of Islands variant, Accounts Merge, Redundant Connection) và production (network connectivity, image processing, social networks).
+> 💡 **Đừng lo lắng:** Union-Find là data structure có **tỷ lệ power/complexity cao nhất** trong toàn bộ series này. Chỉ 1 mảng `parent[]`, 2 function (`find` mỗi cái 3 dòng, `union` mỗi cái 8 dòng), performance gần O(1). Bạn đã dùng nó trong Kruskal (chương trước) — giờ hiểu sâu hơn thôi. Không có recursion phức tạp, không cần tree rotation như AVL/Red-Black, không cần hash function. Chỉ cần hiểu **"mỗi node trỏ về cha, root trỏ về chính mình"**. Union-Find xuất hiện **cực nhiều** trong phỏng vấn (Number of Islands variant, Accounts Merge, Redundant Connection) và production (network connectivity, image processing, social networks).
+
+---
 
 ## Đây là gì?
 
-Union-Find trông như một cấu trúc "mới hoàn toàn", nhưng thực ra nó chỉ là **một mảng** -- `parent[i]` cho biết "cha" của phần tử `i`. Hai thao tác `find` và `union` mỗi cái chỉ vài dòng code. Đây là một trong những cấu trúc có **tỷ lệ sức mạnh / độ phức tạp code** cao nhất mà bạn sẽ học.
+Union-Find trông như một cấu trúc "mới hoàn toàn", nhưng thực ra nó chỉ là **một mảng** — `parent[i]` cho biết "cha" của phần tử `i`. Hai thao tác `find` và `union` mỗi cái chỉ vài dòng code. Đây là một trong những cấu trúc có **tỷ lệ sức mạnh / độ phức tạp code** cao nhất mà bạn sẽ học.
 
 Hãy tưởng tượng trường học có nhiều **nhóm bạn**. Ban đầu ai cũng riêng lẻ. Khi 2 người kết bạn, nhóm của họ **hợp nhất** thành 1.
 
@@ -12,11 +14,11 @@ Bạn cần trả lời nhanh 2 câu hỏi:
 1. **"An và Bình có cùng nhóm không?"** → thao tác **Find** (tìm)
 2. **"Gộp nhóm của An và nhóm của Bình lại"** → thao tác **Union** (hợp)
 
-Đó chính là **Union-Find** (còn gọi là **Disjoint Set Union** -- DSU -- cấu trúc tập hợp rời rạc).
+Đó chính là **Union-Find** (còn gọi là **Disjoint Set Union** — DSU — cấu trúc tập hợp rời rạc).
 
-Tại sao quan trọng? Union-Find là xương sống của thuật toán Kruskal (tìm MST). Nó trả lời "2 đỉnh có cùng thành phần liên thông không?" trong gần O(1) -- nhanh không tưởng.
+Tại sao quan trọng? Union-Find là xương sống của thuật toán Kruskal (tìm MST). Nó trả lời "2 đỉnh có cùng thành phần liên thông không?" trong gần O(1) — nhanh không tưởng.
 
-Với 2 tối ưu hóa (**path compression** + **union by rank**), mỗi thao tác mất O(α(n)) -- α là hàm ngược Ackermann, luôn ≤ 4 với mọi n thực tế. Gần như O(1).
+Với 2 tối ưu hóa (**path compression** + **union by rank**), mỗi thao tác mất O(α(n)) — α là hàm ngược Ackermann, luôn ≤ 4 với mọi n thực tế. Gần như O(1).
 
 ---
 
@@ -24,7 +26,7 @@ Với 2 tối ưu hóa (**path compression** + **union by rank**), mỗi thao t�
 
 Bạn đã biết BFS/DFS có thể check "A và B connected không?" bằng cách traverse từ A, xem có đến được B không. Vậy tại sao cần Union-Find?
 
-**Bài toán:** Dynamic graph -- edges thêm dần theo thời gian, không bao giờ xóa. Liên tục có queries "A và B connected không?"
+**Bài toán:** Dynamic graph — edges thêm dần theo thời gian, không bao giờ xóa. Liên tục có queries "A và B connected không?"
 
 ```
 Cách 1: BFS/DFS mỗi query → O(V+E) per query
@@ -34,7 +36,7 @@ Cách 2: Union-Find → O(α(n)) ≈ O(1) per query
   1M queries = ~4M operations. Gần instant!
 ```
 
-Hãy nghĩ như thế này: BFS/DFS giống như mỗi lần muốn biết "An và Bình cùng nhóm không?", bạn phải **đi hỏi từng người một** cho đến khi tìm thấy. Union-Find giống như mỗi nhóm có **1 trưởng nhóm** -- hỏi trưởng nhóm là biết ngay.
+Hãy nghĩ như thế này: BFS/DFS giống như mỗi lần muốn biết "An và Bình cùng nhóm không?", bạn phải **đi hỏi từng người một** cho đến khi tìm thấy. Union-Find giống như mỗi nhóm có **1 trưởng nhóm** — hỏi trưởng nhóm là biết ngay.
 
 ```
 Trade-off:
@@ -155,7 +157,7 @@ Không tối ưu:      Chỉ path compression:   Cả hai:
 
 ## Union by Size (variant)
 
-Doc bên trên dùng **union by rank** (gắn cây thấp dưới cây cao). Có 1 variant phổ biến: **union by size** -- gắn cây **ít phần tử** vào cây **nhiều phần tử**.
+Doc bên trên dùng **union by rank** (gắn cây thấp dưới cây cao). Có 1 variant phổ biến: **union by size** — gắn cây **ít phần tử** vào cây **nhiều phần tử**.
 
 ```
 Union by Rank:                    Union by Size:
@@ -234,7 +236,7 @@ So sánh 2 variant:
 |---|-------------|-------------|
 | Extra array | `rank[]` (height bound) | `size[]` (element count) |
 | Merge rule | Cây thấp gắn dưới cây cao | Cây nhỏ gắn vào cây lớn |
-| Bonus info | -- | Biết **SIZE** mỗi nhóm! |
+| Bonus info | — | Biết **SIZE** mỗi nhóm! |
 | Performance | O(α(n)) | O(α(n)) (giống nhau) |
 | Dùng khi | Default, đơn giản | Cần biết group size |
 
@@ -310,13 +312,13 @@ union(0, 1) → false → num_components = 2  (đã cùng nhóm, không đổi!)
 Kết quả: 2 nhóm -- {0,1,2,3} và {4}
 ```
 
-**Khi nào dùng?** Bài toán "Number of Islands", "Number of Provinces", network partition detection -- bất cứ khi nào cần đếm connected components trong dynamic graph.
+**Khi nào dùng?** Bài toán "Number of Islands", "Number of Provinces", network partition detection — bất cứ khi nào cần đếm connected components trong dynamic graph.
 
 ---
 
 ## Weighted Union-Find (nâng cao)
 
-> Phần này nâng cao hơn -- bạn có thể bỏ qua nếu chỉ cần basic Union-Find.
+> Phần này nâng cao hơn — bạn có thể bỏ qua nếu chỉ cần basic Union-Find.
 
 Union-Find bình thường chỉ trả lời "A và B cùng nhóm không?" Weighted Union-Find lưu thêm **quan hệ giữa các phần tử** (weight/distance/ratio).
 
@@ -389,16 +391,16 @@ Giải thích:
 
 - `parent`: Mảng trỏ đến cha. Ban đầu `parent[i] = i` (tự trỏ đến mình = mình là trưởng nhóm)
 - `find`: Đệ quy tìm gốc. **Path compression** = gán `parent[x]` thẳng đến gốc, nén toàn bộ đường đi
-- `union` trả về `false` nếu đã cùng nhóm -- rất hữu ích cho Kruskal (phát hiện vòng lặp)
+- `union` trả về `false` nếu đã cùng nhóm — rất hữu ích cho Kruskal (phát hiện vòng lặp)
 - **Union by rank**: cây có rank nhỏ hơn gắn dưới cây có rank lớn hơn. Nếu bằng nhau, chọn 1 làm gốc và tăng rank
 
-**Rust-specific:** `find(&mut self)` cần **mutable reference** vì path compression modify `parent[]`. Đây là design choice đúng đắn -- nếu dùng immutable find (không compress) thì performance chỉ O(log n) thay vì O(α(n)).
+**Rust-specific:** `find(&mut self)` cần **mutable reference** vì path compression modify `parent[]`. Đây là design choice đúng đắn — nếu dùng immutable find (không compress) thì performance chỉ O(log n) thay vì O(α(n)).
 
 ---
 
 ## Union-Find trong thực tế
 
-### a) Social Network -- Connected Groups
+### a) Social Network — Connected Groups
 
 ```
 Facebook: 2 tỷ users, "bạn của bạn" = connected component
@@ -415,7 +417,7 @@ Tại sao Union-Find thay vì BFS?
 
 Khi A kết bạn B → `union(A, B)`. Khi hỏi "A và C connected?" → `find(A) == find(C)`. Nhanh gọn.
 
-### b) Image Processing -- Connected Component Labeling
+### b) Image Processing — Connected Component Labeling
 
 ```
 Binary image (ảnh đen trắng):
@@ -545,7 +547,7 @@ assert_eq!(count, 2);  // 2 nhóm: {0,1,2,3} và {4}
 
 ---
 
-## Những cái bẫy hay gặp
+## Pitfalls — Những cái bẫy hay gặp
 
 ### a) Quên path compression
 
@@ -557,7 +559,7 @@ fn find(&self, mut x: usize) -> usize {
 }
 ```
 
-✅ Luôn thêm path compression -- chỉ 1 dòng code:
+✅ Luôn thêm path compression — chỉ 1 dòng code:
 ```rust
 fn find(&mut self, x: usize) -> usize {
     if self.parent[x] != x {
@@ -606,8 +608,8 @@ fn union(&mut self, x: usize, y: usize) -> bool {
 ✅ Viết `find(&mut self, ...)` (mutable) → path compression modify `parent[]`
 
 💡 Đây là **Rust-specific insight** quan trọng. Path compression thay đổi internal state, nên cần mutable reference. Design choice:
-- `find(&self)` -- immutable, không compress → O(log n). An toàn nhưng chậm.
-- `find(&mut self)` -- mutable, compress → O(α(n)). **Luôn chọn cái này.**
+- `find(&self)` — immutable, không compress → O(log n). An toàn nhưng chậm.
+- `find(&mut self)` — mutable, compress → O(α(n)). **Luôn chọn cái này.**
 
 Nếu cần gọi `find` trong context immutable (ví dụ khi iterate) → clone hoặc refactor.
 
@@ -617,10 +619,10 @@ Nếu cần gọi `find` trong context immutable (ví dụ khi iterate) → clon
 
 | Tình huống | Union-Find? | Thay bằng gì? | Tại sao? |
 |---|---|---|---|
-| "A và B connected?" (dynamic graph) | ✅ | -- | O(α(n)) per query |
-| Kruskal MST (cycle check) | ✅ | -- | Core requirement |
-| Count connected components (dynamic) | ✅ | -- | Track `num_components` |
-| Group/cluster membership | ✅ | -- | `find()` = group ID |
+| "A và B connected?" (dynamic graph) | ✅ | — | O(α(n)) per query |
+| Kruskal MST (cycle check) | ✅ | — | Core requirement |
+| Count connected components (dynamic) | ✅ | — | Track `num_components` |
+| Group/cluster membership | ✅ | — | `find()` = group ID |
 | Need actual path A→B | ❌ | BFS/DFS | UF chỉ biết "connected", không biết path |
 | Need disconnect/split | ❌ | Other DS | UF chỉ union, không split |
 | Static graph, 1 lần check | ⚠️ | BFS/DFS | 1 BFS đủ, UF overhead không cần thiết |
@@ -631,7 +633,7 @@ Nếu cần gọi `find` trong context immutable (ví dụ khi iterate) → clon
 
 ---
 
-## Luyện nhận diện Pattern
+## Practice — Luyện tập
 
 ### a) Number of Provinces (LeetCode #547)
 
@@ -641,7 +643,7 @@ Nếu cần gọi `find` trong context immutable (ví dụ khi iterate) → clon
 - Tạo Union-Find với N elements
 - Duyệt matrix: nếu `isConnected[i][j] == 1` → `union(i, j)`
 - Answer = `num_components` sau khi union hết
-- Có thể dùng DFS/BFS, nhưng Union-Find cleaner -- không cần visited array, không cần adjacency list
+- Có thể dùng DFS/BFS, nhưng Union-Find cleaner — không cần visited array, không cần adjacency list
 
 ### b) Redundant Connection (LeetCode #684)
 
@@ -671,8 +673,8 @@ Nếu cần gọi `find` trong context immutable (ví dụ khi iterate) → clon
 
 ### Trong crates phổ biến
 
-- **`petgraph::unionfind::UnionFind`** -- built-in trong crate `petgraph`, được dùng bởi `min_spanning_tree`
-- **`union-find` crate** -- standalone implementation với nhiều variant
+- **`petgraph::unionfind::UnionFind`** — built-in trong crate `petgraph`, được dùng bởi `min_spanning_tree`
+- **`union-find` crate** — standalone implementation với nhiều variant
 
 ### Rust ownership & Union-Find
 

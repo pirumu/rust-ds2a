@@ -435,6 +435,4 @@ if let Some(val) = stack.pop() {
 
 ---
 
----
-
 [← Doubly Linked List](./02-doubly-linked-list.md) | [Queue →](./04-queue.md)

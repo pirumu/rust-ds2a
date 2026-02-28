@@ -2,6 +2,8 @@
 
 > 💡 **Đừng lo lắng:** Chương này nghe có vẻ "nặng" nhưng thật ra bạn ĐÃ biết hết các công cụ rồi. Heap? Học ở Phần 3. Quick Sort/Partition? Phần 6. Chương này chỉ là **ghép lego** -- lắp các mảnh bạn đã có thành pattern giải bài. Nếu bạn quên Heap, quay lại đọc lại 5 phút rồi quay về đây. Không sao cả.
 
+---
+
 ## Đây là gì?
 
 Bạn đã học Heap ở Phần 3 và Quick Sort ở Phần 6. Giờ mình dùng chúng để giải bài "tìm K phần tử lớn/nhỏ nhất" -- một dạng bài cực kỳ phổ biến trong phỏng vấn.
@@ -238,7 +240,7 @@ Pop (6, list2) → result=[1,1,2,3,4,4,5,6], list2 hết → DONE ✓
 
 ---
 
-## Pitfalls -- Lỗi hay gặp
+## Pitfalls — Lỗi hay gặp
 
 ### Pitfall 1: Min-heap vs Max-heap cho Top-K
 
@@ -380,7 +382,7 @@ Nếu bạn cần decrease-key (thay đổi priority của phần tử đã tron
 
 ---
 
-## Practice -- Luyện tập
+## Practice — Luyện tập
 
 Làm theo thứ tự từ dễ đến khó:
 
@@ -414,7 +416,7 @@ Sau khi thêm 1:    max-heap: [1, 2]   min-heap: [5, 8]    median = (2+5)/2 = 3.
 
 ---
 
-## Chương tiếp theo
+## Tiếp theo
 
 Tiếp theo mình sẽ học **String Matching** -- các thuật toán tìm kiếm chuỗi con như KMP và Rabin-Karp. Nếu bạn từng dùng Ctrl+F tìm từ trong văn bản, đó chính là string matching. Mình sẽ xem máy tính làm điều đó hiệu quả thế nào.
 

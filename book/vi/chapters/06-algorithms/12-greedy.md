@@ -55,10 +55,10 @@ Trước khi code Greedy, hãy tự hỏi 3 câu:
 
 | Bài toán | Substructure? | Local = Global? | Counter-example? | Greedy? |
 |----------|:---:|:---:|:---:|:---:|
-| Thối tiền (VNĐ) | Co | Co | Khong | Dung |
-| Activity Selection | Co | Co | Khong | Dung |
-| Fractional Knapsack | Co | Co | Khong | Dung |
-| 0/1 Knapsack | Co | **Khong** | **Co** (xem pitfall) | **Sai!** |
+| Thối tiền (VNĐ) | Có | Có | Không | Đúng |
+| Activity Selection | Có | Có | Không | Đúng |
+| Fractional Knapsack | Có | Có | Không | Đúng |
+| 0/1 Knapsack | Có | **Không** | **Có** (xem pitfall) | **Sai!** |
 
 ---
 
@@ -439,11 +439,11 @@ DP     = "Tôi không biết, phải thử hết mới biết"
 | | Greedy | DP |
 |--|--------|-----|
 | Tốc độ | Nhanh hơn | Chậm hơn |
-| Luôn tối ưu? | Không (chỉ khi thỏa 2 tính chất) | Co |
-| Code | don gian | Phuc tap hon |
-| Cần proof? | **Co** (exchange / stays ahead) | Khong (chỉ cần recurrence) |
+| Luôn tối ưu? | Không (chỉ khi thỏa 2 tính chất) | Có |
+| Code | Đơn giản | Phức tạp hơn |
+| Cần proof? | **Có** (exchange / stays ahead) | Không (chỉ cần recurrence) |
 | Ví dụ đúng | Activity Selection, Fractional Knapsack | 0/1 Knapsack, Edit Distance |
-| Overlapping subproblems? | Khong can | **Can** (đây là lý do cần memo) |
+| Overlapping subproblems? | Không cần | **Cần** (đây là lý do cần memo) |
 
 ### Bảng "Khi nào dùng gì?"
 
@@ -465,8 +465,8 @@ DP     = "Tôi không biết, phải thử hết mới biết"
 ### Bẫy 1: Dùng Greedy cho 0/1 Knapsack
 
 - **Sai:** Sắp theo ratio, lấy từ cao nhất xuống (như Fractional Knapsack)
-- **Dung:** Dùng DP vì không thể lấy "một phần" đồ vật
-- **Tai sao:**
+- **Đúng:** Dùng DP vì không thể lấy "một phần" đồ vật
+- **Tại sao:**
 
 ```
 Items: (w=10, v=60), (w=20, v=100), (w=30, v=120)
@@ -485,14 +485,14 @@ Greedy cho 160, nhưng đáp án đúng là 220!
 ### Bẫy 2: Greedy mà không chứng minh
 
 - **Sai:** "Trông có vẻ Greedy được" → code luôn
-- **Dung:** Dành 2 phút tìm counter-example trước khi code
-- **Tai sao:** Rất nhiều bài "trông giống Greedy" nhưng thật ra cần DP hoặc cách khác. Thói quen tốt: nghĩ 1 phút, thử 2-3 test case nhỏ bằng tay.
+- **Đúng:** Dành 2 phút tìm counter-example trước khi code
+- **Tại sao:** Rất nhiều bài "trông giống Greedy" nhưng thật ra cần DP hoặc cách khác. Thói quen tốt: nghĩ 1 phút, thử 2-3 test case nhỏ bằng tay.
 
 ### Bẫy 3: Sai tiêu chí Greedy
 
 - **Sai:** Activity Selection — chọn hoạt động **ngắn nhất** (thời lượng ít nhất)
-- **Dung:** Chọn hoạt động **kết thúc sớm nhất**
-- **Tai sao:**
+- **Đúng:** Chọn hoạt động **kết thúc sớm nhất**
+- **Tại sao:**
 
 ```
 Chọn theo thời lượng ngắn nhất:

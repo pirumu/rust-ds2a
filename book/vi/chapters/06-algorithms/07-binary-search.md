@@ -382,7 +382,7 @@ pub fn upper_bound<T: Ord>(arr: &[T], target: &T) -> usize {
 
 ---
 
-## Pitfalls — những lỗi ai cũng từng mắc
+## Pitfalls — Những cái bẫy hay gặp
 
 ### 1. Integer overflow khi tính mid
 
@@ -588,7 +588,7 @@ assert_eq!(in_range, [&3, &5, &7]);
 
 ---
 
-## Practice — luyện tập
+## Practice — Luyện tập
 
 | Bài | Difficulty | Pattern | Gợi ý |
 |-----|-----------|---------|-------|
@@ -603,7 +603,7 @@ assert_eq!(in_range, [&3, &5, &7]);
 
 ---
 
-## Nhìn về phía trước
+## Tiếp theo
 
 Chương tiếp theo: **[Two Pointers](../06-algorithms/08-two-pointers.md)** — một kỹ thuật thường đi cùng Binary Search. Trong Two Pointers, hai chỉ số di chuyển trên mảng sorted để giải bài toán trong O(n). Thực tế, nhiều bài phỏng vấn kết hợp cả hai: Binary Search để thu hẹp không gian, Two Pointers để kiểm tra điều kiện.
 

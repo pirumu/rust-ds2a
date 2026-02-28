@@ -4,8 +4,6 @@
 
 ## Đây là gì?
 
-> **Nếu bạn đang đọc đến đây và cảm thấy "Big-O nghe đáng sợ quá"** -- bạn không cô đơn đâu. Rất nhiều lập trình viên đã đi làm 2-3 năm vẫn nhầm lẫn khi phân tích Big-O. Đây là một kỹ năng cần **luyện tập**, không phải thứ ai cũng hiểu ngay từ lần đầu. Bài này sẽ đi từng bước nhỏ, có ví dụ cụ thể cho mỗi khái niệm. Nếu đọc xong một phần mà thấy chưa hiểu, đọc lại lần nữa -- hoàn toàn bình thường.
-
 ### Mental model: Câu hỏi duy nhất bạn cần nhớ
 
 Trước khi vào bất kỳ ký hiệu nào, hãy ghi nhớ **một câu hỏi duy nhất** -- đây là kim chỉ nam xuyên suốt bài:
@@ -354,7 +352,7 @@ Với n = 1,000,000: cách chậm cần ~500 tỷ phép so sánh (~6 ngày). Cá
 | Ma trận 2 chiều | O(n^2) |
 | Đệ quy sâu d tầng (call stack) | O(d) |
 
-## Sai lầm thường gặp
+## Những cái bẫy hay gặp
 
 ### Sai lầm 1: Nghĩ O(n) + O(n) = O(n^2)
 
@@ -494,7 +492,7 @@ fn has_pair_with_sum(arr: &[i32], target: i32) -> bool {
 
 Bạn có danh sách giá tiền, muốn tìm 2 món cộng lại đúng 100k. Phải thử từng cặp một. Nếu có 1000 món, cần thử gần 500,000 cặp.
 
-## Luyện nhận diện
+## Luyện nhận diện Pattern
 
 Hãy thử phân tích Big-O của mỗi đoạn code dưới đây **trước khi** xem đáp án.
 
@@ -672,8 +670,6 @@ O(n) × O(n)   → O(n^2)       nhân khi lồng nhau
 - [ ] Có hàm ẩn bên trong vòng lặp không? (`.contains()`, `.find()`, string concat)
 - [ ] Space: có tạo cấu trúc dữ liệu mới không? Đệ quy sâu bao nhiêu?
 - [ ] Dùng mental model: "Dữ liệu tăng 10 lần, số bước tăng bao nhiêu lần?"
-
----
 
 ---
 

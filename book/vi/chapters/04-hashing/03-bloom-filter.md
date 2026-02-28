@@ -634,11 +634,9 @@ Nếu bạn đang build hệ thống message queue (như KaCrab -- Kafka client 
 - Bloom filter compact hơn HashSet nhiều lần cho dedup tracking
 - Kafka log compaction cần check "key này có trong segment không?" → Bloom filter per segment (giống Bigtable SSTable pattern)
 
-## Tiếp theo
+## Chương tiếp theo
 
 Bloom Filter là cấu trúc xác suất đầu tiên trong series -- chấp nhận sai nhỏ để tiết kiệm memory cực lớn. Chương tiếp theo, ta sẽ học **Consistent Hashing** -- kỹ thuật phân phối data đều giữa nhiều server, và xử lý gracefully khi server thêm/bớt. Consistent Hashing dùng trong hầu hết hệ thống phân tán: CDN, distributed cache (Memcached, Redis Cluster), database sharding. Nếu Bloom Filter trả lời "có hay không?", thì Consistent Hashing trả lời "data này nên nằm ở server nào?"
-
----
 
 ---
 

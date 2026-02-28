@@ -516,7 +516,7 @@ pub fn trap_rain_water(height: &[i32]) -> i64 {
 
 ---
 
-## Những cái bẫy hay gặp
+## Pitfalls — Những cái bẫy hay gặp
 
 ❌ **Nhầm Increasing vs Decreasing**
 ```rust
@@ -628,7 +628,7 @@ for i in 0..=n {  // <= n, thêm phần tử ảo h=0 ở cuối
 
 ---
 
-## Luyện tập
+## Practice — Luyện tập
 
 | # | Bài | Độ khó | Gợi ý |
 |---|-----|--------|-------|
@@ -655,8 +655,6 @@ Nếu bạn dùng crate `monotonic_stack` trên crates.io, hãy cẩn thận -- 
 ```
 
 ---
-
-[← Bit Manipulation](01-bit-manipulation.md) | [Intervals →](03-intervals.md)
 
 ---
 

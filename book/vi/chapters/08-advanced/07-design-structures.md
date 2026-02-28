@@ -613,7 +613,7 @@ n = tổng số integers trong nested list.
 ## Chạy thử trong Rust
 
 ```rust
-use rust_dsa::design_structures::{MinStack, MedianFinder, RandomizedSet};
+use rust_ds2a::design_structures::{MinStack, MedianFinder, RandomizedSet};
 
 // MinStack
 let mut ms = MinStack::new();
@@ -706,7 +706,7 @@ Bảng tra nhanh — khi đề bài yêu cầu X, hãy nghĩ đến combo Y:
 
 ---
 
-## Cạm bẫy thường gặp
+## Những lỗi hay gặp
 
 ❌ **Sai**: Cố tìm 1 data structure duy nhất làm được tất cả operations trong O(1).
 

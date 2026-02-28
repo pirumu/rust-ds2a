@@ -675,10 +675,6 @@ assert_eq!(single.topological_sort(), Some(vec![0]));
 - Build hệ thống pipeline: nếu tasks có dependency → topo sort cho execution order
 - Config validation: detect circular dependencies trong configuration files
 
----
-
-[← Thuật toán Kruskal (Cây khung nhỏ nhất)](./08-kruskal.md) | [Union-Find (Tập hợp rời rạc) → ./10-union-find.md)
-
 ## Chương tiếp theo
 
 Topological sort dùng in-degree và BFS/DFS để order DAG. Kruskal's MST (chương trước) dùng **Union-Find** để check "2 node cùng nhóm chưa?". Chương tiếp theo deep dive vào **Union-Find (Disjoint Set Union)** -- data structure cho phép find root và union sets trong gần O(1). **Path compression + union by rank** là 2 kỹ thuật nhỏ tạo performance improvement lớn. Union-Find giải quyết mọi bài toán "connectivity" và "grouping" -- từ network connectivity đến image segmentation.

@@ -445,7 +445,7 @@ pub fn subsets_bitmask(nums: &[i32]) -> Vec<Vec<i32>> {
 
 ---
 
-## Rust-specific: Built-in bit methods
+## Rust Ecosystem — Built-in bit methods
 
 Rust có sẵn các method cực tiện cho bit manipulation. Không cần tự viết!
 
@@ -686,6 +686,8 @@ Bit manipulation không phải phép thuật — chỉ là cách nói chuyện t
 ---
 
 ## Tiếp theo
+
+Chương sau: **[Monotonic Stack](./02-monotonic-stack.md)** — stack với một rule duy nhất: giữ thứ tự tăng hoặc giảm dần. Nghe đơn giản, nhưng giải được hàng loạt bài O(n^2) thành O(n): Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram...
 
 ---
 

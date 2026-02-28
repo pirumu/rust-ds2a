@@ -279,7 +279,7 @@ pub fn radix_sort(arr: &mut [u32]) {
 
 ---
 
-## Pitfalls — Bẫy thường gặp
+## Pitfalls — Những cái bẫy hay gặp
 
 ### 1. Quên tính stable
 
@@ -437,7 +437,7 @@ Crate [`voracious_radix_sort`](https://crates.io/crates/voracious_radix_sort) t�
 
 ---
 
-## Practice — LeetCode
+## Practice — Luyện tập
 
 | Bài | Gợi ý |
 |-----|-------|
@@ -464,7 +464,7 @@ Khi nào KHÔNG dùng: n nhỏ, float, key dài thay đổi
 
 ---
 
-## Tiếp theo: Binary Search
+## Tiếp theo
 
 Chúng ta đã xong phần **sorting**! Mảng đã được sắp xếp, giờ câu hỏi tiếp theo tự nhiên là: **tìm kiếm trong mảng sorted có nhanh hơn không?**
 

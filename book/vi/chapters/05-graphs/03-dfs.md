@@ -837,6 +837,4 @@ Chương tiếp theo giới thiệu **Dijkstra's Algorithm** -- BFS "nâng cấp
 
 ---
 
----
-
 [← BFS](./02-bfs.md) | [Dijkstra →](./04-dijkstra.md)

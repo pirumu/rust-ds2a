@@ -619,11 +619,7 @@ Ví dụ thực tế trong hệ thống: tracking which partition IDs are assign
 
 ---
 
-[← Hash Map](./01-hash-map.md) | [Bloom Filter →](./03-bloom-filter.md)
-
----
-
-## Preview chương tiếp theo
+## Chương tiếp theo
 
 HashSet kết thúc phần hash-based structures "đơn giản". Bạn đã có đủ "vũ khí": HashMap cho key-value, HashSet cho membership, BTreeMap/BTreeSet cho sorted. Chương tiếp theo sẽ giới thiệu **Bloom Filter** -- cấu trúc probabilistic (xác suất) cực kỳ tiết kiệm bộ nhớ. Bloom Filter trả lời câu hỏi "phần tử này có trong set không?" giống HashSet, nhưng dùng **ít bộ nhớ hơn gấp nhiều lần** -- đổi lại, đôi khi nó... **nói dối** (false positive). Nghe thú vị chưa?
 

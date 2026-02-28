@@ -311,7 +311,7 @@ Cấu trúc cây và thuật toán query/update **hoàn toàn giống nhau**. Đ
 
 ---
 
-## Pitfalls — Những lỗi hay gặp
+## Những lỗi hay gặp
 
 ### 1. Kích thước mảng: 4n, không phải 2n
 
@@ -319,7 +319,7 @@ Cấu trúc cây và thuật toán query/update **hoàn toàn giống nhau**. Đ
 
 ✅ **Đúng:** `tree = vec![0; 4 * n]`
 
-💡 **Tại sao:** Khi `n` không phải lũy thừa của 2, cây không hoàn hảo (perfect binary tree). Một số node ở tầng cuối bị lệch, index có thể vượt `2n`. Dùng `4n` là an toàn cho mọi trường hợp. Trong Rust code của KaCrab, bạn thấy dòng `vec![0i64; 4 * n.max(1)]` — đó là lý do.
+💡 **Tại sao:** Khi `n` không phải lũy thừa của 2, cây không hoàn hảo (perfect binary tree). Một số node ở tầng cuối bị lệch, index có thể vượt `2n`. Dùng `4n` là an toàn cho mọi trường hợp. Trong Rust code của crate này, bạn thấy dòng `vec![0i64; 4 * n.max(1)]` — đó là lý do.
 
 ```
 n = 5, dùng 2*n = 10 slots?
@@ -371,7 +371,7 @@ fn query_inner(&mut self, node, start, end, l, r) {
 
 ❌ **Sai:** Nhầm lẫn `[l, r]` inclusive với `[l, r)` exclusive
 
-✅ **Đúng:** Chọn một convention và giữ nhất quán. Code của KaCrab dùng **inclusive `[l, r]`** — cả `l` và `r` đều tính.
+✅ **Đúng:** Chọn một convention và giữ nhất quán. Code trong crate này dùng **inclusive `[l, r]`** — cả `l` và `r` đều tính.
 
 💡 **Tại sao:** Nhầm boundary off-by-one là bug phổ biến nhất với Segment Tree. Khi đi từ LeetCode (0-indexed, thường inclusive) sang competitive programming (đôi khi 1-indexed), phải cẩn thận.
 
@@ -454,7 +454,7 @@ Version 0:         Version 1 (sau update index 2):
 
 ## Rust Ecosystem
 
-### Crate `rust_ds2a` (KaCrab)
+### Crate `rust_ds2a`
 
 Thư viện của chúng ta có 3 struct trong module `segment_tree`:
 
@@ -532,10 +532,6 @@ Nhớ:
 - **push_down trước** khi đi xuống con
 - Segment Tree > Fenwick Tree khi cần min/max hoặc lazy
 - Fenwick Tree > Segment Tree khi chỉ cần sum (ngắn hơn, nhanh hơn)
-
----
-
-## Tiếp theo
 
 ---
 

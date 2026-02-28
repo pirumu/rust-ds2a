@@ -4,7 +4,7 @@
 
 ## Đây là gì?
 
-> Array là cấu trúc dữ liệu **đầu tiên** bạn học trong series này, và tin vui: nó cũng là cấu trúc **dễ hiểu nhất**. Nếu bạn đã từng dùng mảng trong bất kỳ ngôn ngữ nào (Python list, JavaScript array), bạn đã hiểu 70% rồi. Phần còn lại chỉ là Rust thêm vài "quy tắc an toàn" -- nhìn lạ nhưng quen rất nhanh.
+Nếu bạn đã từng dùng mảng trong bất kỳ ngôn ngữ nào (Python list, JavaScript array), bạn đã hiểu 70% rồi. Phần còn lại chỉ là Rust thêm vài "quy tắc an toàn" -- nhìn lạ nhưng quen rất nhanh.
 
 Tưởng tượng dãy tủ locker ở trường. Mỗi tủ có số: 0, 1, 2, 3... Bạn muốn lấy đồ ở tủ số 5? Đi thẳng tới tủ 5, mở ra, lấy đồ. Không cần mở từng tủ từ đầu.
 
@@ -544,6 +544,8 @@ pub fn is_palindrome(s: &[u8]) -> bool {
 
 Giống `reverse` ở trên phải không? Cùng pattern, khác hành động: `reverse` swap, `is_palindrome` so sánh.
 
+> **Lưu ý:** Hàm này nhận `&[u8]` (byte slice) -- hoạt động tốt với chuỗi ASCII thuần. Chương tiếp theo ([Strings](./03-strings.md)) có phiên bản `is_palindrome` khác nhận `&str`, hỗ trợ tiếng Việt và bỏ qua dấu cách/hoa-thường. Hai hàm cùng tên nhưng khác module và khác tính năng.
+
 #### Ví dụ 2: Xóa phần tử trùng trong mảng đã sort (slow/fast)
 
 Bài LeetCode kinh điển: cho mảng sorted, xóa trùng **tại chỗ**, trả về độ dài mới.
@@ -690,7 +692,7 @@ right=5: sum=9 ≥ 7 → len=3, thu hẹp       [2,4,3]
 
 Để ý: `binary_search` nhanh hơn `linear_search` rất nhiều (O(log n) vs O(n)), nhưng **đổi lại** mảng phải được sắp xếp. Không có gì miễn phí!
 
-## Nhận diện Pattern -- Luyện tập
+## Luyện nhận diện Pattern
 
 Đọc mô tả bài toán, tự hỏi: dùng cấu trúc gì? Pattern nào?
 
@@ -808,6 +810,4 @@ fn main() {
 
 ---
 
----
-
-[← Phân tích độ phức tạp (Big-O)](./01-complexity.md) | [Strings →](./03-strings.md)
+[← Phân tích Độ phức tạp (Big-O)](./01-complexity.md) | [Strings →](./03-strings.md)

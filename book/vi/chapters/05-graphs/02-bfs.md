@@ -671,6 +671,4 @@ BFS thăm theo tầng, tìm shortest path. Nhưng nhiều bài toán cần **đi
 
 ---
 
----
-
 [← Biểu diễn đồ thị](./01-graph-representations.md) | [DFS →](./03-dfs.md)

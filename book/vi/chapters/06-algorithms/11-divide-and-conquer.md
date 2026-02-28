@@ -414,7 +414,7 @@ Combine lên:
 
 ---
 
-## Pitfalls — Bẫy hay gặp
+## Pitfalls — Những cái bẫy hay gặp
 
 ### 1. Base case sai
 
@@ -624,7 +624,7 @@ Giống Merge Sort, nhưng thay vì sort mảng, bạn merge k lists. Pattern y 
 
 ---
 
-## Tiếp theo — Greedy
+## Tiếp theo
 
 D&C chia bài toán rồi giải tất cả bài con. Nhưng nếu mỗi bước bạn chỉ cần chọn **một** lựa chọn tốt nhất, không cần quay lại? Đó là **Greedy** — thuật toán tham lam. Ví dụ: thối tiền bằng tờ lớn nhất có thể. Greedy nhanh hơn D&C (thường O(n log n) hoặc O(n)), nhưng chỉ đúng khi bài toán có "greedy-choice property". Chương sau mình sẽ tìm hiểu khi nào tham lam được và khi nào tham lam sai.
 
